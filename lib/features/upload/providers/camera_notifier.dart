@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,58 +9,54 @@ class CameraNotifier extends StateNotifier<CameraController?> {
   CameraNotifier() : super(null) {
     initializeCamera();
   }
-  bool _enableFrontCamera = false;
-  final List<ResolutionPreset> _presets = [
-    ResolutionPreset.low,
-    ResolutionPreset.medium,
-    ResolutionPreset.high,
-    ResolutionPreset.veryHigh,
-    ResolutionPreset.ultraHigh,
-    ResolutionPreset.max,
-  ];
 
-  int _currentPresetIndex = 2; // Start from high (1280x720)
+  bool _enableFrontCamera = false;
+  int _currentRatioIndex = 2;
+  final List<double> ratio = [1, 9 / 12, 0]; // Can be updated later
+
+  int get currentRatioIndex => _currentRatioIndex;
 
   Future<void> initializeCamera() async {
     try {
-      final rearCamera = cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.back,
-      );
-      final frontCamera = cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.front,
-      );
+      log('initializing......');
+      await state?.dispose();
       final controller = CameraController(
-        _enableFrontCamera ? frontCamera : rearCamera,
-        _presets[_currentPresetIndex],
+        _enableFrontCamera ? cameras[1] : cameras[0],
+        ResolutionPreset.ultraHigh,
         enableAudio: false,
       );
+
       await controller.initialize();
       state = controller;
-    } catch (e) {
-      log("Error while initializing camera");
+    } catch (e, stackTrace) {
+      log("Error while initializing camera: $e", stackTrace: stackTrace);
     }
   }
 
-  void toggleCamera() async {
+  Future<void> toggleCamera() async {
     _enableFrontCamera = !_enableFrontCamera;
+    await state?.dispose();
     await initializeCamera();
   }
 
-  void toggleResolution() async {
-    _currentPresetIndex = (_currentPresetIndex + 1) % _presets.length;
+  Future<void> toggleResolution() async {
+    _currentRatioIndex = (_currentRatioIndex + 1) % ratio.length;
+    await state?.dispose();
     await initializeCamera();
   }
 
   @override
   void dispose() {
     state?.dispose();
+    log('disposed');
     super.dispose();
   }
 }
 
 final cameraControllerProvider =
-    StateNotifierProvider<CameraNotifier, CameraController?>(
+    StateNotifierProvider.autoDispose<CameraNotifier, CameraController?>(
       (ref) => CameraNotifier(),
     );
 
 final cameraButtonControllerProvider = StateProvider<double>((ref) => 1.0);
+final pickedFileProvider = StateProvider<File?>((ref) => null);

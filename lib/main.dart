@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras(); // Get available cameras
+  
 
   runApp(ProviderScope(child: const MyApp()));
 }
@@ -33,7 +34,6 @@ class _MyAppState extends State<MyApp> {
       title: 'Dazzles',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData(),
-
       routerConfig: RouteProvider.router,
     );
   }
