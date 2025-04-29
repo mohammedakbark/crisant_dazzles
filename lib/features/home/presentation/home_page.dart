@@ -1,9 +1,11 @@
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,28 +25,34 @@ class HomePage extends StatelessWidget {
           children: [
             AppSpacer(hp: .025),
             // Search
-            Container(
-              padding: EdgeInsets.symmetric(
-                vertical: ResponsiveHelper.paddingSmall,
-                horizontal: ResponsiveHelper.paddingMedium,
-              ),
-              width: ResponsiveHelper.wp,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: AppColors.kFillColor,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Global Search",
-                    style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
-                  ),
-                  Icon(
-                    SolarIconsOutline.magnifier,
-                    color: AppColors.kPrimaryColor,
-                  ),
-                ],
+            InkWell(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              onTap: () => context.push(searchScreen),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: ResponsiveHelper.paddingSmall,
+                  horizontal: ResponsiveHelper.paddingMedium,
+                ),
+                width: ResponsiveHelper.wp,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: AppColors.kFillColor,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Global Search",
+                      style: AppStyle.normalStyle(
+                        color: AppColors.kPrimaryColor,
+                      ),
+                    ),
+                    Icon(
+                      SolarIconsOutline.magnifier,
+                      color: AppColors.kPrimaryColor,
+                    ),
+                  ],
+                ),
               ),
             ),
 

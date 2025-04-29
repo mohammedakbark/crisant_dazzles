@@ -1,0 +1,63 @@
+import 'package:dazzles/core/shared/routes/const_routes.dart';
+import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:go_router/go_router.dart';
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  final Size preferredSize;
+  CustomAppBar({Key? key})
+    : preferredSize = const Size.fromHeight(70),
+      super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      bottom: PreferredSize(
+        preferredSize: Size(ResponsiveHelper.wp, ResponsiveHelper.hp * .01),
+        child: SizedBox(),
+      ),
+      automaticallyImplyLeading: false,
+      title: ListTile(
+        contentPadding: EdgeInsets.all(0),
+        leading: CircleAvatar(radius: 30),
+        title: Text(
+          "Hi,Anand Jain",
+          style: AppStyle.largeStyle(
+            fontSize: ResponsiveHelper.fontMedium,
+            color: AppColors.kWhite,
+          ),
+        ),
+        subtitle: Text(
+          "Welcome back to Dazzles !",
+          style: AppStyle.smallStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: ResponsiveHelper.fontSmall,
+            color: AppColors.kPrimaryColor,
+          ),
+        ),
+        trailing: InkWell(
+          onTap: () {
+            context.push(notificationScreen);
+          },
+          child: badges.Badge(
+            badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent),
+            badgeContent: Text("10", style: AppStyle.mediumStyle(fontSize: 8)),
+            position: badges.BadgePosition.topEnd(end: -2, top: -8),
+            badgeAnimation: badges.BadgeAnimation.slide(
+              curve: Curves.fastOutSlowIn,
+              colorChangeAnimationCurve: Curves.easeInCubic,
+            ),
+            child: CircleAvatar(
+              child: Icon(CupertinoIcons.bell_fill, color: AppColors.kWhite),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

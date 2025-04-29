@@ -9,4 +9,5 @@ class AppColors {
   static const Color kSecondaryColor = Color(0xFF161111);
   static const Color kTextPrimaryColor = Color(0xFFa0a0a0);
   static const Color kFillColor = Color(0xFF414141);
+  static const Color kErrorPrimary = Color.fromARGB(255, 195, 47, 36);
 }
