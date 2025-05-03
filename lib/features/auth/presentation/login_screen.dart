@@ -1,21 +1,27 @@
 import 'package:dazzles/core/components/app_button.dart';
+import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/app_textfield.dart';
+import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/core/utils/validators.dart';
+import 'package:dazzles/features/auth/providers/login_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   LoginScreen({super.key});
-  final _emailController = TextEditingController();
+  final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final loginController = ref.watch(loginControllerProvider);
+
     return Scaffold(
       body: Center(
         child: AppMargin(
@@ -42,9 +48,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                   AppSpacer(hp: .15),
                   CustomTextField(
-                    controller: _emailController,
-                    hintText: "Enter your email address",
-                    validator: AppValidator.emailValidator,
+                    controller: _userNameController,
+                    hintText: "Username",
+                    validator: AppValidator.requiredValidator,
                   ),
                   AppSpacer(hp: .02),
                   CustomTextField(
@@ -55,20 +61,40 @@ class LoginScreen extends StatelessWidget {
 
                   AppSpacer(hp: .02),
 
-                  AppButton(
-                    title: "Login",
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
-                    },
+                  // loginController.when(
+
+                  //   data:
+                  //       (data) =>
+                  //   error: (error, stackTrace) => Text("Error"),
+                  //   loading: () => AppLoading(),
+                  // ),
+                  BuildStateManageComponent(
+                    controller: loginController,
+                    successWidget:
+                        (data) => AppButton(
+                          title: "Login",
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              ref
+                                  .read(loginControllerProvider.notifier)
+                                  .onLogin(
+                                    _userNameController.text.trim(),
+                                    _passwordController.text.trim(),
+                                    context,
+                                  );
+                            }
+                          },
+                        ),
                   ),
-                  AppSpacer(hp: .1),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Lost your password?"),
-                      TextButton(onPressed: () {}, child: Text("Reset Now")),
-                    ],
-                  ),
+
+                  // AppSpacer(hp: .1),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text("Lost your password?"),
+                  //     TextButton(onPressed: () {}, child: Text("Reset Now")),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

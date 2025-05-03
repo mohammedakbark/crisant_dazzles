@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dazzles/core/constant/api_constant.dart';
@@ -20,47 +19,121 @@ class ApiConfig {
     Map<String, dynamic>? body,
   }) async {
     try {
-      Response response = await _dio.post(
+      final response = await _dio.post(
         endpoint,
         data: body,
         options: Options(headers: header),
       );
-      final decodedata = jsonDecode(response.toString());
-      // log(decodedata.toString());
-      if (decodedata['error'] == false && decodedata['data'].isEmpty) {
-        return ResponseModel(
-          data: null,
-          error: true,
-          message: "Data Not Found!",
-          status: 500,
-        );
-      } else {
-        return ResponseModel.fromJson(decodedata);
-      }
+
+      return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      log("❌ Internet Connection Error : ${e.message}");
-      if (e.type == DioExceptionType.connectionError) {
+      if (e.response != null && e.response?.data != null) {
+        try {
+          log("response 401  (No Error) X");
+          log(e.response!.data['message'].toString());
+          return ResponseModel.fromJson(e.response!.data);
+        } catch (_) {
+          log("response 401  (Error) X");
+
+          return ResponseModel(
+            data: null,
+            error: true,
+            message: "Failed to parse error response",
+            status: e.response?.statusCode ?? 500,
+          );
+        }
+      }
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+        log("Connection Error ! X");
         return ResponseModel(
           data: null,
           error: true,
           message: "No Internet Connection!",
-          status: 500,
-        );
-      } else {
-        log("❌ Other Dio Error: ${e.message}");
-        return ResponseModel(
-          data: null,
-          error: true,
-          message: "Other Dio Error: ${e.message}",
-          status: 500,
+          status: 503,
         );
       }
-    } catch (e) {
-      log("API Error: $e");
+      log("Dio Error X");
       return ResponseModel(
         data: null,
         error: true,
-        message: "API Error: $e",
+        message: "Dio Error: ${e.message}",
+        status: e.response?.statusCode ?? 500,
+      );
+    } catch (e) {
+      log("Unexpected Error X");
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Unexpected Error: $e",
+        status: 500,
+      );
+    }
+  }
+
+  //---------------------------GET
+
+  static Future<ResponseModel> getRequest({
+    required String endpoint,
+    required Map<String, dynamic> header,
+    Map<String, dynamic>? body,
+  }) async {
+    try {
+      final response = await _dio.get(
+        endpoint,
+        data: body,
+        options: Options(headers: header),
+      );
+
+      // Directly use response.data instead of decoding again
+      // log(response.data.toString());
+      return ResponseModel.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null && e.response?.data != null) {
+        try {
+          log("response 401  (No Error)");
+            log(e.response!.data['message'].toString());
+          return ResponseModel.fromJson(e.response!.data);
+        } catch (_) {
+          log("response 401  (Error)");
+
+          return ResponseModel(
+            data: null,
+            error: true,
+            message: "Failed to parse error response",
+            status: e.response?.statusCode ?? 500,
+          );
+        }
+      }
+      // 🔌 Handle no internet connection
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+        log("Connection Error !");
+
+        return ResponseModel(
+          data: null,
+          error: true,
+          message: "No Internet Connection!",
+          status: 503,
+        );
+      }
+
+      // 🧾 If server returned a valid response (like 401), parse that
+      log("Dio Error");
+
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Dio Error: ${e.message}",
+        status: e.response?.statusCode ?? 500,
+      );
+    } catch (e) {
+      log("Unexpected Error");
+
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Unexpected Error: $e",
         status: 500,
       );
     }

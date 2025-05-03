@@ -76,6 +76,7 @@ class CustomTextField extends StatelessWidget {
           cursorColor: AppColors.kPrimaryColor,
           style: AppStyle.mediumStyle(),
           decoration: InputDecoration(
+            
             errorStyle: AppStyle.mediumStyle(color: AppColors.kErrorPrimary),
             hintStyle: AppStyle.mediumStyle(
               color:

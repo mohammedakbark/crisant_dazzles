@@ -1,3 +1,4 @@
+import 'package:dazzles/core/local%20data/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -7,12 +8,31 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:go_router/go_router.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
   CustomAppBar({Key? key})
     : preferredSize = const Size.fromHeight(70),
       super(key: key);
+
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  @override
+  void initState() {
+    getUserName();
+    super.initState();
+  }
+
+  String userName = '';
+  void getUserName() async {
+    final userData = await LoginRefDataBase().getUserData;
+    setState(() {
+      userName = userData.userName!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +44,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: ListTile(
         contentPadding: EdgeInsets.all(0),
-        leading: CircleAvatar(radius: 30),
+        // leading: CircleAvatar(radius: 30),
         title: Text(
-          "Hi,Anand Jain",
+          "Hi,$userName",
           style: AppStyle.largeStyle(
             fontSize: ResponsiveHelper.fontMedium,
             color: AppColors.kWhite,
@@ -60,4 +80,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
+
+  
 }

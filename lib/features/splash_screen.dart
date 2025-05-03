@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:dazzles/core/local%20data/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
-import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,9 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
+    final loginRef = await LoginRefDataBase().getUserData;
     await Future.delayed(Duration(seconds: 2));
-    if (mounted) {
-      context.go(route);
+    if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+      if (mounted) {
+        context.go(route);
+      }
+    } else {
+      if (mounted) {
+        context.go(loginScreen);
+      }
     }
   }
 
@@ -54,7 +61,6 @@ class _SplashScreenState extends State<SplashScreen> {
                         speed: Duration(microseconds: 100000),
                       ),
                     ],
-                    
                   ),
                 ),
               ),
