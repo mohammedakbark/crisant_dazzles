@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BuildStateManageComponent extends StatelessWidget {
   final AsyncValue<Object?> controller;
-  final Widget Function(Object?) successWidget;
+  final Widget Function(Object? data) successWidget;
   final Widget Function(Object, StackTrace)? errorWidget;
   final Widget Function()? loadingWidget;
   const BuildStateManageComponent({

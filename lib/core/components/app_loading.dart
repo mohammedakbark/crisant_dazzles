@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class AppLoading extends StatefulWidget {
   final bool? isTextLoading;
-  final bool ?removePadding;
-  AppLoading({super.key, this.isTextLoading,this.removePadding});
+  final bool? removePadding;
+  AppLoading({super.key, this.isTextLoading, this.removePadding});
 
   @override
   State<AppLoading> createState() => _AppLoadingState();
@@ -22,7 +22,9 @@ class _AppLoadingState extends State<AppLoading> {
       child:
           widget.isTextLoading == true
               ? Padding(
-                padding:  EdgeInsets.symmetric(vertical:widget.removePadding==true?0: 20),
+                padding: EdgeInsets.symmetric(
+                  vertical: widget.removePadding == true ? 0 : 20,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -61,7 +63,7 @@ class _AppLoadingState extends State<AppLoading> {
               //     );
               //   },
               // )
-              : CircularProgressIndicator(),
+              : CircularProgressIndicator.adaptive(),
     );
   }
 }

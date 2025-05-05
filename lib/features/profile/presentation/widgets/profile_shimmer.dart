@@ -12,34 +12,6 @@ class ProfileShimmer extends StatelessWidget {
     return ShimmerEffect(
       child: Column(
         children: [
-          // CircleAvatar(radius: 100),
-          // AppSpacer(hp: .02),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     color: AppColors.kBgColor,
-          //     borderRadius: BorderRadius.circular(100),
-          //   ),
-          //   height: 7,
-          //   width: 100,
-          // ),
-          // AppSpacer(hp: .01),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     color: AppColors.kBgColor,
-          //     borderRadius: BorderRadius.circular(100),
-          //   ),
-          //   height: 7,
-          //   width: 200,
-          // ),
-          // AppSpacer(hp: .01),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     color: AppColors.kBgColor,
-          //     borderRadius: BorderRadius.circular(100),
-          //   ),
-          //   height: 7,
-          //   width: 200,
-          // ),
           Row(
             children: [
               CircleAvatar(radius: 70),
@@ -49,20 +21,12 @@ class ProfileShimmer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kBgColor,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
+                    ShimmerEffect.placeHolder(
                       height: 12,
                       width: ResponsiveHelper.wp * .23,
                     ),
                     AppSpacer(hp: .01),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kBgColor,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
+                   ShimmerEffect.placeHolder(
                       height: 7,
                       width: ResponsiveHelper.wp * .45,
                     ),
@@ -72,11 +36,7 @@ class ProfileShimmer extends StatelessWidget {
             ],
           ),
           AppSpacer(hp: .05),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.kBgColor,
-              borderRadius: BorderRadius.circular(100),
-            ),
+          ShimmerEffect.placeHolder(
             height: 10,
             width: ResponsiveHelper.wp * .7,
           ),

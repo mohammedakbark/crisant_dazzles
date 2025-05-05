@@ -1,3 +1,4 @@
+import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -11,6 +12,17 @@ class ShimmerEffect extends StatelessWidget {
       baseColor: Colors.grey,
       highlightColor: Colors.white,
       child: child,
+    );
+  }
+
+  static Widget placeHolder({required double height, required double width}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.kBgColor,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      height: height,
+      width: width,
     );
   }
 }

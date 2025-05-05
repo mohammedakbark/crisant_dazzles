@@ -5,31 +5,49 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/custom_app_bar.dart';
 import 'package:dazzles/features/home/presentation/home_page.dart';
+import 'package:dazzles/features/home/providers/dashboard_controller.dart';
 import 'package:dazzles/features/product/presentation/products_page.dart';
+import 'package:dazzles/features/product/providers/get_products_controller.dart';
 import 'package:dazzles/features/profile/presentation/profile_page.dart';
+import 'package:dazzles/features/profile/providers/get_profile_controller.dart';
+import 'package:dazzles/features/upload/presentation/pending_image_page.dart';
 import 'package:dazzles/features/upload/presentation/upload_picture_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dazzles/features/upload/providers/get_pending_products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class NavigationScreen extends ConsumerWidget {
+class NavigationScreen extends ConsumerStatefulWidget {
   NavigationScreen({super.key});
+
+  @override
+  ConsumerState<NavigationScreen> createState() => _NavigationScreenState();
+}
+
+class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   final List<Widget> _pages = [
     HomePage(),
-    UploadPicturePage(),
+    PendingImagePage(),
     ProductsPage(),
     ProfilePage(),
   ];
+
   @override
-  Widget build(BuildContext context, ref) {
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.invalidate(dashboardControllerProvider);
+      ref.invalidate(profileControllerProvider);
+      ref.invalidate(getAllPendingProductControllerProvider);
+      ref.invalidate(allProductControllerProvider);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     int index = ref.read(navigationController.notifier).state;
     return Scaffold(
-      appBar:
-          index == 1 || index == 3
-              ? null
-              : CustomAppBar(),
+      appBar: index == 1 || index == 3 ? null : CustomAppBar(),
       body: _pages[index],
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(

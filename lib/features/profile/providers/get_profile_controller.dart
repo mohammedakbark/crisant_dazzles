@@ -4,7 +4,7 @@ import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
 import 'package:dazzles/features/profile/data/repo/get_profile_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final profileControllerController =
+final profileControllerProvider =
     AsyncNotifierProvider<GetProfileController, UserProfileModel?>(
       GetProfileController.new,
     );

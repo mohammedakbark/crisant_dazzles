@@ -3,3 +3,4 @@ const loginScreen = '/login';
 const route = '/route';
 const notificationScreen = '/notification';
 const searchScreen = "/search";
+const recentlyCaptured = "/viewRecentlyCaptured";

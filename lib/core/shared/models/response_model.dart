@@ -1,17 +1,18 @@
+import 'package:dazzles/core/shared/models/pagination_model.dart';
 
 class ResponseModel {
   int status;
   String message;
   bool error;
   Object? data;
-  // PaginationModel? pagination;
+  PaginationModel? pagination;
 
   ResponseModel({
     required this.data,
     required this.error,
     required this.message,
     required this.status,
-    // this.pagination,
+    this.pagination,
   });
 
   // Map<String, dynamic> toJson() => {
@@ -28,9 +29,9 @@ class ResponseModel {
       error: json['error'],
       message: json['message'] ?? "",
       status: json['status'],
-      // pagination: json['pagination'] != null
-      //     ? PaginationModel.fromJson(json['pagination'])
-      //     : null,
+      pagination: json['pagination'] != null
+          ? PaginationModel.fromJson(json['pagination'])
+          : null,
     );
   }
 }
