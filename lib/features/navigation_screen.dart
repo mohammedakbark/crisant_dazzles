@@ -11,7 +11,7 @@ import 'package:dazzles/features/product/providers/get_products_controller.dart'
 import 'package:dazzles/features/profile/presentation/profile_page.dart';
 import 'package:dazzles/features/profile/providers/get_profile_controller.dart';
 import 'package:dazzles/features/upload/presentation/pending_image_page.dart';
-import 'package:dazzles/features/upload/presentation/upload_picture_page.dart';
+import 'package:dazzles/features/upload/presentation/widgets/upload_picture_page.dart';
 import 'package:dazzles/features/upload/providers/get_pending_products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,7 +47,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   Widget build(BuildContext context) {
     int index = ref.read(navigationController.notifier).state;
     return Scaffold(
-      appBar: index == 1 || index == 3 ? null : CustomAppBar(),
+      appBar: index == 3 ? null : CustomAppBar(),
       body: _pages[index],
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(

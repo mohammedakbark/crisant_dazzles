@@ -4,3 +4,4 @@ const route = '/route';
 const notificationScreen = '/notification';
 const searchScreen = "/search";
 const recentlyCaptured = "/viewRecentlyCaptured";
+const imagePreview = '/imagePreview';

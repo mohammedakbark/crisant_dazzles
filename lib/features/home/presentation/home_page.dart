@@ -6,6 +6,7 @@ import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
+import 'package:dazzles/core/services/navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -43,7 +44,7 @@ class HomePage extends ConsumerWidget {
               // Search
               InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () => context.push(searchScreen),
+                onTap: () => ref.read(navigationController.notifier).state = 2,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     vertical: ResponsiveHelper.paddingSmall,

@@ -9,4 +9,5 @@ class ApiConstants {
   static const String allProduct = "product";
   static const String productData = "product/view";
   static const String pendingProduct = "product/pending";
+  static const String searchProduct = "dashboard/search";
 }

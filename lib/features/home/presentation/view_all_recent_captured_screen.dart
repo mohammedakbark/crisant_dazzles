@@ -62,6 +62,8 @@ class _ViewAllRecentCapturedScreenState
                     itemCount: data.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
                     ),
                     itemBuilder:
                         (context, index) => Container(

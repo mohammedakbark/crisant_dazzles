@@ -21,4 +21,6 @@ class GetDashboardController extends AsyncNotifier<DashboardModel> {
       throw e.toString();
     }
   }
+
+  String _query = '';
 }

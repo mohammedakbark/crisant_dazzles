@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 class AppErrorView extends StatelessWidget {
   final String error;
   final String? errorExp;
+  final Widget? icon;
   final void Function()? onRetry;
 
   const AppErrorView({
     super.key,
+    this.icon,
     required this.error,
     this.errorExp,
     this.onRetry,
@@ -21,10 +23,22 @@ class AppErrorView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Column(
+            children: [
+              icon ??
+                  Icon(
+                    Icons.smart_toy_outlined,
+                    color: AppColors.kTextPrimaryColor,
+                    size: 70,
+                  ),
+              AppSpacer(hp: .01),
+            ],
+          ),
+
           Text(
             textAlign: TextAlign.center,
             error,
-            style: AppStyle.largeStyle(),
+            style: AppStyle.largeStyle(color: AppColors.kTextPrimaryColor),
           ),
 
           // Subtite

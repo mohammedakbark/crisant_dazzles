@@ -22,4 +22,5 @@ class GetProductDataController extends AsyncNotifier<ProductDataModel> {
       throw e.toString();
     }
   }
+
 }

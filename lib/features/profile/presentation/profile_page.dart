@@ -1,3 +1,4 @@
+import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
@@ -29,7 +30,7 @@ class ProfilePage extends ConsumerWidget {
               AppSpacer(hp: .07),
               BuildStateManageComponent(
                 controller: profileController,
-                errorWidget: (p0, p1) => Text(p0.toString()),
+                errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
                 loadingWidget: () => ProfileShimmer(),
 
                 successWidget: (data) {
