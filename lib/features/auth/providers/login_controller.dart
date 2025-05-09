@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/local%20data/login_red_database.dart';

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -10,7 +12,8 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/providers/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/providers/pending_product_controller/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/providers/pending_product_controller/pending_products_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,6 +41,9 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
         ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
       }
     });
+    // Future.microtask(() {
+    //   ref.invalidate(getAllPendingProductControllerProvider);
+    // });
   }
 
   @override
@@ -51,7 +57,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
         return ref.refresh(getAllPendingProductControllerProvider);
       },
       child: BuildStateManageComponent(
-        controller: pendingImageController,
+        stateController: pendingImageController,
         errorWidget:
             (p0, p1) => AppErrorView(
               error: p0.toString(),
@@ -60,7 +66,8 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
               },
             ),
         successWidget: (data) {
-          final pending = data as List<ProductModel>;
+          final state = data as PendingProductSuccessState;
+          final pending = state.products;
           return Column(
             children: [
               Expanded(
@@ -86,19 +93,26 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
     );
   }
 
-  final ImagePicker picker = ImagePicker();
+  Future<void> _pickImage(ImageSource source, ProductModel productModel) async {
+    try {
+      final ImagePicker picker = ImagePicker();
 
-  Future<void> _pickImage(ImageSource source) async {
-    final XFile? pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      if (mounted) {
-        context.pop();
-        context.push(imagePreview, extra: pickedFile.path);
+      final XFile? pickedFile = await picker.pickImage(source: source);
+      if (pickedFile != null) {
+        if (mounted) {
+          context.pop();
+          context.push(
+            imagePreview,
+            extra: {"productModel": productModel, "path": pickedFile.path},
+          );
+        }
       }
+    } catch (e) {
+      log(e.toString());
     }
   }
 
-  void showGallerySheet(BuildContext context) {
+  void showGallerySheet(BuildContext context, ProductModel productModel) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -156,7 +170,8 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed: () => _pickImage(ImageSource.gallery),
+                            onPressed:
+                                () => _pickImage(ImageSource.gallery, productModel),
                             icon: Icon(Icons.photo, color: AppColors.kWhite),
                             label: Text("Gallery"),
                           ),
@@ -178,7 +193,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed: () => _pickImage(ImageSource.camera),
+                            onPressed: () => _pickImage(ImageSource.camera, productModel),
                             icon: Icon(
                               Icons.camera_alt,
                               color: AppColors.kWhite,
@@ -232,7 +247,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                   child: InkWell(
                     overlayColor: WidgetStatePropertyAll(Colors.transparent),
                     onTap: () {
-                      showGallerySheet(context);
+                      showGallerySheet(context, product);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(12),

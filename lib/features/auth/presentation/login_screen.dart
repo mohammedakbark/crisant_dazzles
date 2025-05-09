@@ -1,5 +1,4 @@
 import 'package:dazzles/core/components/app_button.dart';
-import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/app_textfield.dart';
@@ -69,7 +68,7 @@ class LoginScreen extends ConsumerWidget {
                   //   loading: () => AppLoading(),
                   // ),
                   BuildStateManageComponent(
-                    controller: loginController,
+                    stateController: loginController,
                     successWidget:
                         (data) => AppButton(
                           title: "Login",

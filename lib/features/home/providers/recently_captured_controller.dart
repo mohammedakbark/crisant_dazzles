@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dazzles/features/home/data/models/recently_captured.dart';
-import 'package:dazzles/features/home/data/repo/get_dashboard.dart';
 import 'package:dazzles/features/home/data/repo/get_recently_captured_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

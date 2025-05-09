@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:permission_handler/permission_handler.dart';
 
 class AppPermissions {
@@ -15,10 +17,10 @@ class AppPermissions {
 
     if (statuses[Permission.camera]!.isDenied ||
         statuses[Permission.storage]!.isDenied) {
-      print("Permission denied! Request again.");
+      log("Permission denied! Request again.");
       return false;
     } else {
-      print("All permissions granted!");
+      log("All permissions granted!");
       return true;
     }
   }

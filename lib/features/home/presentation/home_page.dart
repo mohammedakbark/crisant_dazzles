@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
@@ -21,11 +20,11 @@ import 'package:solar_icons/solar_icons.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key});
-  List<String> titles = [
+ final List<String> titles = [
     'Products',
     'Image Pending',
     'Upcoming Products',
-    'Image Rejected',
+    'Supplier Returns',
   ];
   @override
   Widget build(BuildContext context, ref) {
@@ -76,7 +75,7 @@ class HomePage extends ConsumerWidget {
               AppSpacer(hp: .05),
               // Grid
               BuildStateManageComponent(
-                controller: dashboardController,
+                stateController: dashboardController,
                 errorWidget:
                     (p0, p1) => AppErrorView(
                       error: p0.toString(),
@@ -86,8 +85,11 @@ class HomePage extends ConsumerWidget {
                       },
                     ),
                 successWidget:
-                    (data) =>
-                        _buildSuccessState(context, data as DashboardModel),
+                    (data) => _buildSuccessState(
+                      context,
+                      data as DashboardModel,
+                      ref,
+                    ),
                 loadingWidget: () => DashBoardShimmer(),
               ),
             ],
@@ -97,37 +99,52 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildGridTile(String title, String data) => Container(
-    padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
-    decoration: BoxDecoration(
-      color: AppColors.kSecondaryColor,
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.kPrimaryColor.withAlpha(30),
-          blurRadius: 1,
-          spreadRadius: 1,
-        ),
-      ],
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          overflow: TextOverflow.ellipsis,
-          title,
-          style: AppStyle.largeStyle(
-            fontSize: ResponsiveHelper.wp * .12,
-            color: AppColors.kPrimaryColor,
+  Widget _buildGridTile(
+    String title,
+    String data, {
+    required void Function()? onTap,
+  }) => InkWell(
+    overlayColor: WidgetStatePropertyAll(Colors.transparent),
+    onTap: onTap,
+    child: Container(
+      padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
+      decoration: BoxDecoration(
+        color: AppColors.kSecondaryColor,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.kPrimaryColor.withAlpha(30),
+            blurRadius: 1,
+            spreadRadius: 1,
           ),
-        ),
-        AppSpacer(hp: .01),
-        Text(data, style: AppStyle.mediumStyle(color: AppColors.kPrimaryColor)),
-      ],
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            overflow: TextOverflow.ellipsis,
+            title,
+            style: AppStyle.largeStyle(
+              fontSize: ResponsiveHelper.wp * .12,
+              color: AppColors.kPrimaryColor,
+            ),
+          ),
+          AppSpacer(hp: .01),
+          Text(
+            data,
+            style: AppStyle.mediumStyle(color: AppColors.kPrimaryColor),
+          ),
+        ],
+      ),
     ),
   );
 
-  Widget _buildSuccessState(BuildContext context, DashboardModel model) {
+  Widget _buildSuccessState(
+    BuildContext context,
+    DashboardModel model,
+    WidgetRef ref,
+  ) {
     return Column(
       children: [
         GridView.builder(
@@ -142,13 +159,31 @@ class HomePage extends ConsumerWidget {
           itemCount: 4,
           itemBuilder:
               (context, index) => _buildGridTile(
+                onTap: () {
+                  switch (index) {
+                    case 0:
+                      {
+                        ref.read(navigationController.notifier).state = 2;
+                      }
+
+                    case 1:
+                      {
+                        ref.read(navigationController.notifier).state = 1;
+                      }
+
+                    case 2:
+                      return;
+                    case 3:
+                      return;
+                  }
+                },
                 '${index == 0
                     ? model.totalProduct
                     : index == 1
                     ? model.imagePending
                     : index == 2
                     ? model.upcomingProducts
-                    : model.imageRejected}',
+                    : model.supplierReturn}',
                 titles[index],
               ),
         ),

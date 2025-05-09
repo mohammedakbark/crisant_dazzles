@@ -16,7 +16,7 @@ class ApiConfig {
   static Future<ResponseModel> postRequest({
     required String endpoint,
     required Map<String, dynamic> header,
-    Map<String, dynamic>? body,
+    Object? body,
   }) async {
     try {
       final response = await _dio.post(
@@ -76,7 +76,7 @@ class ApiConfig {
   static Future<ResponseModel> getRequest({
     required String endpoint,
     required Map<String, dynamic> header,
-    Map<String, dynamic>? body,
+    Object? body,
   }) async {
     try {
       final response = await _dio.get(

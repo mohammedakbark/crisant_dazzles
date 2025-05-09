@@ -1,6 +1,5 @@
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/shimmer_effect.dart';
-import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 

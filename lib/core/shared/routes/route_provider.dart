@@ -3,7 +3,10 @@ import 'package:dazzles/features/home/presentation/view_all_recent_captured_scre
 import 'package:dazzles/features/navigation_screen.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/notification/presentation/notification_screen.dart';
+import 'package:dazzles/features/product/data/models/product_model.dart';
+import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
 import 'package:dazzles/features/splash_screen.dart';
+import 'package:dazzles/features/upload/presentation/copy_more_produtcs_screen.dart';
 import 'package:dazzles/features/upload/presentation/image_preview_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,8 +32,30 @@ class RouteProvider {
         path: imagePreview,
 
         builder: (context, state) {
-          final imagePath = state.extra as String;
-          return PreviewScreen(imagePath: imagePath);
+          final map = state.extra as Map<String, dynamic>;
+          final productModel = map['productModel'] as ProductModel;
+          final path = map['path'] as String;
+          return PreviewScreen(imagePath: path, productModel: productModel);
+        },
+      ),
+
+      GoRoute(
+        path: copySameImageScreen,
+
+        builder: (context, state) {
+          // final map = state.extra as Map<String, dynamic>;
+          // final id = map['id'] as int;
+          // final path = map['path'] as String;
+          return CopyMoreProdutcsScreen();
+        },
+      ),
+
+      GoRoute(
+        path: viewImageScreen,
+
+        builder: (context, state) {
+          final path = state.extra;
+          return ImageViewScreen(image: path!);
         },
       ),
     ],

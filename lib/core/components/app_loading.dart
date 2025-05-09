@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AppLoading extends StatefulWidget {
   final bool? isTextLoading;
   final bool? removePadding;
-  AppLoading({super.key, this.isTextLoading, this.removePadding});
+ const AppLoading({super.key, this.isTextLoading, this.removePadding});
 
   @override
   State<AppLoading> createState() => _AppLoadingState();

@@ -10,12 +10,10 @@ import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
-import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/features/product/data/models/product_data_model.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/product/providers/get_products_controller.dart';
+import 'package:dazzles/features/product/data/providers/product_controller/get_products_controller.dart';
+import 'package:dazzles/features/product/data/providers/product_controller/product_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_icons/solar_icons.dart';
 
@@ -37,12 +35,13 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 200 &&
           ref.read(allProductControllerProvider.notifier).hasMore) {
+        log("has more triggerd");
         ref.read(allProductControllerProvider.notifier).loadMore();
       }
     });
-    Future.microtask(() {
-      ref.invalidate(allProductControllerProvider);
-    });
+    // Future.microtask(() {
+    //   ref.invalidate(allProductControllerProvider);
+    // });
   }
 
   final _debouncer = Debouncer(milliseconds: 500);
@@ -54,44 +53,58 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final productController = ref.watch(allProductControllerProvider);
+    final productsState = ref.watch(allProductControllerProvider);
+    final productsController = ref.read(allProductControllerProvider.notifier);
+
     return AppMargin(
-      child: RefreshIndicator(
-        onRefresh: () async {
-          return ref.refresh(allProductControllerProvider);
-        },
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                _debouncer.run(() {
-                  ref
-                      .watch(allProductControllerProvider.notifier)
-                      .onSearchProduct(value);
-                });
-              },
-              style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                hintText: "Product Search",
-                hintStyle: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                fillColor: AppColors.kFillColor,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                suffixIcon: Icon(
-                  SolarIconsOutline.magnifier,
-                  color: AppColors.kPrimaryColor,
-                ),
+      child: Column(
+        children: [
+          AppSpacer(hp: .01),
+          TextField(
+            controller: productsController.searchContoller,
+            onChanged: (value) {
+              _debouncer.run(() {
+                ref
+                    .watch(allProductControllerProvider.notifier)
+                    .onSearchProduct(value);
+              });
+            },
+            style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
+            decoration: InputDecoration(
+              suffixIcon:
+                  productsController.searchContoller.text.isNotEmpty
+                      ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          return ref.refresh(allProductControllerProvider);
+                        },
+                      )
+                      : null,
+              contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              hintText: "Product Search",
+              hintStyle: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              fillColor: AppColors.kFillColor,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              prefixIcon: Icon(
+                SolarIconsOutline.magnifier,
+                color: AppColors.kPrimaryColor,
               ),
             ),
-            Expanded(
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                return ref.refresh(allProductControllerProvider);
+              },
               child: BuildStateManageComponent(
-                controller: productController,
+                stateController: productsState,
+
                 errorWidget:
                     (p0, p1) => AppErrorView(
                       error: p0.toString(),
@@ -100,7 +113,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                       },
                     ),
                 successWidget: (data) {
-                  final products = data as List<ProductModel>;
+                  final state = data as ProductSuccessState;
+                  final products = state.products;
 
                   return products.isEmpty
                       ? AppErrorView(error: "Products not found")
@@ -133,8 +147,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

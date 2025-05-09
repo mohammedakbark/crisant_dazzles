@@ -15,11 +15,11 @@ class ShimmerEffect extends StatelessWidget {
     );
   }
 
-  static Widget placeHolder({required double height, required double width}) {
+  static Widget placeHolder({required double height, required double width,double ?radius}) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.kBgColor,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(radius??100),
       ),
       height: height,
       width: width,

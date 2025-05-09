@@ -11,9 +11,8 @@ import 'package:go_router/go_router.dart';
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
-  CustomAppBar({Key? key})
-    : preferredSize = const Size.fromHeight(70),
-      super(key: key);
+ const CustomAppBar({super.key})
+    : preferredSize = const Size.fromHeight(70);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();

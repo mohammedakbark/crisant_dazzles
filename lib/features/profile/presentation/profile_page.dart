@@ -29,7 +29,7 @@ class ProfilePage extends ConsumerWidget {
             children: [
               AppSpacer(hp: .07),
               BuildStateManageComponent(
-                controller: profileController,
+                stateController: profileController,
                 errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
                 loadingWidget: () => ProfileShimmer(),
 
