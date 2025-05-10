@@ -11,11 +11,11 @@ import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/features/home/providers/dashboard_controller.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/providers/pending_product_controller/get_pending_products_controller.dart';
-import 'package:dazzles/features/upload/providers/select%20product%20controller/product_id_selection_controller.dart';
+import 'package:dazzles/features/upload/providers/get%20pending%20products/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/features/upload/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
@@ -23,13 +23,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:solar_icons/solar_icons.dart';
 
 class PreviewScreen extends ConsumerStatefulWidget {
   final String imagePath;
   final ProductModel productModel;
 
-  const PreviewScreen({super.key, required this.imagePath, required this.productModel});
+  const PreviewScreen({
+    super.key,
+    required this.imagePath,
+    required this.productModel,
+  });
 
   @override
   ConsumerState<PreviewScreen> createState() => _PreviewScreenState();
@@ -45,19 +48,18 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
   }
 
   void convert() async {
-    Future.microtask(() {
-      ref.invalidate(productIdSelectionControllerProvider);
-      ref.read(productIdSelectionControllerProvider.notifier).add(widget.productModel);
-    });
     files = null;
     files = await stackImageWithLogo(
       baseImageFile: File(widget.imagePath),
       logoAssetPath: AppImages.logoPng,
     );
-    setState(() {});
+    Future.microtask(() {
+      ref.invalidate(selectAndSearchProductControllerProvider);
+      ref
+          .read(selectAndSearchProductControllerProvider.notifier)
+          .add(widget.productModel, context);
+    });
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +78,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
             children: [
               AppSpacer(hp: .01),
               _buildImageView(),
-              AppSpacer(hp: .01),
-              // AppSpacer(hp: .01),
-              // Text(
-              //   "Hint: This image will be uploaded to all selected products.",
-              //   style: AppStyle.smallStyle(color: AppColors.kTextPrimaryColor),
-              // ),
-              // AppSpacer(hp: .01),
-              // _buildSearchBox(),
-              // AppSpacer(hp: .01),
-              // _buildSelectedIds(),
-
-              // AppSpacer(hp: .01),
-              // _buildSimilarProducts(),
               AppSpacer(hp: .05),
-              // Buttons
               _buidButton(),
             ],
           ),
@@ -100,13 +88,20 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
   }
 
   void _onUpload(BuildContext context, UploadImageNotifier controller) async {
+    final state = ref.read(selectAndSearchProductControllerProvider);
+
+    List<int> ids = [];
+    for (var i in state.selectedIds) {
+      ids.add(i.id);
+    }
     if (files != null) {
       await controller.uploadImage(
         context: context,
-        productId: widget.productModel.id,
+        productIds: ids,
         file: files!,
       );
       ref.invalidate(getAllPendingProductControllerProvider);
+      ref.invalidate(dashboardControllerProvider);
       if (context.mounted) {
         context.pop();
       }
@@ -205,7 +200,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                 child:
                     files != null
                         ? Hero(
-                          tag: "imageHero",
+                          tag: files!.path,
                           child: Image.file(
                             height: ResponsiveHelper.hp * .3,
                             files!,
@@ -226,7 +221,10 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
               child: IconButton(
                 onPressed: () {
                   if (files != null) {
-                    context.push(viewImageScreen, extra: files as File);
+                    context.push(
+                      openImage,
+                      extra: {"heroTag": files?.path, "path": files as File},
+                    );
                   }
                 },
                 icon: Icon(Icons.remove_red_eye, color: AppColors.kWhite),
@@ -238,15 +236,13 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     ],
   );
 
-  
-
   _buidButton() {
     final uploadImageState = ref.watch(uploadImageControllerProvider);
     final uploadImageController = ref.read(
       uploadImageControllerProvider.notifier,
     );
     final productSelectionState = ref.watch(
-      productIdSelectionControllerProvider,
+      selectAndSearchProductControllerProvider,
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -255,7 +251,9 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
           duration: Duration(milliseconds: 700),
           child: ElevatedButton.icon(
             onPressed: () {
-              context.push(copySameImageScreen);
+              if (files != null) {
+                context.push(copySameImageScreen, extra: files as File);
+              }
             },
             icon: Icon(
               Icons.copy,

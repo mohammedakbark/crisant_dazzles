@@ -10,7 +10,7 @@ import 'package:dazzles/features/product/data/providers/product_controller/get_p
 import 'package:dazzles/features/profile/presentation/profile_page.dart';
 import 'package:dazzles/features/profile/providers/get_profile_controller.dart';
 import 'package:dazzles/features/upload/presentation/pending_image_page.dart';
-import 'package:dazzles/features/upload/providers/pending_product_controller/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_icons/solar_icons.dart';

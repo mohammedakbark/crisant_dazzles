@@ -6,4 +6,4 @@ const searchScreen = "/search";
 const recentlyCaptured = "/viewRecentlyCaptured";
 const imagePreview = '/imagePreview';
 const copySameImageScreen = "/copySameImage";
-const viewImageScreen = "/viewImage";
+const openImage = "/openImage";

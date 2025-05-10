@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
   final void Function()? onPressed;
+  final Color? bgColor;
   final String title;
-  const AppButton({super.key, this.onPressed, required this.title});
+  const AppButton({
+    super.key,
+    this.onPressed,
+    required this.title,
+     this.bgColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +21,10 @@ class AppButton extends StatelessWidget {
       height: ResponsiveHelper.hp * .07,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.kPrimaryColor,
+          backgroundColor: bgColor ?? AppColors.kPrimaryColor,
         ),
         onPressed: onPressed,
-        child: Text("Login", style: AppStyle.largeStyle()),
+        child: Text(title, style: AppStyle.largeStyle()),
       ),
     );
   }

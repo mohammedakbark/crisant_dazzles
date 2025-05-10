@@ -1,4 +1,3 @@
-
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
@@ -20,7 +19,7 @@ import 'package:solar_icons/solar_icons.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key});
- final List<String> titles = [
+  final List<String> titles = [
     'Products',
     'Image Pending',
     'Upcoming Products',
@@ -222,25 +221,42 @@ class HomePage extends ConsumerWidget {
               ),
               itemCount: model.recentCaptured.length,
               itemBuilder:
-                  (context, index) => Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.kBgColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 1,
-                          spreadRadius: 1,
-                          color: AppColors.kPrimaryColor,
+                  (context, index) => InkWell(
+                    onTap: () {
+                      context.push(
+                        openImage,
+                        extra: {
+                          "heroTag":
+                              model.recentCaptured[index].productId.toString(),
+                          "path":
+                              ApiConstants.imageBaseUrl +
+                              model.recentCaptured[index].productPicture,
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.kBgColor,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ],
+                        // border: Border.all(color: AppColors.kPrimaryColor),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Hero(
+                        tag: model.recentCaptured[index].productId.toString(),
+                        child: AppNetworkImage(
+                          fit: BoxFit.cover,
+                          imageFile:
+                              ApiConstants.imageBaseUrl +
+                              model.recentCaptured[index].productPicture,
                         ),
-                      ],
-                      // border: Border.all(color: AppColors.kPrimaryColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: AppNetworkImage(
-                      fit: BoxFit.cover,
-                      imageFile:
-                          ApiConstants.imageBaseUrl +
-                          model.recentCaptured[index].productPicture,
+                      ),
                     ),
                   ),
             ),

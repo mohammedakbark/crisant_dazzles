@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dazzles/features/auth/presentation/login_screen.dart';
 import 'package:dazzles/features/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/features/navigation_screen.dart';
@@ -43,19 +45,28 @@ class RouteProvider {
         path: copySameImageScreen,
 
         builder: (context, state) {
-          // final map = state.extra as Map<String, dynamic>;
+          final file = state.extra as File;
           // final id = map['id'] as int;
           // final path = map['path'] as String;
-          return CopyMoreProdutcsScreen();
+          return CopyMoreProdutcsScreen(fileImage: file);
         },
       ),
 
       GoRoute(
-        path: viewImageScreen,
+        path: openImage,
 
         builder: (context, state) {
-          final path = state.extra;
-          return ImageViewScreen(image: path!);
+          final map = state.extra as Map<String, dynamic>;
+          final path = map['path'];
+          final tag = map['heroTag'] ?? "heroTag";
+          bool enableEditButton = map['enableEditButton'] ?? false;
+          final prouctModel = map['prouctModel'] as ProductModel?;
+          return ImageViewScreen(
+            heroTag: tag,
+            image: path!,
+            productModel: prouctModel,
+            enableEditButton: enableEditButton,
+          );
         },
       ),
     ],

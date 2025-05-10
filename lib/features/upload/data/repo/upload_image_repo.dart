@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
@@ -8,22 +9,27 @@ import 'package:dio/dio.dart';
 
 class UploadImageRepo {
   static Future<Map<String, dynamic>> onUploadImage(
-    dynamic productId,
+    List<int> productIds,
     File file,
   ) async {
     try {
       final userData = await LoginRefDataBase().getUserData;
-
-      final formData = FormData.fromMap({
-        'image': await MultipartFile.fromFile(
-          file.path,
-          filename: basename(file.path),
-
-          contentType: MediaType('image', 'png'), // ✅ Correct content type
+      final formData = FormData();
+      formData.files.add(
+        MapEntry(
+          'image',
+          await MultipartFile.fromFile(
+            file.path,
+            filename: basename(file.path),
+            contentType: MediaType('image', 'png'),
+          ),
         ),
-      });
+      );
+      for (var id in productIds) {
+        formData.fields.add(MapEntry('productids[]', id.toString()));
+      }
       final response = await ApiConfig.postRequest(
-        endpoint: "${ApiConstants.updateImage}/$productId",
+        endpoint: ApiConstants.updateImage,
         header: {
           'Content-Type': 'multipart/form-data',
           "Authorization": "Bearer ${userData.token}",

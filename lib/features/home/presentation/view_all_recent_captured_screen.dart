@@ -1,14 +1,17 @@
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
+import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/home/data/models/recently_captured.dart';
 import 'package:dazzles/features/home/providers/recently_captured_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ViewAllRecentCapturedScreen extends ConsumerStatefulWidget {
   const ViewAllRecentCapturedScreen({super.key});
@@ -59,43 +62,58 @@ class _ViewAllRecentCapturedScreenState
                   itemCount: data.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
                   ),
                   itemBuilder:
-                      (context, index) => Container(
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          color: AppColors.kBgColor,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 1,
-                              spreadRadius: 1,
-                              color: AppColors.kPrimaryColor.withAlpha(30),
-                            ),
-                          ],
-                          // border: Border.all(color: AppColors.kPrimaryColor),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: AppNetworkImage(
-                                fit: BoxFit.cover,
-                                imageFile:
-                                    ApiConstants.imageBaseUrl +
-                                    data[index].productPicture,
+                      (context, index) => InkWell(
+                        onTap: () {
+                          context.push(
+                            openImage,
+                            extra: {
+                              "heroTag": data[index].productId.toString(),
+                              "path":
+                                  ApiConstants.imageBaseUrl +
+                                  data[index].productPicture,
+                            },
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            color: AppColors.kBgColor,
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                                color: AppColors.kPrimaryColor.withAlpha(30),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                data[index].productName,
-                                style: AppStyle.normalStyle(),
+                            ],
+                            // border: Border.all(color: AppColors.kPrimaryColor),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Hero(
+                                  tag: data[index].productId.toString(),
+                                  child: AppNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageFile:
+                                        ApiConstants.imageBaseUrl +
+                                        data[index].productPicture,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  data[index].productName,
+                                  style: AppStyle.normalStyle(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                 );

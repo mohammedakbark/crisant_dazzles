@@ -7,6 +7,7 @@ import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
@@ -15,6 +16,7 @@ import 'package:dazzles/features/product/data/providers/product_controller/get_p
 import 'package:dazzles/features/product/data/providers/product_controller/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class ProductsPage extends ConsumerStatefulWidget {
@@ -35,7 +37,6 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 200 &&
           ref.read(allProductControllerProvider.notifier).hasMore) {
-        log("has more triggerd");
         ref.read(allProductControllerProvider.notifier).loadMore();
       }
     });
@@ -156,7 +157,16 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
   Widget _buildTile(ProductModel product) {
     return InkWell(
       onTap: () {
-        log(product.id.toString());
+        context.push(
+          openImage,
+          extra: {
+            "heroTag": product.id.toString(),
+            "path":
+                "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
+            "enableEditButton": true,
+            "prouctModel": product,
+          },
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -168,9 +178,13 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
           children: [
             Expanded(
               child: Center(
-                child: AppNetworkImage(
-                  imageFile:
-                      "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
+                child: Hero(
+                  tag:
+                      product.id.toString(),
+                  child: AppNetworkImage(
+                    imageFile:
+                        "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
+                  ),
                 ),
               ),
             ),

@@ -1,11 +1,15 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/utils/snackbars.dart';
+import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/repo/upload_image_repo.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
   @override
@@ -15,13 +19,13 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
   Future<void> uploadImage({
     required BuildContext context,
-    required dynamic productId,
+    required List<int> productIds,
     required File file,
   }) async {
     try {
       state = const AsyncLoading();
 
-      final result = await UploadImageRepo.onUploadImage(productId, file);
+      final result = await UploadImageRepo.onUploadImage(productIds, file);
 
       if (result["error"] == false) {
         state = AsyncData(result);
@@ -45,10 +49,32 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
       );
     }
   }
+
+ static Future<void> pickImage(
+    BuildContext context,
+    ImageSource source,
+    ProductModel productModel,
+  ) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+
+      final XFile? pickedFile = await picker.pickImage(source: source);
+      if (pickedFile != null) {
+        if (context.mounted) {
+          context.pop();
+          context.push(
+            imagePreview,
+            extra: {"productModel": productModel, "path": pickedFile.path},
+          );
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }
 
 final uploadImageControllerProvider =
     AsyncNotifierProvider<UploadImageNotifier, Map<String, dynamic>>(() {
       return UploadImageNotifier();
     });
-

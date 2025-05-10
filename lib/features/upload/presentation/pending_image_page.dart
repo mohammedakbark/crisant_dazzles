@@ -6,14 +6,16 @@ import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
+import 'package:dazzles/core/components/componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/providers/pending_product_controller/get_pending_products_controller.dart';
-import 'package:dazzles/features/upload/providers/pending_product_controller/pending_products_state.dart';
+import 'package:dazzles/features/upload/providers/get%20pending%20products/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/providers/get%20pending%20products/pending_products_state.dart';
+import 'package:dazzles/features/upload/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -93,25 +95,6 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
     );
   }
 
-  Future<void> _pickImage(ImageSource source, ProductModel productModel) async {
-    try {
-      final ImagePicker picker = ImagePicker();
-
-      final XFile? pickedFile = await picker.pickImage(source: source);
-      if (pickedFile != null) {
-        if (mounted) {
-          context.pop();
-          context.push(
-            imagePreview,
-            extra: {"productModel": productModel, "path": pickedFile.path},
-          );
-        }
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
   void showGallerySheet(BuildContext context, ProductModel productModel) {
     showModalBottomSheet(
       context: context,
@@ -171,7 +154,11 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                               ),
                             ),
                             onPressed:
-                                () => _pickImage(ImageSource.gallery, productModel),
+                                () => UploadImageNotifier.pickImage(
+                                  context,
+                                  ImageSource.gallery,
+                                  productModel,
+                                ),
                             icon: Icon(Icons.photo, color: AppColors.kWhite),
                             label: Text("Gallery"),
                           ),
@@ -193,7 +180,12 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed: () => _pickImage(ImageSource.camera, productModel),
+                            onPressed:
+                                () => UploadImageNotifier.pickImage(
+                                  context,
+                                  ImageSource.camera,
+                                  productModel,
+                                ),
                             icon: Icon(
                               Icons.camera_alt,
                               color: AppColors.kWhite,
@@ -227,98 +219,115 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: ResponsiveHelper.wp * .55,
-                  child: AppNetworkImage(
-                    imageFile:
-                        "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
-
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                    onTap: () {
-                      showGallerySheet(context, product);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            SolarIconsOutline.camera,
-                            color: AppColors.kWhite,
-                            size: 30,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "Capture Picture",
-                            style: AppStyle.mediumStyle(
-                              color: AppColors.kWhite,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.productName,
-                  style: AppStyle.boldStyle(fontSize: 18),
-                ),
-                AppSpacer(hp: .005),
-                Text(
-                  "Category: ${product.category}",
-                  style: AppStyle.normalStyle(
-                    color: AppColors.kTextPrimaryColor,
-                  ),
-                ),
-                AppSpacer(hp: .005),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                child: Row(
                   children: [
-                    Text(
-                      "Color: ${product.color}",
-                      style: AppStyle.normalStyle(
-                        color: AppColors.kTextPrimaryColor,
+                    SizedBox(
+                      width: ResponsiveHelper.wp * .55,
+                      child: AppNetworkImage(
+                        imageFile:
+                            "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
+
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.kPrimaryColor.withAlpha(70),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        "Size: ${product.productSize}",
-                        style: AppStyle.mediumStyle(color: AppColors.kWhite),
+                    Expanded(
+                      child: InkWell(
+                        overlayColor: WidgetStatePropertyAll(
+                          Colors.transparent,
+                        ),
+                        onTap: () {
+                          showGallerySheet(context, product);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                SolarIconsOutline.camera,
+                                color: AppColors.kWhite,
+                                size: 30,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "Capture Picture",
+                                style: AppStyle.mediumStyle(
+                                  color: AppColors.kWhite,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.productName,
+                      style: AppStyle.boldStyle(fontSize: 18),
+                    ),
+                    AppSpacer(hp: .005),
+                    Text(
+                      "Category: ${product.category}",
+                      style: AppStyle.normalStyle(
+                        color: AppColors.kTextPrimaryColor,
+                      ),
+                    ),
+                    AppSpacer(hp: .005),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Color: ${product.color}",
+                          style: AppStyle.normalStyle(
+                            color: AppColors.kTextPrimaryColor,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.kPrimaryColor.withAlpha(70),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            "Size: ${product.productSize}",
+                            style: AppStyle.mediumStyle(
+                              color: AppColors.kWhite,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            left: 10,
+            top: 10,
+            child: buildIdBadge(
+              context,
+              enableCopy: true,
+              product.id.toString(),
             ),
           ),
         ],

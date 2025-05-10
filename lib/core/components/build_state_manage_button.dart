@@ -17,14 +17,25 @@ class BuildStateManageComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return stateController.when(
-      data: successWidget,
-      error:
-          errorWidget ??
-          (error, tr) {
-            return successWidget('');
-          },
-      loading: loadingWidget ?? () => AppLoading(),
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      switchInCurve: Curves.easeIn,
+      switchOutCurve: Curves.easeOut,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(scale: animation, child: child),
+        );
+      },
+      child: stateController.when(
+        data: successWidget,
+        error:
+            errorWidget ??
+            (error, tr) {
+              return successWidget('');
+            },
+        loading: loadingWidget ?? () => AppLoading(),
+      ),
     );
   }
 }
