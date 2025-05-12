@@ -21,7 +21,7 @@ class UploadImageRepo {
           await MultipartFile.fromFile(
             file.path,
             filename: basename(file.path),
-            contentType: MediaType('image', 'png'),
+            contentType: MediaType('image', 'jpg'),
           ),
         ),
       );

@@ -17,12 +17,14 @@ import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
 
 class PreviewScreen extends ConsumerStatefulWidget {
   final String imagePath;
@@ -112,12 +114,15 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     required File baseImageFile,
     required String logoAssetPath,
   }) async {
+    // Load base image
     final baseImageBytes = await baseImageFile.readAsBytes();
     final baseImage = await decodeImageFromList(baseImageBytes);
 
+    // Load logo
     final logoData = await rootBundle.load(logoAssetPath);
     final logoImage = await decodeImageFromList(logoData.buffer.asUint8List());
 
+    // Draw on canvas
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
     final paint = Paint();
@@ -129,14 +134,13 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
 
     canvas.drawImage(baseImage, Offset.zero, paint);
 
-    // Resize logo relative to the base image size
+    // Resize logo
     double logoWidth = imageSize.width * 0.3;
     double logoHeight = logoWidth * (logoImage.height / logoImage.width);
 
-    // ➤ Position: bottom-left
     final logoRect = Rect.fromLTWH(
-      50, // left padding
-      imageSize.height - logoHeight - 50, // bottom padding
+      50,
+      imageSize.height - logoHeight - 50,
       logoWidth,
       logoHeight,
     );
@@ -153,25 +157,118 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
       paint,
     );
 
-    final finalImage = await recorder.endRecording().toImage(
+    final composedImage = await recorder.endRecording().toImage(
       baseImage.width,
       baseImage.height,
     );
 
-    final byteData = await finalImage.toByteData(
+    // Get PNG bytes from ui.Image
+    final byteData = await composedImage.toByteData(
       format: ui.ImageByteFormat.png,
     );
     final pngBytes = byteData!.buffer.asUint8List();
 
+    // Decode to image package format
+    final img.Image imagePkg = img.decodeImage(pngBytes)!;
+
+    // Resize for compression (optional)
+    final resized = img.copyResize(
+      imagePkg,
+      width: (imagePkg.width * 0.7).toInt(), // resize to 70% of original
+    );
+
+    // Encode to JPG (smaller size, you can use PNG if needed)
+    final jpgBytes = img.encodeJpg(resized, quality: 85);
+
+    // Save file
     final dir = await getTemporaryDirectory();
     final fileName =
-        'stacked_image_${DateTime.now().millisecondsSinceEpoch}.png';
-
+        'stacked_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final file = File('${dir.path}/$fileName');
-    await file.writeAsBytes(pngBytes);
+    await file.writeAsBytes(jpgBytes);
 
     return file;
   }
+  // ISOLATION USING
+  // Future<File> stackImageWithLogo({
+  //   required File baseImageFile,
+  //   required String logoAssetPath,
+  // }) async {
+  //   // Step 1: Load base image (from file)
+  //   final baseImageBytes = await baseImageFile.readAsBytes();
+  //   final baseImage = await decodeImageFromList(baseImageBytes);
+
+  //   // Step 2: Load logo image (from assets)
+  //   final logoData = await rootBundle.load(logoAssetPath);
+  //   final logoImage = await decodeImageFromList(logoData.buffer.asUint8List());
+
+  //   // Step 3: Draw base image + logo on canvas
+  //   final recorder = ui.PictureRecorder();
+  //   final canvas = Canvas(recorder);
+  //   final paint = Paint();
+
+  //   final imageSize = Size(
+  //     baseImage.width.toDouble(),
+  //     baseImage.height.toDouble(),
+  //   );
+
+  //   canvas.drawImage(baseImage, Offset.zero, paint);
+
+  //   double logoWidth = imageSize.width * 0.3;
+  //   double logoHeight = logoWidth * (logoImage.height / logoImage.width);
+
+  //   final logoRect = Rect.fromLTWH(
+  //     50,
+  //     imageSize.height - logoHeight - 50,
+  //     logoWidth,
+  //     logoHeight,
+  //   );
+
+  //   canvas.drawImageRect(
+  //     logoImage,
+  //     Rect.fromLTWH(
+  //       0,
+  //       0,
+  //       logoImage.width.toDouble(),
+  //       logoImage.height.toDouble(),
+  //     ),
+  //     logoRect,
+  //     paint,
+  //   );
+
+  //   final composedImage = await recorder.endRecording().toImage(
+  //     baseImage.width,
+  //     baseImage.height,
+  //   );
+
+  //   final byteData = await composedImage.toByteData(
+  //     format: ui.ImageByteFormat.png,
+  //   );
+  //   final pngBytes = byteData!.buffer.asUint8List();
+
+  //   // Step 4: Process/compress in background using compute()
+  //   final compressedBytes = await compute(_compressImageInBackground, pngBytes);
+
+  //   // Step 5: Save compressed image to temporary file
+  //   final dir = await getTemporaryDirectory();
+  //   final fileName =
+  //       'stacked_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+  //   final file = File('${dir.path}/$fileName');
+  //   await file.writeAsBytes(compressedBytes);
+
+  //   return file;
+  // }
+
+  // /// This function runs in a background isolate using `compute()`
+  // Uint8List _compressImageInBackground(Uint8List pngBytes) {
+  //   final image = img.decodeImage(pngBytes)!;
+
+  //   // Resize to 70% of original
+  //   final resized = img.copyResize(image, width: (image.width * 0.7).toInt());
+
+  //   // Encode to JPG (quality 85)
+  //   return Uint8List.fromList(img.encodeJpg(resized, quality: 85));
+  // }
 
   Widget _buildImageView() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,3 +426,75 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     );
   }
 }
+
+ // PNG WIH MAXIMUM QUALITY
+
+// Future<File> stackImageWithLogo({
+  //   required File baseImageFile,
+  //   required String logoAssetPath,
+  // }) async {
+  //   final baseImageBytes = await baseImageFile.readAsBytes();
+  //   final baseImage = await decodeImageFromList(baseImageBytes);
+
+  //   final logoData = await rootBundle.load(logoAssetPath);
+  //   final logoImage = await decodeImageFromList(logoData.buffer.asUint8List());
+
+  //   final recorder = ui.PictureRecorder();
+  //   final canvas = Canvas(recorder);
+  //   final paint = Paint();
+
+  //   final imageSize = Size(
+  //     baseImage.width.toDouble(),
+  //     baseImage.height.toDouble(),
+  //   );
+
+  //   canvas.drawImage(baseImage, Offset.zero, paint);
+
+  //   // Resize logo relative to the base image size
+  //   double logoWidth = imageSize.width * 0.3;
+  //   double logoHeight = logoWidth * (logoImage.height / logoImage.width);
+
+  //   // ➤ Position: bottom-left
+  //   final logoRect = Rect.fromLTWH(
+  //     50, // left padding
+  //     imageSize.height - logoHeight - 50, // bottom padding
+  //     logoWidth,
+  //     logoHeight,
+  //   );
+
+  //   canvas.drawImageRect(
+  //     logoImage,
+  //     Rect.fromLTWH(
+  //       0,
+  //       0,
+  //       logoImage.width.toDouble(),
+  //       logoImage.height.toDouble(),
+  //     ),
+  //     logoRect,
+  //     paint,
+  //   );
+
+  //   final finalImage = await recorder.endRecording().toImage(
+  //     baseImage.width,
+  //     baseImage.height,
+  //   );
+
+  //   final byteData = await finalImage.toByteData(
+  //     format: ui.ImageByteFormat.png,
+  //   );
+  //   final pngBytes = byteData!.buffer.asUint8List();
+
+  //   final dir = await getTemporaryDirectory();
+  //   final fileName =
+  //       'stacked_image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+  //   final file = File('${dir.path}/$fileName');
+  //   await file.writeAsBytes(pngBytes);
+
+  //   return file;
+  // }
+
+
+
+
+

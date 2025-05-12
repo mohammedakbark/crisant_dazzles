@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dazzles/core/services/navigation_controller.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -17,7 +19,7 @@ import 'package:solar_icons/solar_icons.dart';
 import 'package:badges/badges.dart' as badges;
 
 class NavigationScreen extends ConsumerStatefulWidget {
- const NavigationScreen({super.key});
+  const NavigationScreen({super.key});
 
   @override
   ConsumerState<NavigationScreen> createState() => _NavigationScreenState();
@@ -55,7 +57,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         ),
         child: Container(
           decoration: BoxDecoration(boxShadow: [BoxShadow()]),
-          // height: ResponsiveHelper.hp * .09,
+          height: Platform.isIOS ? null : ResponsiveHelper.hp * .09,
           child: BottomNavigationBar(
             onTap: (value) {
               ref.read(navigationController.notifier).state = value;
