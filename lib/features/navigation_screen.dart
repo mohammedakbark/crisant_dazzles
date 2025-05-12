@@ -55,7 +55,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         ),
         child: Container(
           decoration: BoxDecoration(boxShadow: [BoxShadow()]),
-          height: ResponsiveHelper.hp * .09,
+          // height: ResponsiveHelper.hp * .09,
           child: BottomNavigationBar(
             onTap: (value) {
               ref.read(navigationController.notifier).state = value;

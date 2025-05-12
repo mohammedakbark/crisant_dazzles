@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -99,13 +100,7 @@ class ProfilePage extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () async {
-                    await LoginRefDataBase().clearLoginCredential();
-                    ref.read(navigationController.notifier).state = 0;
-                    if (context.mounted) {
-                      context.go(initialScreen);
-                    }
-                  },
+                  onPressed: ()=>showLogoutConfirmation(context,ref),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -129,6 +124,124 @@ class ProfilePage extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+   void showLogoutConfirmation(BuildContext context,WidgetRef ref ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return AnimatedPadding(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: SlideInUp(
+            duration: Duration(milliseconds: 400),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.75),
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.white24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 30,
+                    offset: Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Are You Sure?',
+                    style: AppStyle.mediumStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ZoomIn(
+                          duration: Duration(milliseconds: 600),
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.kWhite,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 14,
+                                horizontal: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            onPressed:
+                                () => context.pop()
+                              ,
+                            icon: Icon(Icons.close, color: AppColors.kWhite),
+                            label: Text("Cancel"),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ZoomIn(
+                          duration: Duration(milliseconds: 800),
+                          child: SizedBox(
+                width: ResponsiveHelper.wp * .5,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: AppColors.kErrorPrimary),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: ()async{
+                    await LoginRefDataBase().clearLoginCredential();
+                    ref.read(navigationController.notifier).state=0;
+                    if(context.mounted){
+                      context.go(initialScreen);
+                    }
+                    
+                    // logout
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        SolarIconsOutline.logout,
+                        color: AppColors.kErrorPrimary,
+                      ),
+                      AppSpacer(wp: .02),
+                      Text(
+                        "Logout",
+                        style: AppStyle.mediumStyle(
+                          color: AppColors.kErrorPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
