@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dazzles/core/components/app_loading.dart';
 
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -30,6 +31,7 @@ class AppNetworkImage extends StatelessWidget {
     return CachedNetworkImage(
       fit: fit,
       imageUrl: imageFile ?? "",
+      placeholder: (context, url) => AppLoading(),
       errorListener: (value) {},
       errorWidget:
           (context, url, error) =>

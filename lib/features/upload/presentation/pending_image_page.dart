@@ -13,9 +13,9 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/providers/get%20pending%20products/get_pending_products_controller.dart';
-import 'package:dazzles/features/upload/providers/get%20pending%20products/pending_products_state.dart';
-import 'package:dazzles/features/upload/providers/upload_image_controller.dart';
+import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/data/providers/get%20pending%20products/pending_products_state.dart';
+import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -73,15 +73,23 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
           return Column(
             children: [
               Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => AppSpacer(hp: .01),
-                  controller: _scrollController,
-                  itemCount: pending.length,
-                  itemBuilder: (context, index) {
-                    final product = pending[index];
-                    return _buildProductCard(product);
-                  },
-                ),
+                child:
+                    pending.isEmpty
+                        ? AppErrorView(
+                          error: "No pending data!",
+                          errorExp:
+                              'No more products in pending to update photo',
+                        )
+                        : ListView.separated(
+                          separatorBuilder:
+                              (context, index) => AppSpacer(hp: .01),
+                          controller: _scrollController,
+                          itemCount: pending.length,
+                          itemBuilder: (context, index) {
+                            final product = pending[index];
+                            return _buildProductCard(product);
+                          },
+                        ),
               ),
               ref
                       .read(getAllPendingProductControllerProvider.notifier)

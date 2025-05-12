@@ -10,7 +10,7 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
 import 'package:dazzles/features/profile/presentation/widgets/profile_shimmer.dart';
-import 'package:dazzles/features/profile/providers/get_profile_controller.dart';
+import 'package:dazzles/features/profile/data/providers/get_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

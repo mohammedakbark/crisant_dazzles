@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
+import 'package:dazzles/core/components/componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -168,60 +167,72 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
           },
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          // borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.kPrimaryColor),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Center(
-                child: Hero(
-                  tag:
-                      product.id.toString(),
-                  child: AppNetworkImage(
-                    imageFile:
-                        "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
-                  ),
-                ),
-              ),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              // borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.kPrimaryColor),
             ),
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(product.productName, style: AppStyle.boldStyle()),
-                  Container(
-                    padding: EdgeInsets.all(4),
-                    color: AppColors.kPrimaryColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          product.category,
-                          style: AppStyle.mediumStyle(
-                            color: AppColors.kSecondaryColor,
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6),
-                          color: AppColors.kBgColor,
-                          child: Text(
-                            product.productSize,
-                            style: AppStyle.mediumStyle(),
-                          ),
-                        ),
-                      ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Hero(
+                      tag: product.id.toString(),
+                      child: AppNetworkImage(
+                        imageFile:
+                            "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(product.productName, style: AppStyle.boldStyle()),
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        color: AppColors.kPrimaryColor,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              product.category,
+                              style: AppStyle.mediumStyle(
+                                color: AppColors.kSecondaryColor,
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 6),
+                              color: AppColors.kBgColor,
+                              child: Text(
+                                product.productSize,
+                                style: AppStyle.mediumStyle(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            left: 10,
+            top: 10,
+            child: buildIdBadge(
+              context,
+              product.id.toString(),
+              enableCopy: true,
+            ),
+          ),
+        ],
       ),
     );
   }

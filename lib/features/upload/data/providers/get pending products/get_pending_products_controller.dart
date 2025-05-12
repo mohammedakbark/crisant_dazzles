@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:dazzles/core/shared/models/pagination_model.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/repo/get_pending_products_repo.dart';
-import 'package:dazzles/features/upload/providers/get%20pending%20products/pending_products_state.dart';
+import 'package:dazzles/features/upload/data/providers/get%20pending%20products/pending_products_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final getAllPendingProductControllerProvider = AsyncNotifierProvider<

@@ -11,7 +11,7 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/home/data/models/dashboard_model.dart';
 import 'package:dazzles/features/home/presentation/widgets/dash_board_shimmer.dart';
-import 'package:dazzles/features/home/providers/dashboard_controller.dart';
+import 'package:dazzles/features/home/data/providers/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,7 +38,7 @@ class HomePage extends ConsumerWidget {
         child: AppMargin(
           child: Column(
             children: [
-              AppSpacer(hp: .025),
+              AppSpacer(hp: .02),
               // Search
               InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
@@ -71,7 +71,7 @@ class HomePage extends ConsumerWidget {
                 ),
               ),
 
-              AppSpacer(hp: .05),
+              AppSpacer(hp: .02),
               // Grid
               BuildStateManageComponent(
                 stateController: dashboardController,
@@ -186,7 +186,7 @@ class HomePage extends ConsumerWidget {
                 titles[index],
               ),
         ),
-        AppSpacer(hp: .03),
+        AppSpacer(hp: .015),
         // Products
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,10 +206,10 @@ class HomePage extends ConsumerWidget {
             ),
           ],
         ),
-        AppSpacer(hp: .02),
+        AppSpacer(hp: .01),
         // product Grid
         model.recentCaptured.isEmpty
-            ? AppErrorView(error: "Nothing is captured recently")
+            ? AppErrorView(error: "Nothing is captured recently") 
             : GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               padding: EdgeInsets.all(0),

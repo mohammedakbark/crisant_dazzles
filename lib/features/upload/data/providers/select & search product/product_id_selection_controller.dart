@@ -9,7 +9,7 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/repo/search_product_by_id_repo.dart';
-import 'package:dazzles/features/upload/providers/select%20&%20search%20product/product_selection_state.dart';
+import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_selection_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

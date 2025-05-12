@@ -1,11 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:flutter/material.dart';
 
 class AppLoading extends StatefulWidget {
   final bool? isTextLoading;
   final bool? removePadding;
- const AppLoading({super.key, this.isTextLoading, this.removePadding});
+  const AppLoading({super.key, this.isTextLoading, this.removePadding});
 
   @override
   State<AppLoading> createState() => _AppLoadingState();
@@ -63,7 +64,10 @@ class _AppLoadingState extends State<AppLoading> {
               //     );
               //   },
               // )
-              : CircularProgressIndicator.adaptive(),
+              : CircularProgressIndicator.adaptive(
+                strokeWidth: 1,
+                backgroundColor: AppColors.kFillColor,
+              ),
     );
   }
 }
