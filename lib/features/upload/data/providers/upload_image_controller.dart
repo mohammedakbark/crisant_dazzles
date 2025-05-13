@@ -50,23 +50,33 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
     }
   }
 
- static Future<void> pickImage(
+  // bool isImageLoading = false;
+  static Future<void> pickImage(
     BuildContext context,
     ImageSource source,
     ProductModel productModel,
   ) async {
     try {
+      // isImageLoading = true;
       final ImagePicker picker = ImagePicker();
-
+      print("123");
       final XFile? pickedFile = await picker.pickImage(source: source);
-      if (pickedFile != null) {
-        if (context.mounted) {
-          context.pop();
-          context.push(
-            imagePreview,
-            extra: {"productModel": productModel, "path": pickedFile.path},
-          );
-        }
+      print("456");
+      if (context.mounted && pickedFile != null) {
+        // int sizeInBytes = image.lengthInBytes;
+        // double sizeInKB = sizeInBytes / 1024;
+        // double sizeInMB = sizeInKB / 1024;
+
+        // print('Size: $sizeInBytes bytes');
+        // print('Size: ${sizeInKB.toStringAsFixed(2)} KB');
+        // print('Size: ${sizeInMB.toStringAsFixed(2)} MB');
+        print("789");
+
+        context.pop();
+        context.push(
+          imagePreview,
+          extra: {"productModel": productModel, "path": pickedFile.path},
+        );
       }
     } catch (e) {
       log(e.toString());

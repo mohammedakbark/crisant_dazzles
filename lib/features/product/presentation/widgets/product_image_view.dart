@@ -13,12 +13,13 @@ import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class ImageViewScreen extends StatefulWidget {
+class ImageViewScreen extends ConsumerStatefulWidget {
   final Object image;
   final String heroTag;
   final ProductModel? productModel;
@@ -32,10 +33,10 @@ class ImageViewScreen extends StatefulWidget {
   });
 
   @override
-  State<ImageViewScreen> createState() => _ImageViewScreenState();
+  ConsumerState<ImageViewScreen> createState() => _ImageViewScreenState();
 }
 
-class _ImageViewScreenState extends State<ImageViewScreen> {
+class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
   File? fileImage;
   String? netWorkImage;
   @override
@@ -169,6 +170,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                                   ImageSource.gallery,
                                   productModel,
                                 ),
+
                             icon: Icon(Icons.photo, color: AppColors.kWhite),
                             label: Text("Gallery"),
                           ),
@@ -196,6 +198,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                                   ImageSource.camera,
                                   productModel,
                                 ),
+
                             icon: Icon(
                               Icons.camera_alt,
                               color: AppColors.kWhite,

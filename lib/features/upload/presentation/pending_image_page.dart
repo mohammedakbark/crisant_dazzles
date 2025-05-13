@@ -167,6 +167,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                   ImageSource.gallery,
                                   productModel,
                                 ),
+
                             icon: Icon(Icons.photo, color: AppColors.kWhite),
                             label: Text("Gallery"),
                           ),
@@ -194,6 +195,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                   ImageSource.camera,
                                   productModel,
                                 ),
+
                             icon: Icon(
                               Icons.camera_alt,
                               color: AppColors.kWhite,

@@ -51,12 +51,16 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
       appBar: index == 3 ? null : CustomAppBar(),
       body: _pages[index],
       bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(ResponsiveHelper.borderRadiusLarge),
-          topRight: Radius.circular(ResponsiveHelper.borderRadiusLarge),
-        ),
+        // borderRadius: BorderRadius.only(
+        //   topLeft: Radius.circular(ResponsiveHelper.borderRadiusLarge),
+        //   topRight: Radius.circular(ResponsiveHelper.borderRadiusLarge),
+        // ),
         child: Container(
-          decoration: BoxDecoration(boxShadow: [BoxShadow()]),
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+              horizontal: BorderSide(color: AppColors.kBorderColor),
+            ),
+          ),
           height: Platform.isIOS ? null : ResponsiveHelper.hp * .09,
           child: BottomNavigationBar(
             onTap: (value) {
@@ -70,7 +74,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
             unselectedLabelStyle: AppStyle.normalStyle(
               fontSize: ResponsiveHelper.fontExtraSmall,
             ),
-            backgroundColor: AppColors.kSecondaryColor,
+            backgroundColor: AppColors.kBgColor,
             selectedItemColor: AppColors.kPrimaryColor,
             unselectedItemColor: AppColors.kTextPrimaryColor,
 

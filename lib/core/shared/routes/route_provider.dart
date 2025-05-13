@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dazzles/features/auth/presentation/login_screen.dart';
 import 'package:dazzles/features/home/presentation/view_all_recent_captured_screen.dart';
@@ -36,8 +37,8 @@ class RouteProvider {
         builder: (context, state) {
           final map = state.extra as Map<String, dynamic>;
           final productModel = map['productModel'] as ProductModel;
-          final path = map['path'] as String;
-          return PreviewScreen(imagePath: path, productModel: productModel);
+          final image = map['path'] as String;
+          return PreviewScreen(image: image, productModel: productModel);
         },
       ),
 

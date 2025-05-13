@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
@@ -32,13 +34,17 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
   void initState() {
     super.initState();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 200 &&
-          ref.read(allProductControllerProvider.notifier).hasMore) {
-        ref.read(allProductControllerProvider.notifier).loadMore();
-      }
-    });
+    try {
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent - 200 &&
+            ref.read(allProductControllerProvider.notifier).hasMore) {
+          ref.read(allProductControllerProvider.notifier).loadMore();
+        }
+      });
+    } catch (e) {
+      log("Error");
+    }
     // Future.microtask(() {
     //   ref.invalidate(allProductControllerProvider);
     // });
