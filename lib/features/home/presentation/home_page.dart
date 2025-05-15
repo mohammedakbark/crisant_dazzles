@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/components/app_error_componet.dart';
+import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -12,6 +15,7 @@ import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/home/data/models/dashboard_model.dart';
 import 'package:dazzles/features/home/presentation/widgets/dash_board_shimmer.dart';
 import 'package:dazzles/features/home/data/providers/dashboard_controller.dart';
+import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,19 +29,34 @@ class HomePage extends ConsumerWidget {
     'Upcoming Products',
     'Supplier Returns',
   ];
+  String imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
   @override
   Widget build(BuildContext context, ref) {
+    // final uplaodState = ref.watch(uploadImageControllerProvider);
     final dashboardController = ref.watch(dashboardControllerProvider);
     return RefreshIndicator(
       onRefresh: () async {
+        imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
+
         return ref.refresh(dashboardControllerProvider);
       },
-
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: AppMargin(
           child: Column(
             children: [
+              // InkWell(
+              //     onTap: () {},
+              //     child: Text(ref
+              //         .watch(uploadImageControllerProvider.notifier)
+              //         .entry
+              //         .toString())),
+              // uplaodState.when(
+              //   data: (data) => Text(data['data'].toString()),
+              //   error: (error, stackTrace) => Text(error.toString()),
+              //   loading: () => AppLoading(),
+              // ),
+
               AppSpacer(hp: .02),
               // Search
               InkWell(
@@ -75,20 +94,17 @@ class HomePage extends ConsumerWidget {
               // Grid
               BuildStateManageComponent(
                 stateController: dashboardController,
-                errorWidget:
-                    (p0, p1) => AppErrorView(
-                      error: p0.toString(),
-
-                      onRetry: () {
-                        return ref.refresh(dashboardControllerProvider);
-                      },
-                    ),
-                successWidget:
-                    (data) => _buildSuccessState(
-                      context,
-                      data as DashboardModel,
-                      ref,
-                    ),
+                errorWidget: (p0, p1) => AppErrorView(
+                  error: p0.toString(),
+                  onRetry: () {
+                    return ref.refresh(dashboardControllerProvider);
+                  },
+                ),
+                successWidget: (data) => _buildSuccessState(
+                  context,
+                  data as DashboardModel,
+                  ref,
+                ),
                 loadingWidget: () => DashBoardShimmer(),
               ),
             ],
@@ -102,42 +118,43 @@ class HomePage extends ConsumerWidget {
     String title,
     String data, {
     required void Function()? onTap,
-  }) => InkWell(
-    overlayColor: WidgetStatePropertyAll(Colors.transparent),
-    onTap: onTap,
-    child: Container(
-      padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
-      decoration: BoxDecoration(
-        color: AppColors.kSecondaryColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.kPrimaryColor.withAlpha(30),
-            blurRadius: 1,
-            spreadRadius: 1,
+  }) =>
+      InkWell(
+        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        onTap: onTap,
+        child: Container(
+          padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
+          decoration: BoxDecoration(
+            color: AppColors.kSecondaryColor,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.kPrimaryColor.withAlpha(30),
+                blurRadius: 1,
+                spreadRadius: 1,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            overflow: TextOverflow.ellipsis,
-            title,
-            style: AppStyle.largeStyle(
-              fontSize: ResponsiveHelper.wp * .12,
-              color: AppColors.kPrimaryColor,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                overflow: TextOverflow.ellipsis,
+                title,
+                style: AppStyle.largeStyle(
+                  fontSize: ResponsiveHelper.wp * .12,
+                  color: AppColors.kPrimaryColor,
+                ),
+              ),
+              AppSpacer(hp: .01),
+              Text(
+                data,
+                style: AppStyle.mediumStyle(color: AppColors.kPrimaryColor),
+              ),
+            ],
           ),
-          AppSpacer(hp: .01),
-          Text(
-            data,
-            style: AppStyle.mediumStyle(color: AppColors.kPrimaryColor),
-          ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   Widget _buildSuccessState(
     BuildContext context,
@@ -156,35 +173,29 @@ class HomePage extends ConsumerWidget {
             crossAxisCount: 2,
           ),
           itemCount: 4,
-          itemBuilder:
-              (context, index) => _buildGridTile(
-                onTap: () {
-                  switch (index) {
-                    case 0:
-                      {
-                        ref.read(navigationController.notifier).state = 2;
-                      }
-
-                    case 1:
-                      {
-                        ref.read(navigationController.notifier).state = 1;
-                      }
-
-                    case 2:
-                      return;
-                    case 3:
-                      return;
+          itemBuilder: (context, index) => _buildGridTile(
+            onTap: () {
+              switch (index) {
+                case 0:
+                  {
+                    ref.read(navigationController.notifier).state = 2;
                   }
-                },
-                '${index == 0
-                    ? model.totalProduct
-                    : index == 1
-                    ? model.imagePending
-                    : index == 2
-                    ? model.upcomingProducts
-                    : model.supplierReturn}',
-                titles[index],
-              ),
+
+                case 1:
+                  {
+                    ref.read(navigationController.notifier).state = 1;
+                  }
+
+                case 2:
+                  return;
+
+                case 3:
+                  return;
+              }
+            },
+            '${index == 0 ? model.totalProduct : index == 1 ? model.imagePending : index == 2 ? model.upcomingProducts : model.supplierReturn}',
+            titles[index],
+          ),
         ),
         AppSpacer(hp: .015),
         // Products
@@ -209,57 +220,55 @@ class HomePage extends ConsumerWidget {
         AppSpacer(hp: .01),
         // product Grid
         model.recentCaptured.isEmpty
-            ? AppErrorView(error: "Nothing is captured recently") 
+            ? AppErrorView(error: "Nothing is captured recently")
             : GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.all(0),
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                crossAxisCount: 2,
-              ),
-              itemCount: model.recentCaptured.length,
-              itemBuilder:
-                  (context, index) => InkWell(
-                    onTap: () {
-                      context.push(
-                        openImage,
-                        extra: {
-                          "heroTag":
-                              model.recentCaptured[index].productId.toString(),
-                          "path":
-                              ApiConstants.imageBaseUrl +
-                              model.recentCaptured[index].productPicture,
-                        },
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kBgColor,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 1,
-                            spreadRadius: 1,
-                            color: AppColors.kPrimaryColor,
-                          ),
-                        ],
-                        // border: Border.all(color: AppColors.kPrimaryColor),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Hero(
-                        tag: model.recentCaptured[index].productId.toString(),
-                        child: AppNetworkImage(
-                          fit: BoxFit.cover,
-                          imageFile:
-                              ApiConstants.imageBaseUrl +
-                              model.recentCaptured[index].productPicture,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.all(0),
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
+                  crossAxisCount: 2,
+                ),
+                itemCount: model.recentCaptured.length,
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () {
+                    context.push(
+                      openImage,
+                      extra: {
+                        "heroTag":
+                            model.recentCaptured[index].productId.toString(),
+                        "path": ApiConstants.imageBaseUrl +
+                            model.recentCaptured[index].productPicture,
+                      },
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.kBgColor,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                          color: AppColors.kPrimaryColor,
                         ),
+                      ],
+                      // border: Border.all(color: AppColors.kPrimaryColor),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Hero(
+                      tag: model.recentCaptured[index].productId.toString(),
+                      child: AppNetworkImage(
+                        imageVersion: imageVersion,
+                        fit: BoxFit.cover,
+                        imageFile: ApiConstants.imageBaseUrl +
+                            model.recentCaptured[index].productPicture,
                       ),
                     ),
                   ),
-            ),
+                ),
+              ),
       ],
     );
   }

@@ -1,77 +1,33 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:isolate';
 
+import 'package:dazzles/core/local/hive/controllers/upload_manager.dart';
+import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/core/utils/snackbars.dart';
+import 'package:dazzles/features/home/data/providers/dashboard_controller.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
+import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
+import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/features/upload/data/repo/upload_image_repo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
-  @override
-  Future<Map<String, dynamic>> build() async {
-    return {};
-  }
-
-  Future<void> uploadImage({
-    required BuildContext context,
-    required List<int> productIds,
-    required File file,
-  }) async {
-    try {
-      state = const AsyncLoading();
-
-      final result = await UploadImageRepo.onUploadImage(productIds, file);
-
-      if (result["error"] == false) {
-        state = AsyncData(result);
-        showCustomSnackBar(context, content: result["data"]);
-      } else {
-        log(result["data"]);
-        state = AsyncError(result["data"], StackTrace.current);
-        showCustomSnackBar(
-          context,
-          content: result["data"],
-          contentType: ContentType.failure,
-        );
-      }
-    } catch (e, t) {
-      log(e.toString());
-      state = AsyncError(e, t);
-      showCustomSnackBar(
-        context,
-        content: e.toString(),
-        contentType: ContentType.failure,
-      );
-    }
-  }
-
-  // bool isImageLoading = false;
   static Future<void> pickImage(
     BuildContext context,
     ImageSource source,
     ProductModel productModel,
   ) async {
     try {
-      // isImageLoading = true;
       final ImagePicker picker = ImagePicker();
-      print("123");
       final XFile? pickedFile = await picker.pickImage(source: source);
-      print("456");
       if (context.mounted && pickedFile != null) {
-        // int sizeInBytes = image.lengthInBytes;
-        // double sizeInKB = sizeInBytes / 1024;
-        // double sizeInMB = sizeInKB / 1024;
-
-        // print('Size: $sizeInBytes bytes');
-        // print('Size: ${sizeInKB.toStringAsFixed(2)} KB');
-        // print('Size: ${sizeInMB.toStringAsFixed(2)} MB');
-        print("789");
-
         context.pop();
         context.push(
           imagePreview,
@@ -82,9 +38,103 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
       log(e.toString());
     }
   }
+
+//  uploading
+  Future<void> uploadFunction(
+      BuildContext context, WidgetRef ref, List<int> image) async {
+    state = AsyncLoading();
+    final idsState = ref.read(selectAndSearchProductControllerProvider);
+    final uploadManagerController = ref.read(uploadManagerProvider.notifier);
+    List<int> ids = [];
+    for (var i in idsState.selectedIds) {
+      ids.add(i.id);
+    }
+    context.go(route);
+    final result = await compute(computeImageFiles, {
+      "image": image,
+    });
+
+    final path = result['path'] as String;
+    log(path);
+    final response = await UploadImageRepo.onUploadImage(ids, path);
+    if (response['error'] == false) {
+      state = AsyncData(response);
+
+      log(response['data'].toString());
+    } else {
+      state = AsyncError(response['data'].toString(), StackTrace.empty);
+      log(response['data'].toString());
+      uploadManagerController.addToUplods(UploadPhotoModel(
+        failedReason: response['data'].toString(),
+        ids: ids,
+        imagePath: path,
+        isUploadSuccess: false,
+      ));
+    }
+  }
+
+  // if uplaod failed it can trigger from notification
+  Future<void> uploadFailedImageAgain(Map<String, dynamic> arg) async {
+    List<int> ids = arg['ids'];
+    String path = arg['path'];
+    int dbId = arg['id'];
+    WidgetRef ref = arg['ref'];
+    ref.read(uploadManagerProvider.notifier).changeToLoadingTrue(dbId);
+
+    final response = await UploadImageRepo.onUploadImage(ids, path);
+    if (response['error'] == false) {
+      state = AsyncData(response);
+      log(response['data'].toString());
+      ref.read(uploadManagerProvider.notifier).deleteWithId(dbId);
+    } else {
+      state = AsyncError(response['data'].toString(), StackTrace.empty);
+      log(response['data'].toString());
+      ref.read(uploadManagerProvider.notifier).updateFullModel(UploadPhotoModel(
+          failedReason: response['data'].toString(),
+          ids: ids,
+          id: dbId,
+          imagePath: path,
+          isUploadSuccess: false,
+          isUploading: false));
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> build() async {
+    return {};
+  }
 }
 
 final uploadImageControllerProvider =
     AsyncNotifierProvider<UploadImageNotifier, Map<String, dynamic>>(() {
-      return UploadImageNotifier();
-    });
+  return UploadImageNotifier();
+});
+
+Future<Map<String, dynamic>> computeImageFiles(Map<String, dynamic> arg) async {
+  try {
+    final imageBytes = arg['image'] as List<int>;
+
+    final imageData =
+        img.decodeImage(Uint8List.fromList(Uint8List.fromList(imageBytes)));
+    if (imageData == null) {
+      log("Failed to decode image");
+      return {};
+    }
+    final resizedImageData = img.copyResize(imageData, width: 1024);
+    final jpgBytes = img.encodeJpg(resizedImageData, quality: 85);
+
+    final tempDir = Directory.systemTemp;
+
+    final filePath =
+        '${tempDir.path}/${DateTime.now().microsecondsSinceEpoch}.jpg';
+    final resizedFile = await File(filePath).writeAsBytes(jpgBytes);
+
+    return {
+      "path": resizedFile.path,
+    };
+  } catch (e) {
+    debugPrint(e.toString());
+    debugPrint("3");
+    return {};
+  }
+}

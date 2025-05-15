@@ -1,5 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:dazzles/core/local%20data/login_red_database.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';

@@ -1,4 +1,9 @@
-import 'package:dazzles/core/local%20data/login_red_database.dart';
+import 'dart:developer';
+
+import 'package:dazzles/core/components/build_state_manage_button.dart';
+import 'package:dazzles/core/local/hive/controllers/upload_manager.dart';
+import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -6,23 +11,31 @@ import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_icons/solar_icons.dart';
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+class CustomAppBar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
   @override
   final Size preferredSize;
- const CustomAppBar({super.key})
-    : preferredSize = const Size.fromHeight(70);
+  const CustomAppBar({super.key}) : preferredSize = const Size.fromHeight(70);
 
   @override
-  State<CustomAppBar> createState() => _CustomAppBarState();
+  ConsumerState<CustomAppBar> createState() => _CustomAppBarState();
 }
 
-class _CustomAppBarState extends State<CustomAppBar> {
+class _CustomAppBarState extends ConsumerState<CustomAppBar> {
+  int? count;
   @override
   void initState() {
     getUserName();
     super.initState();
+    Future.microtask(
+      () {
+        ref.invalidate(uploadManagerProvider);
+      },
+    );
   }
 
   String userName = '';
@@ -35,6 +48,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final uploadManagerState = ref.watch(uploadManagerProvider);
     return AppBar(
       bottom: PreferredSize(
         preferredSize: Size(ResponsiveHelper.wp, ResponsiveHelper.hp * .01),
@@ -59,26 +73,35 @@ class _CustomAppBarState extends State<CustomAppBar> {
             color: AppColors.kPrimaryColor,
           ),
         ),
-        trailing: InkWell(
-          onTap: () {
-            context.push(notificationScreen);
-          },
-          child: badges.Badge(
-            badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent),
-            badgeContent: Text("10", style: AppStyle.mediumStyle(fontSize: 8)),
-            position: badges.BadgePosition.topEnd(end: -2, top: -8),
-            badgeAnimation: badges.BadgeAnimation.slide(
-              curve: Curves.fastOutSlowIn,
-              colorChangeAnimationCurve: Curves.easeInCubic,
-            ),
-            child: CircleAvatar(
-              child: Icon(CupertinoIcons.bell_fill, color: AppColors.kWhite),
-            ),
-          ),
-        ),
+        trailing: BuildStateManageComponent(
+            stateController: uploadManagerState,
+            successWidget: (data) {
+              final notif = data as List<UploadPhotoModel>;
+              return InkWell(
+                overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                onTap: () {
+                  context.push(notificationScreen);
+                },
+                child: badges.Badge(
+                  showBadge: notif.isNotEmpty,
+                  badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kWhite),
+                  badgeContent: Text(notif.length.toString(),
+                      style: AppStyle.mediumStyle(
+                          fontSize: 8, color: AppColors.kErrorPrimary)),
+                  position: badges.BadgePosition.topEnd(end: -2, top: -8),
+                  badgeAnimation: badges.BadgeAnimation.slide(
+                    curve: Curves.fastOutSlowIn,
+                    colorChangeAnimationCurve: Curves.easeInCubic,
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: AppColors.kWhite,
+                    child: Icon(SolarIconsBold.cloudCross,
+                        color: AppColors.kErrorPrimary),
+                  ),
+                ),
+              );
+            }),
       ),
     );
   }
-
-  
 }

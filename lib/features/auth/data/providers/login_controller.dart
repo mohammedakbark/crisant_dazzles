@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dazzles/core/local%20data/login_red_database.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/utils/snackbars.dart';

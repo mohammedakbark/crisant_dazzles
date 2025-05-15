@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:dazzles/core/components/app_back_button.dart';
-import 'package:dazzles/core/components/app_button.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -14,20 +12,17 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/features/home/data/providers/dashboard_controller.dart';
-import 'package:dazzles/features/product/data/models/product_data_model.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
-import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class CopyMoreProdutcsScreen extends ConsumerStatefulWidget {
-  final File fileImage;
+  final Uint8List fileImage;
   const CopyMoreProdutcsScreen({super.key, required this.fileImage});
 
   @override
@@ -45,7 +40,7 @@ class _CopyMoreProdutcsScreenState
   }
 
   final _findIDController = TextEditingController();
-
+  final imageVersion = DateTime.timestamp().toString();
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -61,6 +56,7 @@ class _CopyMoreProdutcsScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Image.memory(widget.fileImage),
               _buildSearchBox(),
               AppSpacer(hp: .01),
               _buildSelectedIds(),
@@ -83,133 +79,136 @@ class _CopyMoreProdutcsScreenState
     return selectedProuducts.selectedIds.isEmpty
         ? SizedBox()
         : Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Selected Products", style: AppStyle.boldStyle()),
-              Expanded(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: selectedProuducts.selectedIds.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemBuilder: (context, index) {
-                    final model = selectedProuducts.selectedIds[index];
-                    return SlideInLeft(
-                      duration: Duration(microseconds: 200),
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              context.push(
-                                openImage,
-                                extra: {
-                                  "heroTag": model.id.toString(),
-                                  "path":
-                                      "${ApiConstants.imageBaseUrl}${model.productPicture}",
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: ResponsiveHelper.wp,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 2,
-                              ),
-                              margin: EdgeInsets.only(
-                                right: 8,
-                                bottom: 5,
-                                top: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: AppColors.kFillColor),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: Center(
-                                      child: Hero(
-                                        tag: model.id.toString(),
-                                        child: AppNetworkImage(
-                                          imageFile:
-                                              "${ApiConstants.imageBaseUrl}${model.productPicture}",
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Selected Products", style: AppStyle.boldStyle()),
+                Expanded(
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: selectedProuducts.selectedIds.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      final model = selectedProuducts.selectedIds[index];
+                      return SlideInLeft(
+                        duration: Duration(microseconds: 200),
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                context.push(
+                                  openImage,
+                                  extra: {
+                                    "heroTag": model.id.toString(),
+                                    "path":
+                                        "${ApiConstants.imageBaseUrl}${model.productPicture}",
+                                  },
+                                );
+                              },
+                              child: Container(
+                                width: ResponsiveHelper.wp,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 2,
+                                ),
+                                margin: EdgeInsets.only(
+                                  right: 8,
+                                  bottom: 5,
+                                  top: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border:
+                                      Border.all(color: AppColors.kFillColor),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: Hero(
+                                          tag: model.id.toString(),
+                                          child: AppNetworkImage(
+                                            imageVersion: imageVersion,
+                                            imageFile:
+                                                "${ApiConstants.imageBaseUrl}${model.productPicture}",
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  AppSpacer(hp: .005),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        model.productName.toString(),
-                                        style: AppStyle.boldStyle(
-                                          color: AppColors.kTeal,
+                                    AppSpacer(hp: .005),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          model.productName.toString(),
+                                          style: AppStyle.boldStyle(
+                                            color: AppColors.kTeal,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  AppSpacer(hp: .005),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          "Color : ${model.color}",
+                                      ],
+                                    ),
+                                    AppSpacer(hp: .005),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            "Color : ${model.color}",
+                                            style: AppStyle.smallStyle(
+                                              color:
+                                                  AppColors.kTextPrimaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          " Size : ${model.productSize}",
                                           style: AppStyle.smallStyle(
                                             color: AppColors.kTextPrimaryColor,
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        " Size : ${model.productSize}",
-                                        style: AppStyle.smallStyle(
-                                          color: AppColors.kTextPrimaryColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            child: InkWell(
-                              onTap: () {
-                                selectedProuductsController.remove(model);
-                              },
-                              child: Icon(
-                                SolarIconsBold.closeCircle,
-                                size: 20,
-                                color: AppColors.kErrorPrimary,
+                            Positioned(
+                              child: InkWell(
+                                onTap: () {
+                                  selectedProuductsController.remove(model);
+                                },
+                                child: Icon(
+                                  SolarIconsBold.closeCircle,
+                                  size: 20,
+                                  color: AppColors.kErrorPrimary,
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            left: 10,
-                            top: 20,
-                            child: buildIdBadge(context, model.id.toString()),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                            Positioned(
+                              left: 10,
+                              top: 20,
+                              child: buildIdBadge(context, model.id.toString()),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
+              ],
+            ),
+          );
   }
 
   // List<int> similarProducts = [
@@ -245,7 +244,6 @@ class _CopyMoreProdutcsScreenState
               ),
               errorText: productSelectionState.errorMessage,
               errorStyle: AppStyle.smallStyle(color: AppColors.kErrorPrimary),
-
               contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
               hintText: "Enter product id or scan QRcode",
               hintStyle: AppStyle.normalStyle(color: AppColors.kBorderColor),
@@ -263,45 +261,42 @@ class _CopyMoreProdutcsScreenState
               ),
               prefixIcon: Icon(
                 Icons.search,
-                color:
-                    productSelectionState.errorMessage != null
-                        ? AppColors.kErrorPrimary
-                        : AppColors.kBorderColor,
+                color: productSelectionState.errorMessage != null
+                    ? AppColors.kErrorPrimary
+                    : AppColors.kBorderColor,
               ),
-              suffixIcon:
-                  productSelectionState.enableAddButton &&
-                          productSelectionState.productModel != null
-                      ? ZoomIn(
-                        child: InkWell(
-                          onTap: () {
-                            controller.add(
-                              productSelectionState.productModel!,
-                              context,
-                              showSheet: (onCancel, onReplace) {
-                                _showReplacePicutreConfirmation(
-                                  context: context,
-                                  selectedProduct:
-                                      productSelectionState.productModel!,
-                                  onReplace: onReplace,
-                                  onCanel: onCancel,
-                                );
-                              },
-                            );
-                            _findIDController.clear();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(10),
-                              ),
-                              color: AppColors.kDeepPurple,
+              suffixIcon: productSelectionState.enableAddButton &&
+                      productSelectionState.productModel != null
+                  ? ZoomIn(
+                      child: InkWell(
+                        onTap: () {
+                          controller.add(
+                            productSelectionState.productModel!,
+                            context,
+                            showSheet: (onCancel, onReplace) {
+                              _showReplacePicutreConfirmation(
+                                context: context,
+                                selectedProduct:
+                                    productSelectionState.productModel!,
+                                onReplace: onReplace,
+                                onCanel: onCancel,
+                              );
+                            },
+                          );
+                          _findIDController.clear();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(10),
                             ),
-
-                            child: Icon(Icons.add, color: AppColors.kWhite),
+                            color: AppColors.kDeepPurple,
                           ),
+                          child: Icon(Icons.add, color: AppColors.kWhite),
                         ),
-                      )
-                      : null,
+                      ),
+                    )
+                  : null,
             ),
           ),
         ),
@@ -332,90 +327,93 @@ class _CopyMoreProdutcsScreenState
     );
     return BuildStateManageComponent(
       stateController: uploadImageState,
-      successWidget:
-          (data) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ZoomIn(
-                      duration: Duration(milliseconds: 700),
-                      child: ElevatedButton.icon(
-                        onPressed: () => context.go(route),
-
-                        icon: Icon(
-                          Icons.delete_outline,
-                          color: AppColors.kWhite,
-                        ),
-                        label: Text(
-                          "Discard",
-                          style: AppStyle.normalStyle(color: AppColors.kWhite),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.kErrorPrimary,
-                          foregroundColor: AppColors.kWhite,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 14,
-                          ),
-                          textStyle: const TextStyle(fontSize: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                        ),
+      successWidget: (data) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ZoomIn(
+                  duration: Duration(milliseconds: 700),
+                  child: ElevatedButton.icon(
+                    onPressed: () => context.go(route),
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: AppColors.kWhite,
+                    ),
+                    label: Text(
+                      "Discard",
+                      style: AppStyle.normalStyle(color: AppColors.kWhite),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.kErrorPrimary,
+                      foregroundColor: AppColors.kWhite,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 14,
+                      ),
+                      textStyle: const TextStyle(fontSize: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
                       ),
                     ),
-                    AppSpacer(wp: .03),
-                    ZoomIn(
-                      duration: Duration(milliseconds: 700),
-                      child: SizedBox(
-                        width: ResponsiveHelper.wp * .55,
-                        child: ElevatedButton.icon(
-                          onPressed:
-                              productSelectionState.selectedIds.isNotEmpty
-                                  ? () =>
-                                      _onUpload(context, uploadImageController)
-                                  : null,
-                          icon: Icon(
-                            Icons.cloud_upload_outlined,
-                            color:
-                                productSelectionState.selectedIds.isNotEmpty
-                                    ? AppColors.kWhite
-                                    : AppColors.kTextPrimaryColor,
-                          ),
-                          label: Text(
-                            "Upload",
-                            style: AppStyle.normalStyle(
-                              color:
-                                  productSelectionState.selectedIds.isNotEmpty
-                                      ? AppColors.kWhite
-                                      : AppColors.kTextPrimaryColor,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.kGreen,
-                            foregroundColor: AppColors.kWhite,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 14,
-                            ),
-                            textStyle: const TextStyle(fontSize: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                AppSpacer(wp: .03),
+                ZoomIn(
+                  duration: Duration(milliseconds: 700),
+                  child: SizedBox(
+                    width: ResponsiveHelper.wp * .55,
+                    child: ElevatedButton.icon(
+                      onPressed: productSelectionState.selectedIds.isNotEmpty
+                          ? () {
+                              final container = ProviderContainer();
+                              container
+                                  .read(uploadImageControllerProvider.notifier)
+                                  .uploadFunction(
+                                    context,
+                                    ref,
+                                    widget.fileImage,
+                                  );
+                            }
+                          : null,
+                      icon: Icon(
+                        Icons.cloud_upload_outlined,
+                        color: productSelectionState.selectedIds.isNotEmpty
+                            ? AppColors.kWhite
+                            : AppColors.kTextPrimaryColor,
+                      ),
+                      label: Text(
+                        "Upload",
+                        style: AppStyle.normalStyle(
+                          color: productSelectionState.selectedIds.isNotEmpty
+                              ? AppColors.kWhite
+                              : AppColors.kTextPrimaryColor,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.kGreen,
+                        foregroundColor: AppColors.kWhite,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
+                        textStyle: const TextStyle(fontSize: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+        ],
+      ),
     );
   }
 
@@ -428,7 +426,6 @@ class _CopyMoreProdutcsScreenState
     showModalBottomSheet(
       isDismissible: false,
       context: context,
-
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -486,6 +483,8 @@ class _CopyMoreProdutcsScreenState
                                 child: SizedBox(
                                   height: 120,
                                   child: AppNetworkImage(
+                                    imageVersion:
+                                        DateTime.timestamp().toString(),
                                     imageFile:
                                         '${ApiConstants.imageBaseUrl}${selectedProduct.productPicture}',
                                   ),
@@ -504,7 +503,7 @@ class _CopyMoreProdutcsScreenState
                               const SizedBox(height: 8),
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
+                                child: Image.memory(
                                   widget.fileImage,
                                   height: 120,
                                 ),
@@ -516,7 +515,6 @@ class _CopyMoreProdutcsScreenState
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   Row(
                     children: [
                       Expanded(
@@ -535,7 +533,6 @@ class _CopyMoreProdutcsScreenState
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-
                             child: Text("Cancel"),
                           ),
                         ),
@@ -557,7 +554,6 @@ class _CopyMoreProdutcsScreenState
                               ),
                             ),
                             onPressed: () => onReplace(),
-
                             child: Text("Replace"),
                           ),
                         ),
@@ -573,23 +569,23 @@ class _CopyMoreProdutcsScreenState
     );
   }
 
-  void _onUpload(BuildContext context, UploadImageNotifier controller) async {
-    final state = ref.read(selectAndSearchProductControllerProvider);
+  // void _onUpload(BuildContext context, UploadImageNotifier controller) async {
+  //   final state = ref.read(selectAndSearchProductControllerProvider);
 
-    List<int> ids = [];
-    for (var i in state.selectedIds) {
-      ids.add(i.id);
-    }
+  //   List<int> ids = [];
+  //   for (var i in state.selectedIds) {
+  //     ids.add(i.id);
+  //   }
 
-    await controller.uploadImage(
-      context: context,
-      productIds: ids,
-      file: widget.fileImage,
-    );
-    ref.invalidate(getAllPendingProductControllerProvider);
-    ref.invalidate(dashboardControllerProvider);
-    if (context.mounted) {
-      context.go(route);
-    }
-  }
+  //   await controller.uploadImage(
+  //     context: context,
+  //     productIds: ids,
+  //     file: widget.fileImage,
+  //   );
+  //   ref.invalidate(getAllPendingProductControllerProvider);
+  //   ref.invalidate(dashboardControllerProvider);
+  //   if (context.mounted) {
+  //     context.go(route);
+  //   }
+  // }
 }

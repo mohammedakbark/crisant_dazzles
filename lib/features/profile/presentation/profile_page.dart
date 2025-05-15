@@ -3,7 +3,7 @@ import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
-import 'package:dazzles/core/local%20data/login_red_database.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/services/navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';

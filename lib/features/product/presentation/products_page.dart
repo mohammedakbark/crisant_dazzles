@@ -57,6 +57,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
     super.dispose();
   }
 
+  String imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
   @override
   Widget build(BuildContext context) {
     final productsState = ref.watch(allProductControllerProvider);
@@ -77,15 +78,14 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
             },
             style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
             decoration: InputDecoration(
-              suffixIcon:
-                  productsController.searchContoller.text.isNotEmpty
-                      ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          return ref.refresh(allProductControllerProvider);
-                        },
-                      )
-                      : null,
+              suffixIcon: productsController.searchContoller.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        return ref.refresh(allProductControllerProvider);
+                      },
+                    )
+                  : null,
               contentPadding: EdgeInsets.symmetric(horizontal: 20),
               hintText: "Product Search",
               hintStyle: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
@@ -106,18 +106,17 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
+                imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
                 return ref.refresh(allProductControllerProvider);
               },
               child: BuildStateManageComponent(
                 stateController: productsState,
-
-                errorWidget:
-                    (p0, p1) => AppErrorView(
-                      error: p0.toString(),
-                      onRetry: () {
-                        return ref.refresh(allProductControllerProvider);
-                      },
-                    ),
+                errorWidget: (p0, p1) => AppErrorView(
+                  error: p0.toString(),
+                  onRetry: () {
+                    return ref.refresh(allProductControllerProvider);
+                  },
+                ),
                 successWidget: (data) {
                   final state = data as ProductSuccessState;
                   final products = state.products;
@@ -125,31 +124,31 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                   return products.isEmpty
                       ? AppErrorView(error: "Products not found")
                       : Column(
-                        children: [
-                          AppSpacer(hp: .02),
-                          Expanded(
-                            child: GridView.builder(
-                              controller: _scrollController,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: products.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                  ),
-                              itemBuilder:
-                                  (context, index) =>
-                                      _buildTile(products[index]),
+                          children: [
+                            AppSpacer(hp: .02),
+                            Expanded(
+                              child: GridView.builder(
+                                controller: _scrollController,
+                                physics: BouncingScrollPhysics(),
+                                itemCount: products.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                ),
+                                itemBuilder: (context, index) =>
+                                    _buildTile(products[index]),
+                              ),
                             ),
-                          ),
-                          ref
-                                  .watch(allProductControllerProvider.notifier)
-                                  .isLoadingMore
-                              ? AppLoading(isTextLoading: true)
-                              : SizedBox(),
-                        ],
-                      );
+                            ref
+                                    .watch(
+                                        allProductControllerProvider.notifier)
+                                    .isLoadingMore
+                                ? AppLoading(isTextLoading: true)
+                                : SizedBox(),
+                          ],
+                        );
                 },
               ),
             ),
@@ -186,12 +185,12 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                 Expanded(
                   child: Center(
                     child: Hero(
-                      tag: product.id.toString(),
-                      child: AppNetworkImage(
-                        imageFile:
-                            "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
-                      ),
-                    ),
+                        tag: product.id.toString(),
+                        child: AppNetworkImage(
+                          imageVersion: imageVersion,
+                          imageFile:
+                              "${ApiConstants.imageBaseUrl}${product.productPicture}",
+                        )),
                   ),
                 ),
                 Padding(

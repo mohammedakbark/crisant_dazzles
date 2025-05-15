@@ -1,16 +1,17 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
-import 'package:dazzles/core/local%20data/login_red_database.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dio/dio.dart';
 
 class UploadImageRepo {
   static Future<Map<String, dynamic>> onUploadImage(
     List<int> productIds,
-    File file,
+    String filepath,
   ) async {
     try {
       final userData = await LoginRefDataBase().getUserData;
@@ -19,8 +20,8 @@ class UploadImageRepo {
         MapEntry(
           'image',
           await MultipartFile.fromFile(
-            file.path,
-            filename: basename(file.path),
+            filepath,
+            filename: basename(filepath),
             contentType: MediaType('image', 'jpg'),
           ),
         ),

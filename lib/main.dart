@@ -1,3 +1,4 @@
+import 'package:dazzles/core/config/main_config.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
 import 'package:dazzles/core/shared/theme/app_theme.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
@@ -6,9 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // cameras = await availableCameras(); // Get available cameras
-  
-
+  await MainConfig.initHive();
   runApp(ProviderScope(child: const MyApp()));
 }
 
@@ -36,3 +35,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+

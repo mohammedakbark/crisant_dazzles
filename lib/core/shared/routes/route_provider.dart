@@ -46,7 +46,7 @@ class RouteProvider {
         path: copySameImageScreen,
 
         builder: (context, state) {
-          final file = state.extra as File;
+          final file = state.extra as Uint8List;
           // final id = map['id'] as int;
           // final path = map['path'] as String;
           return CopyMoreProdutcsScreen(fileImage: file);

@@ -60,36 +60,33 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
       },
       child: BuildStateManageComponent(
         stateController: pendingImageController,
-        errorWidget:
-            (p0, p1) => AppErrorView(
-              error: p0.toString(),
-              onRetry: () {
-                return ref.refresh(getAllPendingProductControllerProvider);
-              },
-            ),
+        errorWidget: (p0, p1) => AppErrorView(
+          error: p0.toString(),
+          onRetry: () {
+            return ref.refresh(getAllPendingProductControllerProvider);
+          },
+        ),
         successWidget: (data) {
           final state = data as PendingProductSuccessState;
           final pending = state.products;
           return Column(
             children: [
               Expanded(
-                child:
-                    pending.isEmpty
-                        ? AppErrorView(
-                          error: "No pending data!",
-                          errorExp:
-                              'No more products in pending to update photo',
-                        )
-                        : ListView.separated(
-                          separatorBuilder:
-                              (context, index) => AppSpacer(hp: .01),
-                          controller: _scrollController,
-                          itemCount: pending.length,
-                          itemBuilder: (context, index) {
-                            final product = pending[index];
-                            return _buildProductCard(product);
-                          },
-                        ),
+                child: pending.isEmpty
+                    ? AppErrorView(
+                        error: "No pending data!",
+                        errorExp: 'No more products in pending to update photo',
+                      )
+                    : ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            AppSpacer(hp: .01),
+                        controller: _scrollController,
+                        itemCount: pending.length,
+                        itemBuilder: (context, index) {
+                          final product = pending[index];
+                          return _buildProductCard(product);
+                        },
+                      ),
               ),
               ref
                       .read(getAllPendingProductControllerProvider.notifier)
@@ -161,13 +158,11 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed:
-                                () => UploadImageNotifier.pickImage(
-                                  context,
-                                  ImageSource.gallery,
-                                  productModel,
-                                ),
-
+                            onPressed: () => UploadImageNotifier.pickImage(
+                              context,
+                              ImageSource.gallery,
+                              productModel,
+                            ),
                             icon: Icon(Icons.photo, color: AppColors.kWhite),
                             label: Text("Gallery"),
                           ),
@@ -189,13 +184,11 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed:
-                                () => UploadImageNotifier.pickImage(
-                                  context,
-                                  ImageSource.camera,
-                                  productModel,
-                                ),
-
+                            onPressed: () => UploadImageNotifier.pickImage(
+                              context,
+                              ImageSource.camera,
+                              productModel,
+                            ),
                             icon: Icon(
                               Icons.camera_alt,
                               color: AppColors.kWhite,
@@ -243,7 +236,6 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                       child: AppNetworkImage(
                         imageFile:
                             "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
-
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -257,7 +249,6 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
-
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

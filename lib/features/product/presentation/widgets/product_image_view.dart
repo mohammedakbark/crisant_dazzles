@@ -60,21 +60,18 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
       body: Container(
         alignment: Alignment.center,
         height: ResponsiveHelper.hp * .8,
-
         child: Center(
           child: PhotoView(
-            errorBuilder:
-                (context, error, stackTrace) =>
-                    AppErrorView(error: error.toString()),
-            imageProvider:
-                netWorkImage != null
-                    ? CachedNetworkImageProvider(
-                      netWorkImage!,
-                      errorListener: (p0) {
-                        log(p0.toString());
-                      },
-                    )
-                    : FileImage(fileImage!),
+            errorBuilder: (context, error, stackTrace) =>
+                AppErrorView(error: error.toString()),
+            imageProvider: netWorkImage != null
+                ? CachedNetworkImageProvider(
+                    "${netWorkImage}?v=${DateTime.now().microsecondsSinceEpoch}",
+                    errorListener: (p0) {
+                      log(p0.toString());
+                    },
+                  )
+                : FileImage(fileImage!) as ImageProvider,
             maxScale: 1.0,
             minScale: .1,
             heroAttributes: PhotoViewHeroAttributes(tag: widget.heroTag),
@@ -89,20 +86,19 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
   Widget _buildEditButton() {
     return widget.enableEditButton
         ? InkWell(
-          onTap: () => showGallerySheet(context, widget.productModel!),
-          child: Container(
-            alignment: Alignment.center,
-            color: AppColors.kBgColor,
-            height: 100,
-
-            child: Text(
-              "Update Image",
-              style: AppStyle.largeStyle(
-                fontSize: ResponsiveHelper.fontRegular,
+            onTap: () => showGallerySheet(context, widget.productModel!),
+            child: Container(
+              alignment: Alignment.center,
+              color: AppColors.kBgColor,
+              height: 100,
+              child: Text(
+                "Update Image",
+                style: AppStyle.largeStyle(
+                  fontSize: ResponsiveHelper.fontRegular,
+                ),
               ),
             ),
-          ),
-        )
+          )
         : SizedBox();
   }
 
@@ -164,13 +160,11 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed:
-                                () => UploadImageNotifier.pickImage(
-                                  context,
-                                  ImageSource.gallery,
-                                  productModel,
-                                ),
-
+                            onPressed: () => UploadImageNotifier.pickImage(
+                              context,
+                              ImageSource.gallery,
+                              productModel,
+                            ),
                             icon: Icon(Icons.photo, color: AppColors.kWhite),
                             label: Text("Gallery"),
                           ),
@@ -192,13 +186,11 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed:
-                                () => UploadImageNotifier.pickImage(
-                                  context,
-                                  ImageSource.camera,
-                                  productModel,
-                                ),
-
+                            onPressed: () => UploadImageNotifier.pickImage(
+                              context,
+                              ImageSource.camera,
+                              productModel,
+                            ),
                             icon: Icon(
                               Icons.camera_alt,
                               color: AppColors.kWhite,
