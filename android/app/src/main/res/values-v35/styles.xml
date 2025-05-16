@@ -1,0 +1,8 @@
+<!-- This folder and file is created bty developer for this package support in natively  -->
+<!-- Added for image_cropper  package  -->
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<resources>
+  <style name="Ucrop.CropTheme" parent="Theme.AppCompat.Light.NoActionBar">
+      <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+  </style>
+</resources>

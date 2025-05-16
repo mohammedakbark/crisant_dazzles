@@ -1,6 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:dazzles/core/shared/routes/route_provider.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/main.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -14,7 +17,6 @@ showCustomSnackBar(
     elevation: 0,
     behavior: SnackBarBehavior.floating,
     backgroundColor: Colors.transparent,
-
     content: AwesomeSnackbarContent(
       title: title ?? '',
       message: content,
@@ -38,13 +40,33 @@ showToastMessage(
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
-    backgroundColor:
-        isError == null
-            ? AppColors.kFillColor
-            : isError == false
+    backgroundColor: isError == null
+        ? AppColors.kFillColor
+        : isError == false
             ? AppColors.kGreen.withOpacity(.6)
             : AppColors.kErrorPrimary.withOpacity(.6),
     textColor: AppColors.kWhite,
     fontSize: ResponsiveHelper.fontSmall,
   );
+}
+
+showCustomSnackBarAdptive(
+  String message, {
+  bool? isError,
+  Color? color,
+}) {
+  final snackbar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: isError == true
+          ? AppColors.kErrorPrimary.withAlpha(70)
+          : isError == false
+              ? AppColors.kGreen.withAlpha(70)
+              : AppColors.kFillColor,
+      content: Text(
+        message,
+        style: AppStyle.normalStyle(color: AppColors.kWhite),
+      ));
+  ScaffoldMessenger.of(rootNavigatorKey.currentContext!)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(snackbar);
 }

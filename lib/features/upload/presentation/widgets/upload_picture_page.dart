@@ -1,13 +1,11 @@
 // import 'dart:developer';
 // import 'dart:io';
 
-// import 'package:camera/camera.dart';
 // import 'package:dazzles/core/components/app_loading.dart';
 // import 'package:dazzles/core/components/app_margin.dart';
 // import 'package:dazzles/core/components/app_spacer.dart';
 // import 'package:dazzles/core/shared/theme/app_colors.dart';
 // import 'package:dazzles/core/utils/responsive_helper.dart';
-// import 'package:dazzles/features/upload/providers/camera_notifier.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';

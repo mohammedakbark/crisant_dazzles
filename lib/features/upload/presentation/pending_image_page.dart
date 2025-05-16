@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -8,7 +6,6 @@ import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/components/componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
-import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
@@ -18,7 +15,6 @@ import 'package:dazzles/features/upload/data/providers/get%20pending%20products/
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solar_icons/solar_icons.dart';
 
@@ -43,9 +39,6 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
         ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
       }
     });
-    // Future.microtask(() {
-    //   ref.invalidate(getAllPendingProductControllerProvider);
-    // });
   }
 
   @override
@@ -100,114 +93,6 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
     );
   }
 
-  void showGallerySheet(BuildContext context, ProductModel productModel) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return AnimatedPadding(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-          ),
-          child: SlideInUp(
-            duration: Duration(milliseconds: 400),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.75),
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.white24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 30,
-                    offset: Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Select Image Source',
-                    style: AppStyle.mediumStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ZoomIn(
-                          duration: Duration(milliseconds: 600),
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.kDeepPurple,
-                              foregroundColor: AppColors.kWhite,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 14,
-                                horizontal: 12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            onPressed: () => UploadImageNotifier.pickImage(
-                              context,
-                              ImageSource.gallery,
-                              productModel,
-                            ),
-                            icon: Icon(Icons.photo, color: AppColors.kWhite),
-                            label: Text("Gallery"),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ZoomIn(
-                          duration: Duration(milliseconds: 800),
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.kTeal,
-                              foregroundColor: AppColors.kWhite,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 14,
-                                horizontal: 12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            onPressed: () => UploadImageNotifier.pickImage(
-                              context,
-                              ImageSource.camera,
-                              productModel,
-                            ),
-                            icon: Icon(
-                              Icons.camera_alt,
-                              color: AppColors.kWhite,
-                            ),
-                            label: Text("Camera"),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Widget _buildProductCard(ProductModel product) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
@@ -245,7 +130,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                           Colors.transparent,
                         ),
                         onTap: () {
-                          showGallerySheet(context, product);
+                          showGallerySheet(context, product, ref);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -335,4 +220,107 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
       ),
     );
   }
+}
+
+void showGallerySheet(
+    BuildContext context, ProductModel productModel, WidgetRef ref) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) {
+      return AnimatedPadding(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
+        child: SlideInUp(
+          duration: Duration(milliseconds: 400),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.75),
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.white24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 30,
+                  offset: Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Select Image Source',
+                  style: AppStyle.mediumStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ZoomIn(
+                        duration: Duration(milliseconds: 600),
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.kDeepPurple,
+                            foregroundColor: AppColors.kWhite,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                              horizontal: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () => UploadImageNotifier().pickImage(
+                              context, ImageSource.gallery, productModel, ref),
+                          icon: Icon(Icons.photo, color: AppColors.kWhite),
+                          label: Text("Gallery"),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ZoomIn(
+                        duration: Duration(milliseconds: 800),
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.kTeal,
+                            foregroundColor: AppColors.kWhite,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                              horizontal: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () => UploadImageNotifier().pickImage(
+                              context, ImageSource.camera, productModel, ref),
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: AppColors.kWhite,
+                          ),
+                          label: Text("Camera"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

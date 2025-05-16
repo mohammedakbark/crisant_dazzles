@@ -9,6 +9,7 @@ class ResponsiveHelper {
 
   /// Initialize once using a context (call this in main screen)
   static void init(BuildContext context) {
+   
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHight = MediaQuery.of(context).size.height;
   }

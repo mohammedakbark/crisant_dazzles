@@ -73,35 +73,71 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
             color: AppColors.kPrimaryColor,
           ),
         ),
-        trailing: BuildStateManageComponent(
-            stateController: uploadManagerState,
-            successWidget: (data) {
-              final notif = data as List<UploadPhotoModel>;
-              return InkWell(
-                overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () {
-                  context.push(notificationScreen);
-                },
-                child: badges.Badge(
-                  showBadge: notif.isNotEmpty,
-                  badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kWhite),
-                  badgeContent: Text(notif.length.toString(),
-                      style: AppStyle.mediumStyle(
-                          fontSize: 8, color: AppColors.kErrorPrimary)),
-                  position: badges.BadgePosition.topEnd(end: -2, top: -8),
-                  badgeAnimation: badges.BadgeAnimation.slide(
-                    curve: Curves.fastOutSlowIn,
-                    colorChangeAnimationCurve: Curves.easeInCubic,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: AppColors.kWhite,
-                    child: Icon(SolarIconsBold.cloudCross,
-                        color: AppColors.kErrorPrimary),
-                  ),
-                ),
-              );
-            }),
       ),
+      actions: [
+        // Padding(
+        //   padding: EdgeInsets.only(right: 10),
+        //   child: BuildStateManageComponent(
+        //       stateController: uploadManagerState,
+        //       successWidget: (data) {
+        //         final notif = data as List<UploadPhotoModel>;
+        //         return InkWell(
+        //           overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        //           onTap: () {
+        //             context.push(notificationScreen);
+        //           },
+        //           child: badges.Badge(
+        //             showBadge: notif.isNotEmpty,
+        //             badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kWhite),
+        //             badgeContent: Text(notif.length.toString(),
+        //                 style: AppStyle.mediumStyle(
+        //                     fontSize: 8, color: AppColors.kErrorPrimary)),
+        //             position: badges.BadgePosition.topEnd(end: -2, top: -8),
+        //             badgeAnimation: badges.BadgeAnimation.slide(
+        //               curve: Curves.fastOutSlowIn,
+        //               colorChangeAnimationCurve: Curves.easeInCubic,
+        //             ),
+        //             child: CircleAvatar(
+        //               backgroundColor: AppColors.kPrimaryColor.withAlpha(50),
+        //               child: Icon(CupertinoIcons.camera,
+        //                   size: 18, color: AppColors.kWhite),
+        //             ),
+        //           ),
+        //         );
+        //       }),
+        // ),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: BuildStateManageComponent(
+              stateController: uploadManagerState,
+              successWidget: (data) {
+                final notif = data as List<UploadPhotoModel>;
+                return InkWell(
+                  overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                  onTap: () {
+                    context.push(notificationScreen);
+                  },
+                  child: badges.Badge(
+                    showBadge: notif.isNotEmpty,
+                    badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kWhite),
+                    badgeContent: Text(notif.length.toString(),
+                        style: AppStyle.mediumStyle(
+                            fontSize: 8, color: AppColors.kErrorPrimary)),
+                    position: badges.BadgePosition.topEnd(end: -2, top: -8),
+                    badgeAnimation: badges.BadgeAnimation.slide(
+                      curve: Curves.fastOutSlowIn,
+                      colorChangeAnimationCurve: Curves.easeInCubic,
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: AppColors.kPrimaryColor.withAlpha(50),
+                      child: Icon(CupertinoIcons.cloud_upload,
+                          size: 18, color: AppColors.kWhite),
+                    ),
+                  ),
+                );
+              }),
+        ),
+      ],
     );
   }
 }

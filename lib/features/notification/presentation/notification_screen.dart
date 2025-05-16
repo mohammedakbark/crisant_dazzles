@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
@@ -12,7 +10,6 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/intl_c.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,6 +59,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         child: AppMargin(
             child: BuildStateManageComponent(
           stateController: uploadManagerState,
+          
           successWidget: (data) {
             final uploads = data as List<UploadPhotoModel>;
             return uploads.isEmpty
