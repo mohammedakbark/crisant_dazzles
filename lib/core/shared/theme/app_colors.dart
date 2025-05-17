@@ -10,7 +10,7 @@ class AppColors {
   static const Color kFillColor = Color(0xFF414141);
   static const Color kErrorPrimary = Colors.redAccent;
   static Color kGreen = Colors.greenAccent.shade700;
-  static const Color kTeal = Colors.teal;
+  static const Color kTeal = Color(0xFF009688);
   static const Color kDeepPurple = Colors.deepPurpleAccent;
   static const Color kOrange = Colors.deepOrangeAccent;
 }
