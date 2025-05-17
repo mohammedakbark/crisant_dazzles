@@ -52,7 +52,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   Widget build(BuildContext context) {
     int index = ref.watch(navigationController);
     return Scaffold(
-      appBar: ref.watch(navigationController.notifier).state == 4
+      appBar: index == 4
           ? null
           : CustomAppBar(),
       body: Stack(
@@ -131,6 +131,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildCustomeNav() {
+        int index = ref.watch(navigationController);
+
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -145,12 +147,12 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildIconSet(CupertinoIcons.home, "Home", 0),
-              _buildIconSet(CupertinoIcons.folder, "Pending", 1),
+              _buildIconSet(SolarIconsBold.home, "Home", 0),
+              _buildIconSet(CupertinoIcons.square_list_fill, "Pending", 1),
               SizedBox(
                 width: ResponsiveHelper.wp * .1,
               ),
-              _buildIconSet(CupertinoIcons.add, "Products", 3),
+              _buildIconSet(CupertinoIcons.cart_fill, "Products", 3),
               _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
             ],
           ),
@@ -159,12 +161,12 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
               child: InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
                 onTap: () {
-                  if (ref.watch(navigationController.notifier).state == 2) {
+                  if (index == 2) {
                     ref
                         .read(cameraControllerProvider.notifier)
                         .takePhoto(context);
                   } else {
-                    ref.watch(navigationController.notifier).state = 2;
+                    ref.read(navigationController.notifier).state = 2;
                   }
                 },
                 child: Container(
@@ -183,7 +185,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                           : AppColors.kWhite,
                       shape: BoxShape.circle),
                   child: Icon(
-                    CupertinoIcons.camera,
+                    CupertinoIcons.camera_fill,
                     color: ref.watch(navigationController.notifier).state == 2
                         ? AppColors.kWhite
                         : AppColors.kTextPrimaryColor,
@@ -196,10 +198,10 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildIconSet(IconData icon, String label, int index) {
-    bool isSelected = ref.watch(navigationController.notifier).state == index;
+    bool isSelected = ref.read(navigationController.notifier).state == index;
     return IconButton(
         onPressed: () {
-          ref.watch(navigationController.notifier).state = index;
+          ref.read(navigationController.notifier).state = index;
         },
         icon: Column(
           mainAxisAlignment: MainAxisAlignment.center,

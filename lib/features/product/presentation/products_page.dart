@@ -63,7 +63,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
     final productsState = ref.watch(allProductControllerProvider);
     final productsController = ref.read(allProductControllerProvider.notifier);
 
-    return AppMargin(
+    return 
+    AppMargin(
       child: Column(
         children: [
           AppSpacer(hp: .01),

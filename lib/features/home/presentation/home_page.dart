@@ -1,7 +1,5 @@
-import 'dart:developer';
 
 import 'package:dazzles/core/components/app_error_componet.dart';
-import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -15,102 +13,108 @@ import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/home/data/models/dashboard_model.dart';
 import 'package:dazzles/features/home/presentation/widgets/dash_board_shimmer.dart';
 import 'package:dazzles/features/home/data/providers/dashboard_controller.dart';
-import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget{
   HomePage({super.key});
+
+  @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
   final List<String> titles = [
     'Products',
     'Image Pending',
     'Upcoming Products',
     'Supplier Returns',
   ];
+
   String imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
+@override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.invalidate(dashboardControllerProvider);
+    },);
+  }
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, ) {
     // final uplaodState = ref.watch(uploadImageControllerProvider);
     final dashboardController = ref.watch(dashboardControllerProvider);
-    return RefreshIndicator(
-      onRefresh: () async {
+    return 
+      
+      SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: RefreshIndicator(
+          onRefresh: () async {
         imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
 
         return ref.refresh(dashboardControllerProvider);
       },
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: AppMargin(
-          child: Column(
-            children: [
-              // InkWell(
-              //     onTap: () {},
-              //     child: Text(ref
-              //         .watch(uploadImageControllerProvider.notifier)
-              //         .entry
-              //         .toString())),
-              // uplaodState.when(
-              //   data: (data) => Text(data['data'].toString()),
-              //   error: (error, stackTrace) => Text(error.toString()),
-              //   loading: () => AppLoading(),
-              // ),
-
-              AppSpacer(hp: .02),
-              // Search
-              InkWell(
-                overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () => ref.read(navigationController.notifier).state = 2,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: ResponsiveHelper.paddingSmall,
-                    horizontal: ResponsiveHelper.paddingMedium,
-                  ),
-                  width: ResponsiveHelper.wp,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: AppColors.kFillColor,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Global Search",
-                        style: AppStyle.normalStyle(
+          child: AppMargin(
+            child: Column(
+              children: [
+               
+                AppSpacer(hp: .01),
+                // Search
+                InkWell(
+                  overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                  onTap: () => ref.read(navigationController.notifier).state = 2,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: ResponsiveHelper.paddingSmall,
+                      horizontal: ResponsiveHelper.paddingMedium,
+                    ),
+                    width: ResponsiveHelper.wp,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: AppColors.kFillColor,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Global Search",
+                          style: AppStyle.normalStyle(
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ),
+                        Icon(
+                          SolarIconsOutline.magnifier,
                           color: AppColors.kPrimaryColor,
                         ),
-                      ),
-                      Icon(
-                        SolarIconsOutline.magnifier,
-                        color: AppColors.kPrimaryColor,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-
-              AppSpacer(hp: .02),
-              // Grid
-              BuildStateManageComponent(
-                stateController: dashboardController,
-                errorWidget: (p0, p1) => AppErrorView(
-                  error: p0.toString(),
-                  onRetry: () {
-                    return ref.refresh(dashboardControllerProvider);
-                  },
+          
+                AppSpacer(hp: .02),
+                // Grid
+                BuildStateManageComponent(
+                  stateController: dashboardController,
+                  errorWidget: (p0, p1) => AppErrorView(
+                    error: p0.toString(),
+                    onRetry: () {
+                      return ref.refresh(dashboardControllerProvider);
+                    },
+                  ),
+                  successWidget: (data) => _buildSuccessState(
+                    context,
+                    data as DashboardModel,
+                    ref,
+                  ),
+                  loadingWidget: () => DashBoardShimmer(),
                 ),
-                successWidget: (data) => _buildSuccessState(
-                  context,
-                  data as DashboardModel,
-                  ref,
-                ),
-                loadingWidget: () => DashBoardShimmer(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+    
     );
   }
 
@@ -261,7 +265,7 @@ class HomePage extends ConsumerWidget {
                       tag: model.recentCaptured[index].productId.toString(),
                       child: AppNetworkImage(
                         imageVersion: imageVersion,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fitHeight,
                         imageFile: ApiConstants.imageBaseUrl +
                             model.recentCaptured[index].productPicture,
                       ),
