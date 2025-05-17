@@ -41,7 +41,7 @@ class _ViewAllRecentCapturedScreenState
         leading: AppBackButton(),
         title: Text("Recently Captured", style: AppStyle.boldStyle()),
       ),
-      body: RefreshIndicator(
+      body: RefreshIndicator.adaptive(
         onRefresh: () async {
           return ref.refresh(recntlyCapturedControllerProvider);
         },

@@ -1,12 +1,4 @@
-import 'dart:developer';
-import 'dart:io';
 
-import 'package:animate_do/animate_do.dart';
-import 'package:dazzles/core/components/app_network_image.dart';
-import 'package:dazzles/core/constant/api_constant.dart';
-import 'package:dazzles/core/constant/app_images.dart';
-import 'package:dazzles/core/shared/theme/app_colors.dart';
-import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/repo/search_product_by_id_repo.dart';
 import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_selection_state.dart';

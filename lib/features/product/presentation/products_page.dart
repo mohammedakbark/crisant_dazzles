@@ -105,7 +105,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
             ),
           ),
           Expanded(
-            child: RefreshIndicator(
+            child: RefreshIndicator.adaptive(
               onRefresh: () async {
                 imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
                 return ref.refresh(allProductControllerProvider);

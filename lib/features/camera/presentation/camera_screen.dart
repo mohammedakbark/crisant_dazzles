@@ -2,16 +2,13 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
-import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
-import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/camera/data/providers/camera_controller.dart';
 import 'package:dazzles/features/camera/data/providers/camera_controller_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CameraScreen extends ConsumerStatefulWidget {
   const CameraScreen({super.key});
@@ -21,17 +18,19 @@ class CameraScreen extends ConsumerStatefulWidget {
 }
 
 class _CameraScreenState extends ConsumerState<CameraScreen> {
-  CameraController? _cameraController;
 
   @override
   Widget build(BuildContext context) {
-    final cameraState = ref.watch(cameraControllerProvider);
-    final cameraController = ref.read(cameraControllerProvider.notifier);
-    return BuildStateManageComponent(
-      stateController: cameraState,
+    
+    return
+    // SizedBox();
+     BuildStateManageComponent(
+      stateController: ref.watch(cameraControllerProvider),
+      errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
       successWidget: (data) {
         log("message");
         final state = data as CameraControllerState;
+        final cameraController = ref.read(cameraControllerProvider.notifier);
         return AspectRatio(
             aspectRatio: 9 / 16,
             child: Stack(

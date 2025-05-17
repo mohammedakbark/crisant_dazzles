@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:dazzles/core/config/main_config.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/camera/data/providers/camera_controller_state.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
@@ -12,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-// late List<CameraDescription> cameras;
+late List<CameraDescription> cameras;
 
 class CamerasController extends AsyncNotifier<CameraControllerState> {
   late CameraController cameraController;
@@ -21,9 +19,11 @@ class CamerasController extends AsyncNotifier<CameraControllerState> {
   FutureOr<CameraControllerState> build() async {
     try {
       state = AsyncValue.loading();
-      final cameras = await availableCameras();
-
-      cameraController = CameraController(cameras[0], ResolutionPreset.max);
+      final backCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.external,
+        orElse: () => cameras.first, // fallback
+      );
+      cameraController = CameraController(backCamera, ResolutionPreset.max);
       await cameraController.initialize();
       return CameraControllerState(cameraController: cameraController);
     } catch (e, trace) {

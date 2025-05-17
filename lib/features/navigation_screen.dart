@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dazzles/core/services/navigation_controller.dart';
@@ -161,12 +162,14 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
               child: InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
                 onTap: () {
+                  log("dddhd");
+                  final index=ref.read(navigationController.notifier);
                   if (index == 2) {
                     ref
                         .read(cameraControllerProvider.notifier)
                         .takePhoto(context);
                   } else {
-                    ref.read(navigationController.notifier).state = 2;
+                    ref.watch(navigationController.notifier).state = 2;
                   }
                 },
                 child: Container(

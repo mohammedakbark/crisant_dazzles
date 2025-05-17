@@ -24,7 +24,7 @@ class GetPendingProductsController
   FutureOr<PendingProductSuccessState> build() async {
     try {
       state = AsyncValue.loading();
-      return _fetchProducts();
+      return await _fetchProducts();
     } catch (e) {
       throw e.toString();
     }

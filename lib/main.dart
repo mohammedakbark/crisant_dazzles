@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MainConfig.initHive();
+  await MainConfig.initCameraService();
   runApp(ProviderScope(child: const MyApp()));
 }
 

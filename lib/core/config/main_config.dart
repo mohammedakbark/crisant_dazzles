@@ -14,6 +14,6 @@ class MainConfig {
   }
 
   static initCameraService() async {
-    // cameras = await availableCameras();
+    cameras = await availableCameras();
   }
 }

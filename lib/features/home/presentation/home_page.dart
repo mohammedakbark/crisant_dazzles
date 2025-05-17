@@ -50,7 +50,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       
       SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: RefreshIndicator(
+        child: RefreshIndicator.adaptive(
           onRefresh: () async {
         imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
 

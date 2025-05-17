@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void init() async {
     final loginRef = await LoginRefDataBase().getUserData;
+   await AppPermissions.handleCameraPermission();
     await Future.delayed(Duration(seconds: 2));
     if (loginRef.token != null && loginRef.token!.isNotEmpty) {
       if (mounted) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -31,14 +33,17 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
   @override
   void initState() {
     super.initState();
-
-    _scrollController.addListener(() {
+   try{
+     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 200 &&
           ref.read(getAllPendingProductControllerProvider.notifier).hasMore) {
         ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
       }
     });
+   }catch(e){
+    log("Pending screen initialization Error : $e");
+   }
   }
 
   @override
@@ -47,7 +52,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
       getAllPendingProductControllerProvider,
     );
 
-    return RefreshIndicator(
+    return RefreshIndicator.adaptive(
       onRefresh: () async {
         return ref.refresh(getAllPendingProductControllerProvider);
       },

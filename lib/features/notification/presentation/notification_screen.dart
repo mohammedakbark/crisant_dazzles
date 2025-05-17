@@ -52,7 +52,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
               : SizedBox()
         ],
       ),
-      body: RefreshIndicator(
+      body: RefreshIndicator.adaptive(
         onRefresh: () async {
           return ref.refresh(uploadManagerProvider);
         },
