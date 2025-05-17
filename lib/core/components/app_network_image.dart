@@ -51,7 +51,7 @@ class AppNetworkImage extends StatelessWidget {
               : Icon(
                   size: iconSize,
                   errorIcon ?? Icons.broken_image_rounded,
-                  color: AppColors.kWhite,
+                  color: AppColors.kFillColor,
                 ),
     );
   }

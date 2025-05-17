@@ -40,7 +40,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: AppBackButton(),
-        title: Text("Notifications", style: AppStyle.boldStyle()),
+        title: Text("Upload Failed", style: AppStyle.boldStyle()),
         actions: [
           uploadManagerState.value != null &&
                   uploadManagerState.value!.isNotEmpty

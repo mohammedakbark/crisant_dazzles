@@ -15,6 +15,7 @@ import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:dazzles/features/upload/data/providers/get%20pending%20products/pending_products_state.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,17 +34,17 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
   @override
   void initState() {
     super.initState();
-   try{
-     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 200 &&
-          ref.read(getAllPendingProductControllerProvider.notifier).hasMore) {
-        ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
-      }
-    });
-   }catch(e){
-    log("Pending screen initialization Error : $e");
-   }
+    try {
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent - 200 &&
+            ref.read(getAllPendingProductControllerProvider.notifier).hasMore) {
+          ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
+        }
+      });
+    } catch (e) {
+      log("Pending screen initialization Error : $e");
+    }
   }
 
   @override
@@ -77,7 +78,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                       )
                     : ListView.separated(
                         separatorBuilder: (context, index) =>
-                            AppSpacer(hp: .01),
+                            AppSpacer(hp: .005),
                         controller: _scrollController,
                         itemCount: pending.length,
                         itemBuilder: (context, index) {
@@ -100,127 +101,87 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
 
   Widget _buildProductCard(ProductModel product) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 12),
       decoration: BoxDecoration(
-        color: AppColors.kSecondaryColor.withAlpha(250),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.kWhite.withAlpha(30),
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Stack(
+          color: AppColors.kBorderColor.withAlpha(10),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.kFillColor)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: ResponsiveHelper.wp * .55,
-                      child: AppNetworkImage(
-                        imageFile:
-                            "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        overlayColor: WidgetStatePropertyAll(
-                          Colors.transparent,
-                        ),
-                        onTap: () {
-                          showGallerySheet(context, product, ref);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                SolarIconsOutline.camera,
-                                color: AppColors.kWhite,
-                                size: 30,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "Capture Picture",
-                                style: AppStyle.mediumStyle(
-                                  color: AppColors.kWhite,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       product.productName,
-                      style: AppStyle.boldStyle(fontSize: 18),
+                      style: AppStyle.largeStyle(
+
+                        
+                        fontSize: 20),
                     ),
-                    AppSpacer(hp: .005),
+                    buildIdBadge(
+                      context,
+                      enableCopy: true,
+                      product.id.toString(),
+                    ),
+                  ],
+                ),
+                AppSpacer(hp: .01,),
+                Text(
+                  "Category: ${product.category}",
+                  style: AppStyle.normalStyle(
+                    color: AppColors.kTextPrimaryColor,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      "Category: ${product.category}",
+                      "Color: ${product.color}",
                       style: AppStyle.normalStyle(
                         color: AppColors.kTextPrimaryColor,
                       ),
                     ),
-                    AppSpacer(hp: .005),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Color: ${product.color}",
-                          style: AppStyle.normalStyle(
-                            color: AppColors.kTextPrimaryColor,
-                          ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.kPrimaryColor.withAlpha(70),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        "Size: ${product.productSize}",
+                        style: AppStyle.mediumStyle(
+                          color: AppColors.kWhite,
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.kPrimaryColor.withAlpha(70),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            "Size: ${product.productSize}",
-                            style: AppStyle.mediumStyle(
-                              color: AppColors.kWhite,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            left: 10,
-            top: 10,
-            child: buildIdBadge(
-              context,
-              enableCopy: true,
-              product.id.toString(),
+              ],
             ),
           ),
+          InkWell(
+            onTap: () {
+              showGallerySheet(context,product,ref);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
+                color: AppColors.kBgColor),
+              alignment: Alignment.center,
+              child: Text("Update Image",style: AppStyle.largeStyle(),),
+            ),
+          )
         ],
       ),
     );

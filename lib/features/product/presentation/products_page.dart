@@ -90,12 +90,19 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
               contentPadding: EdgeInsets.symmetric(horizontal: 20),
               hintText: "Product Search",
               hintStyle: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
-              focusedBorder: OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.kBgColor),
                 borderRadius: BorderRadius.circular(50),
               ),
-              fillColor: AppColors.kFillColor,
+              focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(color: AppColors.kBgColor),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              fillColor:    AppColors.kFillColor.withAlpha(70),
               filled: true,
               border: OutlineInputBorder(
+                                 borderSide: BorderSide(color: AppColors.kBgColor),
+
                 borderRadius: BorderRadius.circular(50),
               ),
               prefixIcon: Icon(
@@ -177,6 +184,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
         children: [
           Container(
             decoration: BoxDecoration(
+              
               // borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.kPrimaryColor),
             ),

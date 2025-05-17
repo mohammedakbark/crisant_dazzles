@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
@@ -59,10 +60,12 @@ class _CopyMoreProdutcsScreenState
       canPop: false,
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+        
+          // automaticallyImplyLeading: false,
           title: Text("Update More Product", style: AppStyle.boldStyle()),
           backgroundColor: Colors.transparent,
           elevation: 0,
+          leading: AppBackButton(),
         ),
         body: AppMargin(
           child: Column(
@@ -72,6 +75,7 @@ class _CopyMoreProdutcsScreenState
               _buildSearchBox(),
               AppSpacer(hp: .01),
               _buildSelectedIds(),
+              
             ],
           ),
         ),
@@ -239,7 +243,11 @@ class _CopyMoreProdutcsScreenState
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(
-          child: TextField(
+          child: TextFormField(
+            onFieldSubmitted: (value) {
+    FocusScope.of(context).unfocus(); // Dismiss the keyboard
+  },
+           textInputAction: TextInputAction.done,
             controller: _findIDController,
             onChanged: (value) {
               _debouncer.run(() {
@@ -247,6 +255,7 @@ class _CopyMoreProdutcsScreenState
               });
             },
             keyboardType: TextInputType.number,
+            
             style: AppStyle.normalStyle(),
             cursorColor: AppColors.kBorderColor,
             decoration: InputDecoration(
@@ -286,10 +295,12 @@ class _CopyMoreProdutcsScreenState
                   ? ZoomIn(
                       child: InkWell(
                         onTap: () {
+                           FocusScope.of(context).unfocus();
                           controller.add(
                             productSelectionState.productModel!,
                             context,
                             showSheet: (onCancel, onReplace) {
+                             
                               _showReplacePicutreConfirmation(
                                 context: context,
                                 selectedProduct:
@@ -339,77 +350,33 @@ class _CopyMoreProdutcsScreenState
     final productSelectionState = ref.watch(
       selectAndSearchProductControllerProvider,
     );
-    return BuildStateManageComponent(
-      stateController: uploadImageState,
-      successWidget: (data) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ZoomIn(
-                  duration: Duration(milliseconds: 700),
-                  child: ElevatedButton.icon(
-                    onPressed: () => context.go(route),
-                    icon: Icon(
-                      Icons.delete_outline,
-                      color: AppColors.kWhite,
-                    ),
-                    label: Text(
-                      "Discard",
-                      style: AppStyle.normalStyle(color: AppColors.kWhite),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.kErrorPrimary,
-                      foregroundColor: AppColors.kWhite,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 14,
-                      ),
-                      textStyle: const TextStyle(fontSize: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                  ),
-                ),
-                AppSpacer(wp: .03),
-                ZoomIn(
-                  duration: Duration(milliseconds: 700),
-                  child: SizedBox(
-                    width: ResponsiveHelper.wp * .55,
+    return Padding(
+     padding: EdgeInsets.only(bottom: 20),  
+      child: BuildStateManageComponent(
+        stateController: uploadImageState,
+        successWidget: (data) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ZoomIn(
+                    duration: Duration(milliseconds: 700),
                     child: ElevatedButton.icon(
-                      onPressed: productSelectionState.selectedIds.isNotEmpty
-                          ? () {
-                              final container = ProviderContainer();
-                              container
-                                  .read(uploadImageControllerProvider.notifier)
-                                  .uploadMultipleIds(
-                                    context,
-                                    ref,
-                                    widget.fileImage,
-                                  );
-                            }
-                          : null,
+                      onPressed: () => context.go(route),
                       icon: Icon(
-                        Icons.cloud_upload_outlined,
-                        color: productSelectionState.selectedIds.isNotEmpty
-                            ? AppColors.kWhite
-                            : AppColors.kTextPrimaryColor,
+                        Icons.delete_outline,
+                        color: AppColors.kWhite,
                       ),
                       label: Text(
-                        "Upload",
-                        style: AppStyle.normalStyle(
-                          color: productSelectionState.selectedIds.isNotEmpty
-                              ? AppColors.kWhite
-                              : AppColors.kTextPrimaryColor,
-                        ),
+                        "Discard",
+                        style: AppStyle.normalStyle(color: AppColors.kWhite),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.kGreen,
+                        backgroundColor: AppColors.kErrorPrimary,
                         foregroundColor: AppColors.kWhite,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
@@ -422,11 +389,58 @@ class _CopyMoreProdutcsScreenState
                       ),
                     ),
                   ),
-                ),
-              ],
+                  AppSpacer(wp: .03),
+                  ZoomIn(
+                    duration: Duration(milliseconds: 700),
+                    child: SizedBox(
+                      width: ResponsiveHelper.wp * .55,
+                      child: ElevatedButton.icon(
+                        onPressed: productSelectionState.selectedIds.isNotEmpty
+                            ? () {
+                                final container = ProviderContainer();
+                                container
+                                    .read(uploadImageControllerProvider.notifier)
+                                    .uploadMultipleIds(
+                                      context,
+                                      ref,
+                                      widget.fileImage,
+                                    );
+                              }
+                            : null,
+                        icon: Icon(
+                          Icons.cloud_upload_outlined,
+                          color: productSelectionState.selectedIds.isNotEmpty
+                              ? AppColors.kWhite
+                              : AppColors.kTextPrimaryColor,
+                        ),
+                        label: Text(
+                          "Upload",
+                          style: AppStyle.normalStyle(
+                            color: productSelectionState.selectedIds.isNotEmpty
+                                ? AppColors.kWhite
+                                : AppColors.kTextPrimaryColor,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.kGreen,
+                          foregroundColor: AppColors.kWhite,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
+                          ),
+                          textStyle: const TextStyle(fontSize: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -18,14 +18,14 @@ class DashBoardShimmer extends StatelessWidget {
             padding: EdgeInsets.all(0),
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
               crossAxisCount: 2,
             ),
             itemCount: 4,
             itemBuilder: (context, index) => _buildGridTile(),
           ),
-          AppSpacer(hp: .03),
+            AppSpacer(hp: .015),
           // Products
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,20 +43,13 @@ class DashBoardShimmer extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacer(hp: .02),
+          AppSpacer(hp: .01),
           // product Grid
-          GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.all(0),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
-              crossAxisCount: 2,
-            ),
-            itemCount: 2,
-            itemBuilder: (context, index) => Card(),
-          ),
+          Container(
+            color: AppColors.kBorderColor,
+            width: ResponsiveHelper.wp,
+            height: ResponsiveHelper.hp*.2,
+          )
         ],
       ),
     );
@@ -64,7 +57,7 @@ class DashBoardShimmer extends StatelessWidget {
 
   Widget _buildGridTile() => Container(
     decoration: BoxDecoration(
-      color: AppColors.kSecondaryColor,
+    color: AppColors.kBorderColor,
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
         BoxShadow(

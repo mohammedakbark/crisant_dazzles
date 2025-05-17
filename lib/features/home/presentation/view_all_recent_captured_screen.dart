@@ -45,7 +45,9 @@ class _ViewAllRecentCapturedScreenState
         onRefresh: () async {
           return ref.refresh(recntlyCapturedControllerProvider);
         },
-        child: BuildStateManageComponent(
+        child:
+        
+         BuildStateManageComponent(
           stateController: recentCapturedController,
           errorWidget:
               (p0, p1) => AppErrorView(
@@ -80,7 +82,7 @@ class _ViewAllRecentCapturedScreenState
                           margin: EdgeInsets.all(10),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                            color: AppColors.kBgColor,
+                            color: AppColors.kWhite,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 1,
@@ -98,6 +100,7 @@ class _ViewAllRecentCapturedScreenState
                                 child: Hero(
                                   tag: data[index].productId.toString(),
                                   child: AppNetworkImage(
+
                                     fit: BoxFit.cover,
                                     imageFile:
                                         ApiConstants.imageBaseUrl +
@@ -109,7 +112,9 @@ class _ViewAllRecentCapturedScreenState
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   data[index].productName,
-                                  style: AppStyle.normalStyle(),
+                                  style: AppStyle.boldStyle(
+                                      color: AppColors.kBgColor
+                                  ),
                                 ),
                               ),
                             ],

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData themeData() => ThemeData(
+    
     textTheme: AppTheme.buildTextTheme(
+    
       AppStyle.smallStyle(
         
       ),
@@ -12,8 +14,11 @@ class AppTheme {
       AppStyle.largeStyle(),
     ),
     scaffoldBackgroundColor: AppColors.kBgColor,
-    appBarTheme: AppBarTheme(backgroundColor: AppColors.kBgColor),
-    colorScheme: ColorScheme.light(primary: AppColors.kPrimaryColor),
+     
+    appBarTheme: AppBarTheme(
+      centerTitle: false,
+      backgroundColor: AppColors.kBgColor),
+    colorScheme: ColorScheme.dark(primary: AppColors.kPrimaryColor),
   );
 
   static TextTheme buildTextTheme(

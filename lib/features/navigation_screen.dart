@@ -53,15 +53,13 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   Widget build(BuildContext context) {
     int index = ref.watch(navigationController);
     return Scaffold(
-      appBar: index == 4
-          ? null
-          : CustomAppBar(),
+      appBar: index == 4 ? null : CustomAppBar(),
       body: Stack(
         fit: StackFit.expand,
         children: [
           Padding(
               padding: EdgeInsets.only(
-                bottom: ResponsiveHelper.hp * .085,
+                bottom: Platform.isAndroid?ResponsiveHelper.hp * .09: ResponsiveHelper.hp * .12,
               ),
               child: _pages[index]),
           Positioned(bottom: 0, child: _buildCustomeNav())
@@ -132,40 +130,42 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildCustomeNav() {
-        int index = ref.watch(navigationController);
-
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppColors.kSecondaryColor,
       ),
       width: ResponsiveHelper.wp,
-      height: ResponsiveHelper.hp * .085,
+      height:Platform.isAndroid?ResponsiveHelper.hp * .09: ResponsiveHelper.hp * .12,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildIconSet(SolarIconsBold.home, "Home", 0),
-              _buildIconSet(CupertinoIcons.square_list_fill, "Pending", 1),
-              SizedBox(
-                width: ResponsiveHelper.wp * .1,
-              ),
-              _buildIconSet(CupertinoIcons.cart_fill, "Products", 3),
-              _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
-            ],
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 10,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildIconSet(SolarIconsBold.home, "Home", 0),
+                _buildIconSet(CupertinoIcons.square_list_fill, "Pending", 1),
+                SizedBox(
+                  width: ResponsiveHelper.wp * .1,
+                ),
+                _buildIconSet(CupertinoIcons.cart_fill, "Products", 3),
+                _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
+              ],
+            ),
           ),
           Positioned(
-              top: -35,
+              top: -30,
               child: InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () {
+                onTap: () async {
                   log("dddhd");
-                  final index=ref.read(navigationController.notifier);
-                  if (index == 2) {
-                    ref
+                  if (ref.watch(navigationController) == 2) {
+                    await ref
                         .read(cameraControllerProvider.notifier)
                         .takePhoto(context);
                   } else {
@@ -176,22 +176,39 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   width: ResponsiveHelper.wp * .3,
                   height: ResponsiveHelper.wp * .18,
                   decoration: BoxDecoration(
+                    color: Colors.transparent,
                       border: Border.all(
                           width: 4,
                           color:
                               ref.watch(navigationController.notifier).state ==
                                       2
-                                  ? AppColors.kWhite
-                                  : AppColors.kSecondaryColor),
-                      color: ref.watch(navigationController.notifier).state == 2
-                          ? AppColors.kSecondaryColor
-                          : AppColors.kWhite,
+                                  ? AppColors.kPrimaryColor
+                                  : AppColors.kWhite),
+                     
                       shape: BoxShape.circle),
-                  child: Icon(
-                    CupertinoIcons.camera_fill,
-                    color: ref.watch(navigationController.notifier).state == 2
-                        ? AppColors.kWhite
-                        : AppColors.kTextPrimaryColor,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 4,
+                            color:AppColors.kSecondaryColor,
+                            // color: ref
+                            //             .watch(navigationController.notifier)
+                            //             .state ==
+                            //         2
+                            //     ? AppColors.kWhite
+                            //     : AppColors.kSecondaryColor
+                          ),
+                        color:
+                            ref.watch(navigationController.notifier).state == 2
+                                ? AppColors.kPrimaryColor
+                                : AppColors.kWhite,
+                        shape: BoxShape.circle),
+                    child: Icon(
+                      CupertinoIcons.camera_fill,
+                      color: ref.watch(navigationController.notifier).state == 2
+                          ? AppColors.kWhite
+                          : AppColors.kBgColor,
+                    ),
                   ),
                 ),
               ))
@@ -215,22 +232,19 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                       icon,
                       color: isSelected
                           ? AppColors.kPrimaryColor
-                          : AppColors.kTextPrimaryColor,
+                          : AppColors.kWhite,
                     ),
                   )
                 : Icon(
                     icon,
-                    color: isSelected
-                        ? AppColors.kPrimaryColor
-                        : AppColors.kTextPrimaryColor,
+                    color:
+                        isSelected ? AppColors.kPrimaryColor : AppColors.kWhite,
                   ),
             Text(
               label,
-              style: AppStyle.smallStyle(
+              style: AppStyle.boldStyle(
                 fontSize: ResponsiveHelper.fontSmall,
-                color: isSelected
-                    ? AppColors.kPrimaryColor
-                    : AppColors.kTextPrimaryColor,
+                color: isSelected ? AppColors.kPrimaryColor : AppColors.kWhite,
               ),
             )
           ],

@@ -64,7 +64,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 // Search
                 InkWell(
                   overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                  onTap: () => ref.read(navigationController.notifier).state = 2,
+                  onTap: () => ref.read(navigationController.notifier).state = 3,
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       vertical: ResponsiveHelper.paddingSmall,
@@ -73,7 +73,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     width: ResponsiveHelper.wp,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: AppColors.kFillColor,
+                      color: AppColors.kFillColor.withAlpha(70),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,38 +167,45 @@ class _HomePageState extends ConsumerState<HomePage> {
   ) {
     return Column(
       children: [
-        GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.all(0),
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            crossAxisCount: 2,
-          ),
-          itemCount: 4,
-          itemBuilder: (context, index) => _buildGridTile(
-            onTap: () {
-              switch (index) {
-                case 0:
-                  {
-                    ref.read(navigationController.notifier).state = 2;
-                  }
+        Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.kBorderColor.withAlpha(10)), 
 
-                case 1:
-                  {
-                    ref.read(navigationController.notifier).state = 1;
-                  }
-
-                case 2:
-                  return;
-
-                case 3:
-                  return;
-              }
-            },
-            '${index == 0 ? model.totalProduct : index == 1 ? model.imagePending : index == 2 ? model.upcomingProducts : model.supplierReturn}',
-            titles[index],
+          child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(0),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              crossAxisCount: 2,
+            ),
+            itemCount: 4,
+            itemBuilder: (context, index) => _buildGridTile(
+              onTap: () {
+                switch (index) {
+                  case 0:
+                    {
+                      ref.read(navigationController.notifier).state = 3;
+                    }
+          
+                  case 1:
+                    {
+                      ref.read(navigationController.notifier).state = 1;
+                    }
+          
+                  case 2:
+                    return;
+          
+                  case 3:
+                    return;
+                }
+              },
+              '${index == 0 ? model.totalProduct : index == 1 ? model.imagePending : index == 2 ? model.upcomingProducts : model.supplierReturn}',
+              titles[index],
+            ),
           ),
         ),
         AppSpacer(hp: .015),
@@ -223,7 +230,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         AppSpacer(hp: .01),
         // product Grid
-        model.recentCaptured.isEmpty
+        Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.kBorderColor.withAlpha(10)),
+          child: model.recentCaptured.isEmpty
             ? AppErrorView(error: "Nothing is captured recently")
             : GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -249,14 +261,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.kBgColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 1,
-                          spreadRadius: 1,
-                          color: AppColors.kPrimaryColor,
-                        ),
-                      ],
+                      color: AppColors.kWhite,
+                      
                       // border: Border.all(color: AppColors.kPrimaryColor),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -273,6 +279,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
+        )
       ],
     );
   }

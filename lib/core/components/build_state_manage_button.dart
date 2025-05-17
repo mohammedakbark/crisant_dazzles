@@ -28,6 +28,7 @@ class BuildStateManageComponent extends StatelessWidget {
         );
       },
       child: stateController.when(
+         
         data: successWidget,
         error:
             errorWidget ??

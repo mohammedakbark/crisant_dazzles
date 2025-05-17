@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -12,29 +13,42 @@ import 'package:image_picker/image_picker.dart';
 
 late List<CameraDescription> cameras;
 
-class CamerasController extends AsyncNotifier<CameraControllerState> {
+class CamerasController extends AsyncNotifier<Map<String, dynamic>> {
   late CameraController cameraController;
 
   @override
-  FutureOr<CameraControllerState> build() async {
-    try {
-      state = AsyncValue.loading();
-      final backCamera = cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.external,
-        orElse: () => cameras.first, // fallback
-      );
-      cameraController = CameraController(backCamera, ResolutionPreset.max);
-      await cameraController.initialize();
-      return CameraControllerState(cameraController: cameraController);
-    } catch (e, trace) {
-      throw AsyncValue.error(e, trace);
-    }
+  FutureOr<Map<String, dynamic>> build() async {
+    // try {
+    //   state = AsyncValue.loading();
+    //   if(cameras.isNotEmpty){
+    //     final backCamera = cameras.firstWhere(
+    //     (camera) => camera.lensDirection == CameraLensDirection.external,
+    //     orElse: () => cameras.first, // fallback
+    //   );
+    //   cameraController = CameraController(backCamera, ResolutionPreset.max);
+    //   await cameraController.initialize();
+    //   return CameraControllerState(cameraController: cameraController);
+
+    //   }else{
+    //     return null;
+    //   }
+
+    // } catch (e, trace) {
+    //   log("catch : ${e.toString()}");
+    //   throw AsyncValue.error(e, trace);
+    // }
+    return {};
   }
 
-  @override
-  void dispose() {
-    cameraController.dispose(); // Properly dispose here
+  Future<void> initCamera() async {
+    cameraController = CameraController(cameras[0], ResolutionPreset.high);
+    return await cameraController.initialize();
   }
+
+  // @override
+  // void dispose() {
+  //   cameraController.dispose(); // Properly dispose here
+  // }
 
   Future<void> takePhoto(BuildContext context) async {
     final xFile = await cameraController.takePicture();
@@ -59,6 +73,6 @@ class CamerasController extends AsyncNotifier<CameraControllerState> {
 }
 
 final cameraControllerProvider =
-    AsyncNotifierProvider<CamerasController, CameraControllerState>(
+    AsyncNotifierProvider<CamerasController, Map<String, dynamic>>(
   () => CamerasController(),
 );
