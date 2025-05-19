@@ -3,23 +3,18 @@ import 'dart:developer';
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
-import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/components/componets.dart';
-import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:dazzles/features/upload/data/providers/get%20pending%20products/pending_products_state.dart';
 import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:solar_icons/solar_icons.dart';
 
 class PendingImagePage extends ConsumerStatefulWidget {
   const PendingImagePage({super.key});
@@ -247,7 +242,7 @@ void showGallerySheet(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () => UploadImageNotifier().pickImage(
+                          onPressed: () => UploadImageNotifier().pickImageAndUpload(
                               context, ImageSource.gallery, productModel, ref),
                           icon: Icon(Icons.photo, color: AppColors.kWhite),
                           label: Text("Gallery"),
@@ -270,7 +265,7 @@ void showGallerySheet(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () => UploadImageNotifier().pickImage(
+                          onPressed: () => UploadImageNotifier().pickImageAndUpload (
                               context, ImageSource.camera, productModel, ref),
                           icon: Icon(
                             Icons.camera_alt,

@@ -8,7 +8,6 @@ import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/features/upload/data/repo/upload_image_repo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +21,9 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
   ) {
     return ImageCropper().cropImage(
         sourcePath: imagePath,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        compressQuality: 90,
         aspectRatio: CropAspectRatio(ratioX: 9, ratioY: 16),
         compressFormat: ImageCompressFormat.png,
         uiSettings: [
@@ -38,6 +40,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
           ),
           IOSUiSettings(
             title: 'Cropper',
+            
             aspectRatioPresets: [
               CropAspectRatioPreset.ratio16x9,
             ],
@@ -46,7 +49,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
   }
 
 // IMAGE PICKER WITH SINGLE IMAGE UPLOAD FUNCTION
-  Future<void> pickImage(BuildContext context, ImageSource source,
+  Future<void> pickImageAndUpload(BuildContext context, ImageSource source,
       ProductModel productModel, WidgetRef ref) async {
     final uploadManagerController = ref.read(uploadManagerProvider.notifier);
 
@@ -62,7 +65,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
           pickedFile.path,
         );
         if (_croppedFile != null) {
-          _uploadSingleIdProduct(
+          _uploadImage(
             [productModel.id],
             _croppedFile.path,
             uploadManagerController,
@@ -77,7 +80,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
 // SINGLE IMAGE UPLOAD (FROM PENDING IMAGE AND ALL PRODUCTS)
 
-  Future<void> _uploadSingleIdProduct(
+  Future<void> _uploadImage(
     List<int> ids,
     String path,
     UploadManager uploadManagerController,
@@ -131,7 +134,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
     }
   }
 
-//  uploading
+//  uploading  multiple ids
   Future<void> uploadMultipleIds(
       BuildContext context, WidgetRef ref, File image) async {
     state = AsyncLoading();
@@ -141,7 +144,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
     for (var i in idsState.selectedIds) {
       ids.add(i.id);
     }
-    _uploadSingleIdProduct(ids, image.path, uploadManagerController);
+    _uploadImage(ids, image.path, uploadManagerController);
     context.go(route);
   }
   // }Future<void> uploadMultipleIds(
@@ -190,31 +193,62 @@ final uploadImageControllerProvider =
   return UploadImageNotifier();
 });
 
-Future<Map<String, dynamic>> computeImageFiles(Map<String, dynamic> arg) async {
-  try {
-    // final imageBytes = arg['image'] as List<int>;
 
-    // final imageData =
-    //     img.decodeImage(Uint8List.fromList(Uint8List.fromList(imageBytes)));
-    // if (imageData == null) {
-    //   log("Failed to decode image");
-    //   return {};
-    // }
-    // final resizedImageData = img.copyResize(imageData, width: 1024);
-    // final jpgBytes = img.encodeJpg(resizedImageData, quality: 85);
 
-    // final tempDir = Directory.systemTemp;
+// Future<File> resizeImageTo2MP(File imageFile) async {
+//   // Read image bytes
+//   final bytes = await imageFile.readAsBytes();
+//   final image = img.decodeImage(bytes);
+//   if (image == null) throw Exception("Failed to decode image");
 
-    // final filePath =
-    //     '${tempDir.path}/${DateTime.now().microsecondsSinceEpoch}.jpg';
-    // final resizedFile = await File(filePath).writeAsBytes(jpgBytes);
+//   // Calculate scale factor to reach ~2MP
+//   final currentPixels = image.width * image.height;
+//   final targetPixels = 2000000; // 2MP
+//   final scaleFactor = (targetPixels / currentPixels).sqrt();
 
-    return {
-      "path": '',
-    };
-  } catch (e) {
-    debugPrint(e.toString());
-    debugPrint("3");
-    return {};
-  }
-}
+//   final newWidth = (image.width * scaleFactor).round();
+//   final newHeight = (image.height * scaleFactor).round();
+
+//   // Resize the image
+//   final resized = img.copyResize(image, width: newWidth, height: newHeight);
+
+//   // Get temporary directory to save the resized image
+//   final tempDir = await getTemporaryDirectory();
+//   final resizedPath = '${tempDir.path}/resized_image.jpg';
+
+//   // Encode and save the resized image
+//   final resizedFile = File(resizedPath);
+//   await resizedFile.writeAsBytes(img.encodeJpg(resized));
+
+//   return resizedFile;
+// }
+
+
+// Future<Map<String, dynamic>> computeImageFiles(Map<String, dynamic> arg) async {
+//   try {
+//     // final imageBytes = arg['image'] as List<int>;
+
+//     // final imageData =
+//     //     img.decodeImage(Uint8List.fromList(Uint8List.fromList(imageBytes)));
+//     // if (imageData == null) {
+//     //   log("Failed to decode image");
+//     //   return {};
+//     // }
+//     // final resizedImageData = img.copyResize(imageData, width: 1024);
+//     // final jpgBytes = img.encodeJpg(resizedImageData, quality: 85);
+
+//     // final tempDir = Directory.systemTemp;
+
+//     // final filePath =
+//     //     '${tempDir.path}/${DateTime.now().microsecondsSinceEpoch}.jpg';
+//     // final resizedFile = await File(filePath).writeAsBytes(jpgBytes);
+
+//     return {
+//       "path": '',
+//     };
+//   } catch (e) {
+//     debugPrint(e.toString());
+//     debugPrint("3");
+//     return {};
+//   }
+// }

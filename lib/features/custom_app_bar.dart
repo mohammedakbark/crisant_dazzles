@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/local/hive/controllers/upload_manager.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:solar_icons/solar_icons.dart';
 
 class CustomAppBar extends ConsumerStatefulWidget
     implements PreferredSizeWidget {
