@@ -82,7 +82,7 @@ class _ViewAllRecentCapturedScreenState
                           margin: EdgeInsets.all(10),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                            color: AppColors.kWhite,
+                      color: AppColors.kBorderColor,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 1,
@@ -113,7 +113,7 @@ class _ViewAllRecentCapturedScreenState
                                 child: Text(
                                   data[index].productName,
                                   style: AppStyle.boldStyle(
-                                      color: AppColors.kBgColor
+                                      color: AppColors.kWhite
                                   ),
                                 ),
                               ),

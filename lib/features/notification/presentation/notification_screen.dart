@@ -1,4 +1,3 @@
-
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
@@ -9,7 +8,7 @@ import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/intl_c.dart';
-import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
+import 'package:dazzles/features/pending/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -59,7 +58,6 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         child: AppMargin(
             child: BuildStateManageComponent(
           stateController: uploadManagerState,
-          
           successWidget: (data) {
             final uploads = data as List<UploadPhotoModel>;
             return uploads.isEmpty
@@ -87,108 +85,125 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
     final time = IntlC.convertToTime(model.dateTime ?? DateTime(2000));
 
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor:
-                  status ? AppColors.kPrimaryColor : AppColors.kErrorPrimary,
-              child: Icon(
-                status ? Icons.check_circle_outline : Icons.error_outline,
-                color: Colors.white,
-                size: 20,
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor:
+                    status ? AppColors.kPrimaryColor : AppColors.kErrorPrimary,
+                child: Icon(
+                  status ? Icons.check_circle_outline : Icons.error_outline,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
-            ),
-            // CircularProgressIndicator(),
-            AppSpacer(
-              wp: .03,
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Upload Failed!",
-                    style: AppStyle.boldStyle(
-                        fontSize: 16, color: AppColors.kBgColor),
-                  ),
-                  Text(
-                    title,
-                    style: AppStyle.boldStyle(
-                        fontSize: 12, color: AppColors.kFillColor),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 8),
-                    child: Row(
-                      children: [
-                        Icon(Icons.calendar_today,
-                            size: 14, color: AppColors.kTextPrimaryColor),
-                        SizedBox(width: 4),
-                        Text(
-                          date,
-                          style: AppStyle.normalStyle(
-                              color: AppColors.kTextPrimaryColor),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.access_time,
-                            size: 14, color: AppColors.kTextPrimaryColor),
-                        SizedBox(width: 4),
-                        Text(
-                          time,
-                          style: AppStyle.normalStyle(
-                              color: AppColors.kTextPrimaryColor),
-                        ),
-                      ],
+              AppSpacer(
+                wp: .03,
+              ),
+              Flexible(
+                child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Upload Failed!",
+                      style: AppStyle.boldStyle(
+                          fontSize: 16, color: AppColors.kBgColor),
                     ),
+                    AppSpacer(hp: .005,),
+                    Text(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      title,
+                      style: AppStyle.normalStyle(
+                          fontSize: 12, color: AppColors.kFillColor),
+                    ),
+                  ],
+                ),
+              ),
+              AppSpacer(
+                wp: .03,
+              ),
+              InkWell(
+                onTap: () async {
+                  if (model.isUploading != true) {
+                    ref
+                        .read(uploadImageControllerProvider.notifier)
+                        .uploadFailedImageAgain({
+                      "ids": model.ids,
+                      "id": model.id,
+                      "path": model.imagePath,
+                      "ref": ref
+                    });
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: model.isUploading == true
+                        ? AppColors.kFillColor
+                        : AppColors.kDeepPurple,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
-              ),
-            ),
-            AppSpacer(
-              wp: .03,
-            ),
-            InkWell(
-              onTap: () async {
-                if (model.isUploading != true) {
-                  ref
-                      .read(uploadImageControllerProvider.notifier)
-                      .uploadFailedImageAgain({
-                    "ids": model.ids,
-                    "id": model.id,
-                    "path": model.imagePath,
-                    "ref": ref
-                  });
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: model.isUploading == true
-                      ? AppColors.kFillColor
-                      : AppColors.kDeepPurple,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  model.isUploading == true ? "Uplaoding" : "Upload",
-                  style: AppStyle.normalStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                  child: Text(
+                    model.isUploading == true ? "Uplaoding" : "Upload",
+                    style: AppStyle.normalStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: [
+                Flexible(
+                  child: Row(children: [Icon(Icons.calendar_today,
+                      size: 14, color: AppColors.kTextPrimaryColor),
+                  SizedBox(width: 4),
+                  Text(
+                    date,
+                    style:
+                        AppStyle.normalStyle(color: AppColors.kTextPrimaryColor),
+                  ),],),
+                ),
+              
+                Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [Icon(Icons.access_time,
+                      size: 14, color: AppColors.kTextPrimaryColor),
+                  SizedBox(width: 4),
+                  Text(
+                    time,
+                    style:
+                        AppStyle.normalStyle(color: AppColors.kTextPrimaryColor),
+                  ),],),
+                )
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

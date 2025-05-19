@@ -36,6 +36,7 @@ class AppNetworkImage extends StatelessWidget {
       imageUrl: "${imageFile}?v=$imageVersion" ?? "",
       placeholder: (context, url) => AppLoading(),
       errorListener: (value) {},
+      
       errorWidget: (context, url, error) =>
           (userName != null && userName!.isNotEmpty)
               ? Center(

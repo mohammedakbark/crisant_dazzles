@@ -1,13 +1,15 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/features/product/data/models/product_data_model.dart';
 
 class GetProductDataRepo {
-  static Future<Map<String, dynamic>> onGetProductData() async {
+  static Future<Map<String, dynamic>> onGetProductData(int id) async {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.getRequest(
-      endpoint: ApiConstants.productData,
+      endpoint: ApiConstants.productData+"/$id",
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",

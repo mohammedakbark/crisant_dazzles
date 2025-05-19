@@ -15,8 +15,8 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
-import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
+import 'package:dazzles/features/pending/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
+import 'package:dazzles/features/pending/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,7 +60,6 @@ class _CopyMoreProdutcsScreenState
       canPop: false,
       child: Scaffold(
         appBar: AppBar(
-        
           // automaticallyImplyLeading: false,
           title: Text("Update More Product", style: AppStyle.boldStyle()),
           backgroundColor: Colors.transparent,
@@ -75,7 +74,6 @@ class _CopyMoreProdutcsScreenState
               _buildSearchBox(),
               AppSpacer(hp: .01),
               _buildSelectedIds(),
-              
             ],
           ),
         ),
@@ -244,10 +242,7 @@ class _CopyMoreProdutcsScreenState
       children: [
         Flexible(
           child: TextFormField(
-            onFieldSubmitted: (value) {
-    FocusScope.of(context).unfocus(); // Dismiss the keyboard
-  },
-           textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.done,
             controller: _findIDController,
             onChanged: (value) {
               _debouncer.run(() {
@@ -255,7 +250,6 @@ class _CopyMoreProdutcsScreenState
               });
             },
             keyboardType: TextInputType.number,
-            
             style: AppStyle.normalStyle(),
             cursorColor: AppColors.kBorderColor,
             decoration: InputDecoration(
@@ -295,12 +289,10 @@ class _CopyMoreProdutcsScreenState
                   ? ZoomIn(
                       child: InkWell(
                         onTap: () {
-                           FocusScope.of(context).unfocus();
                           controller.add(
                             productSelectionState.productModel!,
                             context,
                             showSheet: (onCancel, onReplace) {
-                             
                               _showReplacePicutreConfirmation(
                                 context: context,
                                 selectedProduct:
@@ -351,7 +343,7 @@ class _CopyMoreProdutcsScreenState
       selectAndSearchProductControllerProvider,
     );
     return Padding(
-     padding: EdgeInsets.only(bottom: 20),  
+      padding: EdgeInsets.only(bottom: 20),
       child: BuildStateManageComponent(
         stateController: uploadImageState,
         successWidget: (data) => Column(
@@ -399,7 +391,8 @@ class _CopyMoreProdutcsScreenState
                             ? () {
                                 final container = ProviderContainer();
                                 container
-                                    .read(uploadImageControllerProvider.notifier)
+                                    .read(
+                                        uploadImageControllerProvider.notifier)
                                     .uploadMultipleIds(
                                       context,
                                       ref,

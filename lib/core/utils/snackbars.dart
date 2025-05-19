@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -57,6 +59,13 @@ showCustomSnackBarAdptive(
 }) {
   final snackbar = SnackBar(
       behavior: SnackBarBehavior.floating,
+      showCloseIcon: true,
+      elevation: 10,
+      closeIconColor: AppColors.kWhite,
+      margin: EdgeInsets.only(
+        left: ResponsiveHelper.wp*.03,
+        right: ResponsiveHelper.wp*.03,
+        bottom: Platform.isAndroid?ResponsiveHelper.hp * .07: ResponsiveHelper.hp * .09,),
       backgroundColor: isError == true
           ? AppColors.kErrorPrimary.withAlpha(70)
           : isError == false

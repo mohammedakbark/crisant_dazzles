@@ -15,6 +15,7 @@ import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/features/product/data/providers/product_controller/product_state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -63,8 +64,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
     final productsState = ref.watch(allProductControllerProvider);
     final productsController = ref.read(allProductControllerProvider.notifier);
 
-    return 
-    AppMargin(
+    return AppMargin(
       child: Column(
         children: [
           AppSpacer(hp: .01),
@@ -91,18 +91,17 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
               hintText: "Product Search",
               hintStyle: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
               enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.kBgColor),
+                borderSide: BorderSide(color: AppColors.kBgColor),
                 borderRadius: BorderRadius.circular(50),
               ),
               focusedBorder: OutlineInputBorder(
-                 borderSide: BorderSide(color: AppColors.kBgColor),
+                borderSide: BorderSide(color: AppColors.kBgColor),
                 borderRadius: BorderRadius.circular(50),
               ),
-              fillColor:    AppColors.kFillColor.withAlpha(70),
+              fillColor: AppColors.kFillColor.withAlpha(70),
               filled: true,
               border: OutlineInputBorder(
-                                 borderSide: BorderSide(color: AppColors.kBgColor),
-
+                borderSide: BorderSide(color: AppColors.kBgColor),
                 borderRadius: BorderRadius.circular(50),
               ),
               prefixIcon: Icon(
@@ -133,7 +132,12 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                       ? AppErrorView(error: "Products not found")
                       : Column(
                           children: [
-                            AppSpacer(hp: .02),
+                            ref
+                                    .watch(
+                                        allProductControllerProvider.notifier)
+                                    .isLoadingMore
+                                ? AppLoading(isTextLoading: true)
+                                : AppSpacer(hp: .02),
                             Expanded(
                               child: GridView.builder(
                                 controller: _scrollController,
@@ -149,12 +153,6 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                                     _buildTile(products[index]),
                               ),
                             ),
-                            ref
-                                    .watch(
-                                        allProductControllerProvider.notifier)
-                                    .isLoadingMore
-                                ? AppLoading(isTextLoading: true)
-                                : SizedBox(),
                           ],
                         );
                 },
@@ -184,7 +182,6 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              
               // borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.kPrimaryColor),
             ),
@@ -239,12 +236,20 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
           ),
           Positioned(
             left: 10,
-            top: 10,
-            child: buildIdBadge(
+            right: 10,
+           top: 10,
+            child: Row( 
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+              buildIdBadge(
               context,
               product.id.toString(),
               enableCopy: true,
             ),
+            InkWell(onTap: (){
+              context.push(viewAndEditProductScreen,extra: {"id":product.id});
+            }, child: Icon(CupertinoIcons.arrow_right_circle))
+            ],)
           ),
         ],
       ),

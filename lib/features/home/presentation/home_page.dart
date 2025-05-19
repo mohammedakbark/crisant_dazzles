@@ -261,7 +261,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.kWhite,
+                      color: AppColors.kBorderColor,
                       
                       // border: Border.all(color: AppColors.kPrimaryColor),
                       borderRadius: BorderRadius.circular(20),

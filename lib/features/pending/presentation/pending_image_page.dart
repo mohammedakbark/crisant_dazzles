@@ -9,9 +9,9 @@ import 'package:dazzles/core/components/componets.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/data/providers/get%20pending%20products/get_pending_products_controller.dart';
-import 'package:dazzles/features/upload/data/providers/get%20pending%20products/pending_products_state.dart';
-import 'package:dazzles/features/upload/data/providers/upload_image_controller.dart';
+import 'package:dazzles/features/pending/data/providers/get%20pending%20products/get_pending_products_controller.dart';
+import 'package:dazzles/features/pending/data/providers/get%20pending%20products/pending_products_state.dart';
+import 'package:dazzles/features/pending/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -65,6 +65,11 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
           final pending = state.products;
           return Column(
             children: [
+              ref
+                      .read(getAllPendingProductControllerProvider.notifier)
+                      .isLoadingMore
+                  ? AppLoading(isTextLoading: true)
+                  : SizedBox(),
               Expanded(
                 child: pending.isEmpty
                     ? AppErrorView(
@@ -82,11 +87,6 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                         },
                       ),
               ),
-              ref
-                      .read(getAllPendingProductControllerProvider.notifier)
-                      .isLoadingMore
-                  ? AppLoading(isTextLoading: true)
-                  : SizedBox(),
             ],
           );
         },
@@ -115,10 +115,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                   children: [
                     Text(
                       product.productName,
-                      style: AppStyle.largeStyle(
-
-                        
-                        fontSize: 20),
+                      style: AppStyle.largeStyle(fontSize: 20),
                     ),
                     buildIdBadge(
                       context,
@@ -127,7 +124,9 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                     ),
                   ],
                 ),
-                AppSpacer(hp: .01,),
+                AppSpacer(
+                  hp: .01,
+                ),
                 Text(
                   "Category: ${product.category}",
                   style: AppStyle.normalStyle(
@@ -166,15 +165,20 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
           ),
           InkWell(
             onTap: () {
-              showGallerySheet(context,product,ref);
+              showGallerySheet(context, product, ref);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
-                color: AppColors.kBgColor),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  color: AppColors.kBgColor),
               alignment: Alignment.center,
-              child: Text("Update Image",style: AppStyle.largeStyle(),),
+              child: Text(
+                "Update Image",
+                style: AppStyle.largeStyle(),
+              ),
             ),
           )
         ],
@@ -242,8 +246,9 @@ void showGallerySheet(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () => UploadImageNotifier().pickImageAndUpload(
-                              context, ImageSource.gallery, productModel, ref),
+                          onPressed: () => UploadImageNotifier()
+                              .pickImageAndUpload(context, ImageSource.gallery,
+                                  productModel, ref),
                           icon: Icon(Icons.photo, color: AppColors.kWhite),
                           label: Text("Gallery"),
                         ),
@@ -265,8 +270,9 @@ void showGallerySheet(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () => UploadImageNotifier().pickImageAndUpload (
-                              context, ImageSource.camera, productModel, ref),
+                          onPressed: () => UploadImageNotifier()
+                              .pickImageAndUpload(context, ImageSource.camera,
+                                  productModel, ref),
                           icon: Icon(
                             Icons.camera_alt,
                             color: AppColors.kWhite,

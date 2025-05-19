@@ -1,7 +1,6 @@
-
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/upload/data/repo/search_product_by_id_repo.dart';
-import 'package:dazzles/features/upload/data/providers/select%20&%20search%20product/product_selection_state.dart';
+import 'package:dazzles/features/pending/data/repo/search_product_by_id_repo.dart';
+import 'package:dazzles/features/pending/data/providers/select%20&%20search%20product/product_selection_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +29,7 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
           () {
             state = state.copyWith(errorMessage: null, enableAddButton: false);
             context.pop();
+            FocusScope.of(context).unfocus();
           },
           () {
             state = state.copyWith(
@@ -37,6 +37,7 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
               selectedIds: [...state.selectedIds, model],
             );
             context.pop();
+            FocusScope.of(context).unfocus();
           },
         );
         // _showReplacePicutreConfirmation(
@@ -108,7 +109,7 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
 
 final selectAndSearchProductControllerProvider =
     NotifierProvider<SelectAndSearchProductController, ProductSelectionState>(
-      () {
-        return SelectAndSearchProductController();
-      },
-    );
+  () {
+    return SelectAndSearchProductController();
+  },
+);

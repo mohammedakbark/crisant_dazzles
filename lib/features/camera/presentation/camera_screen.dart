@@ -44,12 +44,13 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
         builder: (context, snapshot) {
           log("Loding");
           if (snapshot.connectionState == ConnectionState.done) {
+            final notifier=ref.watch(cameraControllerProvider.notifier);
             return AspectRatio(
                 aspectRatio: 9 / 16,
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    CameraPreview(ref.watch(cameraControllerProvider.notifier).cameraController),
+               notifier.cameraController!=null?     CameraPreview(notifier.cameraController!):AppErrorView(error: "Camara is not availabe!"),
                     Positioned(
                       bottom: 10,
                       left: 10,

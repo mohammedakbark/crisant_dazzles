@@ -7,6 +7,7 @@ import 'package:dazzles/features/navigation_screen.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/notification/presentation/notification_screen.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
+import 'package:dazzles/features/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
 import 'package:dazzles/features/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,17 @@ class RouteProvider {
             image: path!,
             productModel: prouctModel,
             enableEditButton: enableEditButton,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: viewAndEditProductScreen,
+        builder: (context, state) {
+          final map = state.extra as Map<String, dynamic>;
+          final id = map['id'] as int;
+          return ViewAndEditProductScreen(
+            productId: id,
           );
         },
       ),

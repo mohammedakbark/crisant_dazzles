@@ -8,3 +8,4 @@ const recentlyCaptured = "/viewRecentlyCaptured";
 // const copySameImageScreen = "/copySameImage";
 const openImage = "/openImage";
 const productsSelectionScreen = "/productsSelectionScreen";
+const viewAndEditProductScreen = "/viewAndEditProductScreen";
