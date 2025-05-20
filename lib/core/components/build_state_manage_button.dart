@@ -14,7 +14,6 @@ class BuildStateManageComponent extends StatelessWidget {
     required this.successWidget,
     this.loadingWidget,
   });
-
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
