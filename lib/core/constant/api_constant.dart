@@ -1,6 +1,6 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.31.79:5173/api/mobile/";
-  static const String imageBaseUrl = "http://192.168.31.79:5173/";
+  static const String baseUrl = "https://api.dazzles.in/api/mobile/";
+  static const String imageBaseUrl = "https://api.dazzles.in/";
   static const String login = "login";
   static const String profile = "profile";
   static const String dashboard = "dashboard";

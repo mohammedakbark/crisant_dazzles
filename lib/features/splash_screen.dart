@@ -1,12 +1,17 @@
+
+import 'dart:developer';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,18 +28,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-    final loginRef = await LoginRefDataBase().getUserData;
-   await AppPermissions.handleCameraPermission();
-    await Future.delayed(Duration(seconds: 2));
-    if (loginRef.token != null && loginRef.token!.isNotEmpty) {
-      if (mounted) {
-        context.go(route);
+      final loginRef = await LoginRefDataBase().getUserData;
+     await AppPermissions.handleCameraPermission();
+      await Future.delayed(Duration(seconds: 2));
+      if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+        if (mounted) {
+          context.go(route);
+        }
+      } else {
+        if (mounted) {
+          context.go(loginScreen);
+        }
       }
-    } else {
-      if (mounted) {
-        context.go(loginScreen);
-      }
-    }
   }
 
   @override
@@ -56,7 +61,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   child: AnimatedTextKit(
                     totalRepeatCount: 1,
-
                     animatedTexts: [
                       TyperAnimatedText(
                         'hello',
@@ -68,11 +72,23 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             Spacer(flex: 3),
-            Text("App Version 1.0"),
+            FutureBuilder(
+              future: getAppVersion(),
+              builder: (context, snapshot) =>
+                  snapshot.connectionState == ConnectionState.done
+                      ? Text(snapshot.data??'null',style: AppStyle.normalStyle(),)
+                      : SizedBox(),
+            ),
             Spacer(),
           ],
         ),
       ),
     );
+  }
+
+  Future<String> getAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    log(info.appName);
+    return 'App Version ${info.version}';
   }
 }

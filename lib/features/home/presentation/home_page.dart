@@ -143,15 +143,17 @@ class _HomePageState extends ConsumerState<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
+                  textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 title,
                 style: AppStyle.largeStyle(
-                  fontSize: ResponsiveHelper.wp * .12,
+                  fontSize: ResponsiveHelper.wp * .09,
                   color: AppColors.kPrimaryColor,
                 ),
               ),
               AppSpacer(hp: .01),
               Text(
+                textAlign: TextAlign.center,
                 data,
                 style: AppStyle.mediumStyle(color: AppColors.kPrimaryColor),
               ),

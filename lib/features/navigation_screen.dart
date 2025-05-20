@@ -59,73 +59,14 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         children: [
           Padding(
               padding: EdgeInsets.only(
-                bottom: Platform.isAndroid?ResponsiveHelper.hp * .09: ResponsiveHelper.hp * .12,
+                bottom: Platform.isAndroid
+                    ? ResponsiveHelper.hp * .09
+                    : ResponsiveHelper.hp * .12,
               ),
               child: _pages[index]),
           Positioned(bottom: 0, child: _buildCustomeNav())
         ],
       ),
-      // bottomNavigationBar: Container(
-      //   decoration: BoxDecoration(
-      //     border: Border.symmetric(
-      //       horizontal: BorderSide(color: AppColors.kBorderColor),
-      //     ),
-      //   ),
-      //   height: Platform.isIOS ? null : ResponsiveHelper.hp * .09,
-      //   child: BottomNavigationBar(
-      //     onTap: (value) {
-      //       ref.read(navigationController.notifier).state = value;
-      //     },
-      //     currentIndex: ref.watch(navigationController),
-      //     iconSize: 28,
-      //     selectedLabelStyle: AppStyle.boldStyle(
-      //       fontSize: ResponsiveHelper.fontExtraSmall,
-      //     ),
-      //     unselectedLabelStyle: AppStyle.normalStyle(
-      //       fontSize: ResponsiveHelper.fontExtraSmall,
-      //     ),
-      //     backgroundColor: AppColors.kBgColor,
-      //     selectedItemColor: AppColors.kPrimaryColor,
-      //     unselectedItemColor: AppColors.kTextPrimaryColor,
-      //     type: BottomNavigationBarType.fixed,
-      //     selectedIconTheme: IconThemeData(
-      //       shadows: [
-      //         Shadow(
-      //           color: AppColors.kWhite,
-      //           blurRadius: 1,
-      //           offset: Offset(1, 0),
-      //         ),
-      //       ],
-      //       color: AppColors.kPrimaryColor,
-      //     ),
-      //     unselectedIconTheme: IconThemeData(
-      //       applyTextScaling: true,
-      //       color: AppColors.kTextPrimaryColor,
-      //     ),
-      //     items: [
-      //       BottomNavigationBarItem(
-      //         activeIcon: Icon(SolarIconsBold.home2),
-      //         icon: Icon(SolarIconsOutline.home2),
-      //         label: "Home",
-      //       ),
-      //       BottomNavigationBarItem(
-      //         activeIcon: _buildBadge(Icon(SolarIconsBold.camera)),
-      //         icon: _buildBadge(Icon(SolarIconsOutline.camera)),
-      //         label: "Uploads",
-      //       ),
-      //       BottomNavigationBarItem(
-      //         activeIcon: Icon(SolarIconsBold.postsCarouselVertical),
-      //         icon: Icon(SolarIconsOutline.postsCarouselVertical),
-      //         label: "Product",
-      //       ),
-      //       BottomNavigationBarItem(
-      //         activeIcon: Icon(SolarIconsBold.user),
-      //         icon: Icon(SolarIconsOutline.user),
-      //         label: "Profile",
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -136,7 +77,9 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         color: AppColors.kSecondaryColor,
       ),
       width: ResponsiveHelper.wp,
-      height:Platform.isAndroid?ResponsiveHelper.hp * .09: ResponsiveHelper.hp * .12,
+      height: Platform.isAndroid
+          ? ResponsiveHelper.hp * .09
+          : ResponsiveHelper.hp * .12,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
@@ -165,6 +108,9 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                 onTap: () async {
                   log("dddhd");
                   if (ref.watch(navigationController) == 2) {
+                    ref.watch(camaraButtonScaleController.notifier).state = 0.9;
+                    await Future.delayed(Duration(microseconds: 500));
+                    ref.watch(camaraButtonScaleController.notifier).state  = 1.0;
                     await ref
                         .read(cameraControllerProvider.notifier)
                         .takePhoto(context);
@@ -172,25 +118,29 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                     ref.watch(navigationController.notifier).state = 2;
                   }
                 },
-                child: Container(
-                  width: ResponsiveHelper.wp * .3,
-                  height: ResponsiveHelper.wp * .18,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                      border: Border.all(
-                          width: 4,
-                          color:
-                              ref.watch(navigationController.notifier).state ==
-                                      2
-                                  ? AppColors.kPrimaryColor
-                                  : AppColors.kWhite),
-                     
-                      shape: BoxShape.circle),
+                child: AnimatedScale(
+                  scale: ref.watch(camaraButtonScaleController),
+                  duration: const Duration(milliseconds: 150),
+                  curve: Curves.easeOut,
                   child: Container(
+                    width: ResponsiveHelper.wp * .3,
+                    height: ResponsiveHelper.wp * .18,
                     decoration: BoxDecoration(
+                        color: Colors.transparent,
                         border: Border.all(
                             width: 4,
-                            color:AppColors.kSecondaryColor,
+                            color: ref
+                                        .watch(navigationController.notifier)
+                                        .state ==
+                                    2
+                                ? AppColors.kPrimaryColor
+                                : AppColors.kWhite),
+                        shape: BoxShape.circle),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 4,
+                            color: AppColors.kSecondaryColor,
                             // color: ref
                             //             .watch(navigationController.notifier)
                             //             .state ==
@@ -198,16 +148,19 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                             //     ? AppColors.kWhite
                             //     : AppColors.kSecondaryColor
                           ),
+                          color:
+                              ref.watch(navigationController.notifier).state ==
+                                      2
+                                  ? AppColors.kPrimaryColor
+                                  : AppColors.kWhite,
+                          shape: BoxShape.circle),
+                      child: Icon(
+                        CupertinoIcons.camera_fill,
                         color:
                             ref.watch(navigationController.notifier).state == 2
-                                ? AppColors.kPrimaryColor
-                                : AppColors.kWhite,
-                        shape: BoxShape.circle),
-                    child: Icon(
-                      CupertinoIcons.camera_fill,
-                      color: ref.watch(navigationController.notifier).state == 2
-                          ? AppColors.kWhite
-                          : AppColors.kBgColor,
+                                ? AppColors.kWhite
+                                : AppColors.kBgColor,
+                      ),
                     ),
                   ),
                 ),
@@ -259,6 +212,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
       data = 0;
     }
     return badges.Badge(
+      showBadge: data != 0,
       badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent),
       badgeContent: Text(
         data != null ? data.toString() : "0",
