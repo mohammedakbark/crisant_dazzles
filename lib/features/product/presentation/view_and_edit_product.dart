@@ -55,10 +55,16 @@ class _ViewAndEditProductScreenState
                 InkWell(
                   onTap: () {
                     context.push(openImage, extra: {
-                      "path": ApiConstants.imageBaseUrl+model.productPicture,
+                      "path": ApiConstants.imageBaseUrl + model.productPicture,
                       "heroTag": widget.productId.toString(),
                       "enableEditButton": true,
-                      "prouctModel": ProductModel(id: widget.productId, productName: model.productName, productPicture: model.productPicture, category: model.productCategory, productSize: model.productsize, color: model.color)
+                      "prouctModel": ProductModel(
+                          id: widget.productId,
+                          productName: model.productName,
+                          productPicture: model.productPicture,
+                          category: model.productCategory,
+                          productSize: model.productsize,
+                          color: model.color)
                     });
                   },
                   child: Container(
@@ -162,14 +168,16 @@ class _ViewAndEditProductScreenState
                   hp: .02,
                 ),
                 // ATTRIBUTES
-                Text(
-                  "Attributes",
-                  style:
-                      AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
-                ),
+                model.formattedAttributes.isNotEmpty
+                    ? Text(
+                        "Attributes",
+                        style: AppStyle.boldStyle(
+                            fontSize: ResponsiveHelper.fontMedium),
+                      )
+                    : SizedBox(),
                 AppSpacer(
                   hp: .02,
-                ),
+                ), 
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.kBorderColor.withAlpha(10),
