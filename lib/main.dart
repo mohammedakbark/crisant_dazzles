@@ -14,7 +14,6 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -25,7 +24,6 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
     ResponsiveHelper.init(context);
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
