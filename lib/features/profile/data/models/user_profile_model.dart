@@ -14,11 +14,11 @@ class UserProfileModel {
     });
 
     factory UserProfileModel.fromJson(Map<String, dynamic> json) => UserProfileModel(
-        username: json["username"],
-        store: json["store"],
-        role: json["role"],
-        mode: json["mode"],
-        status: json["status"],
+        username: json["username"]??'',
+        store: json["store"]??'',
+        role: json["role"]??'',
+        mode: json["mode"]??'',
+        status: json["status"]??'',
     );
 
     Map<String, dynamic> toJson() => {
