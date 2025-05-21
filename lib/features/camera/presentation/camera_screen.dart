@@ -3,10 +3,8 @@ import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
-import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/features/camera/data/providers/camera_controller.dart';
-import 'package:dazzles/features/camera/data/providers/camera_controller_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,14 +21,13 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      
-    },);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {},
+    );
     super.dispose();
   }
 
@@ -39,18 +36,19 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
     initializeControllerFuture =
         ref.read(cameraControllerProvider.notifier).initCamera();
     return FutureBuilder(
-      
         future: initializeControllerFuture,
         builder: (context, snapshot) {
           log("Loding");
           if (snapshot.connectionState == ConnectionState.done) {
-            final notifier=ref.watch(cameraControllerProvider.notifier);
+            final notifier = ref.watch(cameraControllerProvider.notifier);
             return AspectRatio(
                 aspectRatio: 9 / 16,
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-               notifier.cameraController!=null?     CameraPreview(notifier.cameraController!):AppErrorView(error: "Camara is not availabe!"),
+                    notifier.cameraController != null
+                        ? CameraPreview(notifier.cameraController!)
+                        : AppErrorView(error: "Camara is not availabe!"),
                     Positioned(
                       bottom: 10,
                       left: 10,
