@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/models/response_model.dart';
+import 'package:dazzles/core/shared/routes/route_provider.dart';
+import 'package:dazzles/features/profile/presentation/profile_page.dart';
 import 'package:dio/dio.dart';
 
 class ApiConfig {
@@ -29,11 +31,12 @@ class ApiConfig {
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
-          log("response 401  (No Error) X");
+          log("response 401  (No Error) POST");
           log(e.response!.data['message'].toString());
+            _checkTokenExpired(e.response!.data);
           return ResponseModel.fromJson(e.response!.data);
         } catch (_) {
-          log("response 401  (Error) X");
+          log("response 401  (Error) POST");
 
           return ResponseModel(
             data: null,
@@ -45,7 +48,7 @@ class ApiConfig {
       }
       if (e.type == DioExceptionType.connectionError ||
           e.type == DioExceptionType.unknown) {
-        log("Connection Error ! X");
+        log("Connection Error ! POST");
         return ResponseModel(
           data: null,
           error: true,
@@ -53,7 +56,7 @@ class ApiConfig {
           status: 503,
         );
       }
-      log("Dio Error X");
+      log("Dio Error POST");
       return ResponseModel(
         data: null,
         error: true,
@@ -61,7 +64,7 @@ class ApiConfig {
         status: e.response?.statusCode ?? 500,
       );
     } catch (e) {
-      log("Unexpected Error X");
+      log("Unexpected Error POST");
       return ResponseModel(
         data: null,
         error: true,
@@ -87,12 +90,15 @@ class ApiConfig {
 
       // Directly use response.data instead of decoding again
       // log(response.data.toString());
+
+    
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
           log("response 401  (No Error)");
             log(e.response!.data['message'].toString());
+            _checkTokenExpired(e.response!.data);
           return ResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error)");
@@ -137,5 +143,12 @@ class ApiConfig {
         status: 500,
       );
     }
+  }
+
+
+ static void _checkTokenExpired(data)async{
+     if(data['error']==true && data['message']=="jwt expired"){
+       await  ProfilePage.logout(rootNavigatorKey.currentContext!);
+      }
   }
 }

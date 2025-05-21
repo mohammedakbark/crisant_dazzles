@@ -1,13 +1,14 @@
-
 import 'dart:developer';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,10 +29,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-      final loginRef = await LoginRefDataBase().getUserData;
+      // final loginRef = await LoginRefDataBase().getUserData;
      await AppPermissions.handleCameraPermission();
-      await Future.delayed(Duration(seconds: 2));
-      if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+      // await Future.delayed(Duration(seconds: 2));
+      // if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+      //   if (mounted) {
+      //     context.go(route);
+      //   }
+      // } else {
+      //   if (mounted) {
+      //     context.go(loginScreen);
+      //   }
+      // }
+  }
+
+  void goNext()async{
+          final loginRef = await LoginRefDataBase().getUserData;
+  if (loginRef.token != null && loginRef.token!.isNotEmpty) {
         if (mounted) {
           context.go(route);
         }
@@ -49,21 +63,63 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(flex: 4),
+            Spacer(),
+            AppSpacer(
+              hp: .05,
+            ),
             SizedBox(
+              height: ResponsiveHelper.hp * .1,
               width: ResponsiveHelper.wp,
               child: Center(
                 child: DefaultTextStyle(
-                  style: GoogleFonts.dancingScript(
-                    fontSize: 100,
+                  style: TextStyle(
+                    letterSpacing: -3,
+                    fontSize: 60,
                     color: AppColors.kPrimaryColor,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w100,
                   ),
+                  //  style:
+                  // TextStyle(
+                  //   fontFamily:"Suithen",
+                  //   color: AppColors.kPrimaryColor,
+                  //   fontSize: 100,
+
+                  // ),
+                  // GoogleFonts.hachiMaruPop(
+                  //   fontSize: 59,
+                  //   color: AppColors.kPrimaryColor,
+                  //   fontWeight: FontWeight.w100,
+                  // ),
                   child: AnimatedTextKit(
+                    onFinished: goNext,
                     totalRepeatCount: 1,
                     animatedTexts: [
                       TyperAnimatedText(
+                        'नमस्ते',
+                        speed: Duration(microseconds: 100000),
+                      ),
+                      TyperAnimatedText(
                         'hello',
+                        speed: Duration(microseconds: 100000),
+                      ),
+                      TyperAnimatedText(
+                        'ನಮಸ್ಕಾರ',
+                        speed: Duration(microseconds: 100000),
+                      ),
+                      TyperAnimatedText(
+                        'வணக்கம்',
+                        speed: Duration(microseconds: 100000),
+                      ),
+                      TyperAnimatedText(
+                        'నమస్తే',
+                        speed: Duration(microseconds: 100000),
+                      ),
+                      TyperAnimatedText(
+                        'നമസ്കാരം',
+                        speed: Duration(microseconds: 100000),
+                      ),
+                      TyperAnimatedText(
+                        'السلام علیکم',
                         speed: Duration(microseconds: 100000),
                       ),
                     ],
@@ -71,15 +127,30 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            Spacer(flex: 3),
+            AppSpacer(
+              hp: .05,
+            ),
+            InkWell(
+              onTap: goNext,
+              child: Text("Skip",
+                style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
+                ),
+            ),
+           
+            Spacer(),
             FutureBuilder(
               future: getAppVersion(),
               builder: (context, snapshot) =>
                   snapshot.connectionState == ConnectionState.done
-                      ? Text(snapshot.data??'null',style: AppStyle.normalStyle(),)
+                      ? Text(
+                          snapshot.data ?? 'null',
+                          style: AppStyle.normalStyle(),
+                        )
                       : SizedBox(),
             ),
-            Spacer(),
+            AppSpacer(
+              hp: .05,
+            )
           ],
         ),
       ),

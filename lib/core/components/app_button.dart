@@ -24,7 +24,7 @@ class AppButton extends StatelessWidget {
           backgroundColor: bgColor ?? AppColors.kPrimaryColor,
         ),
         onPressed: onPressed,
-        child: Text(title, style: AppStyle.largeStyle()),
+        child: Text(title, style: AppStyle.largeStyle(color: AppColors.kBgColor)),
       ),
     );
   }

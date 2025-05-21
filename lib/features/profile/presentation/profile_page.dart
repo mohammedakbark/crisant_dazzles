@@ -33,7 +33,6 @@ class ProfilePage extends ConsumerWidget {
                 stateController: profileController,
                 errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
                 loadingWidget: () => ProfileShimmer(),
-
                 successWidget: (data) {
                   final datas = data as UserProfileModel;
                   return Column(
@@ -88,9 +87,7 @@ class ProfilePage extends ConsumerWidget {
                   );
                 },
               ),
-
               AppSpacer(hp: .05),
-
               SizedBox(
                 width: ResponsiveHelper.wp * .5,
                 child: OutlinedButton(
@@ -100,7 +97,7 @@ class ProfilePage extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: ()=>showLogoutConfirmation(context,ref),
+                  onPressed: () => showLogoutConfirmation(context, ref),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -127,7 +124,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-   void showLogoutConfirmation(BuildContext context,WidgetRef ref ) {
+  void showLogoutConfirmation(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -184,9 +181,7 @@ class ProfilePage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed:
-                                () => context.pop()
-                              ,
+                            onPressed: () => context.pop(),
                             icon: Icon(Icons.close, color: AppColors.kWhite),
                             label: Text("Cancel"),
                           ),
@@ -197,41 +192,43 @@ class ProfilePage extends ConsumerWidget {
                         child: ZoomIn(
                           duration: Duration(milliseconds: 800),
                           child: SizedBox(
-                width: ResponsiveHelper.wp * .5,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.kErrorPrimary),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: ()async{
-                    await LoginRefDataBase().clearLoginCredential();
-                    ref.read(navigationController.notifier).state=0;
-                    if(context.mounted){
-                      context.go(initialScreen);
-                    }
-                    
-                    // logout
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        SolarIconsOutline.logout,
-                        color: AppColors.kErrorPrimary,
-                      ),
-                      AppSpacer(wp: .02),
-                      Text(
-                        "Logout",
-                        style: AppStyle.mediumStyle(
-                          color: AppColors.kErrorPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                            width: ResponsiveHelper.wp * .5,
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side:
+                                    BorderSide(color: AppColors.kErrorPrimary),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () async {
+                                await LoginRefDataBase().clearLoginCredential();
+                                ref.read(navigationController.notifier).state =
+                                    0;
+                                if (context.mounted) {
+                                  context.go(initialScreen);
+                                }
+
+                                // logout
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    SolarIconsOutline.logout,
+                                    color: AppColors.kErrorPrimary,
+                                  ),
+                                  AppSpacer(wp: .02),
+                                  Text(
+                                    "Logout",
+                                    style: AppStyle.mediumStyle(
+                                      color: AppColors.kErrorPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -243,5 +240,14 @@ class ProfilePage extends ConsumerWidget {
         );
       },
     );
+  }
+
+  static Future<void> logout(BuildContext context) async {
+    await LoginRefDataBase().clearLoginCredential();
+    final ref = ProviderContainer();
+    ref.read(navigationController.notifier).state = 0;
+    if (context.mounted) {
+      context.go(initialScreen);
+    }
   }
 }

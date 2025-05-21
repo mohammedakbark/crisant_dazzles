@@ -32,23 +32,26 @@ class LoginScreen extends ConsumerWidget {
                 children: [
                   Text(
                     "DAZZLES",
-                    style: GoogleFonts.libreBaskerville(
+                    style: GoogleFonts.roboto(
                       fontSize: ResponsiveHelper.wp * .15,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w100,
                       color: AppColors.kPrimaryColor,
                     ),
                   ),
                   Text(
                     "MYSORE | BANGALORE",
-                    style: AppStyle.mediumStyle(
+                    style: GoogleFonts.roboto(
+                      fontWeight: FontWeight.w100,
                       color: AppColors.kPrimaryColor,
-                      spacing: 4,
+                      fontSize: ResponsiveHelper.wp * .04,
+                      letterSpacing: 4,
                     ),
+                   
                   ),
                   AppSpacer(hp: .15),
                   CustomTextField(
                     controller: _userNameController,
-                    hintText: "Username",
+                    hintText: "User Name",
                     validator: AppValidator.requiredValidator,
                   ),
                   AppSpacer(hp: .02),
@@ -69,21 +72,18 @@ class LoginScreen extends ConsumerWidget {
                   // ),
                   BuildStateManageComponent(
                     stateController: loginController,
-                    successWidget:
-                        (data) => AppButton(
-                          title: "Login",
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              ref
-                                  .read(loginControllerProvider.notifier)
-                                  .onLogin(
-                                    _userNameController.text.trim(),
-                                    _passwordController.text.trim(),
-                                    context,
-                                  );
-                            }
-                          },
-                        ),
+                    successWidget: (data) => AppButton(
+                      title: "Login",
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          ref.read(loginControllerProvider.notifier).onLogin(
+                                _userNameController.text.trim(),
+                                _passwordController.text.trim(),
+                                context,
+                              );
+                        }
+                      },
+                    ),
                   ),
 
                   // AppSpacer(hp: .1),
