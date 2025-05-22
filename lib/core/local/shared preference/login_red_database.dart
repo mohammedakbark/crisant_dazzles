@@ -6,6 +6,7 @@ class LoginRefDataBase {
   final _userName = "USER_NAME";
   final _userID = "USER_ID";
   final _pushToken = "PUSH_TOKEN";
+  final _role="ROLE";
   LocalUserRefModel? _localUserRefModel;
   LocalUserRefModel get localUserRefModel => _localUserRefModel!;
 
@@ -27,6 +28,7 @@ class LoginRefDataBase {
       _pushToken,
       userDataModel.pushToken ?? userData.pushToken ?? '',
     );
+    await pref.setString(_role, userDataModel.role ?? userData.role ?? '',);
 
     await _getUserData();
   }
@@ -38,6 +40,7 @@ class LoginRefDataBase {
     final userName = pref.getString(_userName) ?? '';
     final userId = pref.getInt(_userID) ?? 0;
     final pushToken = pref.getString(_pushToken) ?? '';
+     final role = pref.getString(_role) ?? '';
     // log(token.toString());
     // log(userId.toString());
 
@@ -46,6 +49,7 @@ class LoginRefDataBase {
       userId: userId,
       userName: userName,
       pushToken: pushToken,
+      role: role
     );
   }
 
@@ -56,5 +60,6 @@ class LoginRefDataBase {
     await pref.remove(_userID);
     await pref.remove(_userName);
     await pref.remove(_pushToken);
+    await pref.remove(_role);
   }
 }

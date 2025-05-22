@@ -124,7 +124,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  void showLogoutConfirmation(BuildContext context, WidgetRef ref) {
+ static void showLogoutConfirmation(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

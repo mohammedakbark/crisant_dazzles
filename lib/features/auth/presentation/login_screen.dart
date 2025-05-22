@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/components/app_button.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -113,7 +115,9 @@ class LoginScreen extends ConsumerWidget {
                           (e) => DropdownMenuItem(value: e, child: Text(e)),
                         )
                         .toList(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      initialValue = value!;
+                    },
                   ),
                   AppSpacer(hp: .015),
                   CustomTextField(
@@ -152,22 +156,17 @@ class LoginScreen extends ConsumerWidget {
 
                   AppSpacer(hp: .02),
 
-                  // loginController.when(
-
-                  //   data:
-                  //       (data) =>
-                  //   error: (error, stackTrace) => Text("Error"),
-                  //   loading: () => AppLoading(),
-                  // ),
                   BuildStateManageComponent(
                     stateController: loginController,
                     successWidget: (data) => AppButton(
                       title: "Login",
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
+                         
                           ref.read(loginControllerProvider.notifier).onLogin(
                                 _userNameController.text.trim(),
                                 _passwordController.text.trim(),
+                                initialValue,
                                 context,
                               );
                         }

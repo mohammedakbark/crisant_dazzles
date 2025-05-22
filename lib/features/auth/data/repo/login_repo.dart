@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 
@@ -20,6 +22,7 @@ class LoginRepo {
           "token": data['token'],
           "userId": data['user']['id'],
           'username': data['user']['username'],
+          'role': data['user']['role'],
         };
       } else {
         return {"error": true, "message": response.message};

@@ -4,7 +4,7 @@ class AppColors {
   static const Color kBorderColor = Colors.white24;
   static const Color kWhite = Colors.white;
   static const Color kBgColor = Color(0xFF1a1a1a);
-  static const Color kPrimaryColor = Color.fromARGB(255, 255, 208, 204);
+  static const Color kPrimaryColor = Color.fromARGB(255, 229, 185, 181);
   //a47975
   static const Color kSecondaryColor = Color(0xFF161111);
   static const Color kTextPrimaryColor = Color(0xFFa0a0a0);

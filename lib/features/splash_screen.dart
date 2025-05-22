@@ -8,10 +8,9 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dazzles/features/auth/data/providers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,31 +28,36 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-      // final loginRef = await LoginRefDataBase().getUserData;
-     await AppPermissions.handleCameraPermission();
-      // await Future.delayed(Duration(seconds: 2));
-      // if (loginRef.token != null && loginRef.token!.isNotEmpty) {
-      //   if (mounted) {
-      //     context.go(route);
-      //   }
-      // } else {
-      //   if (mounted) {
-      //     context.go(loginScreen);
-      //   }
-      // }
+    // final loginRef = await LoginRefDataBase().getUserData;
+    await AppPermissions.handleCameraPermission();
+    // await Future.delayed(Duration(seconds: 2));
+    // if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+    //   if (mounted) {
+    //     context.go(route);
+    //   }
+    // } else {
+    //   if (mounted) {
+    //     context.go(loginScreen);
+    //   }
+    // }
   }
 
-  void goNext()async{
-          final loginRef = await LoginRefDataBase().getUserData;
-  if (loginRef.token != null && loginRef.token!.isNotEmpty) {
-        if (mounted) {
+  void goNext() async {
+    final loginRef = await LoginRefDataBase().getUserData;
+    if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+      log("User Role -> ${loginRef.role}");
+      if (mounted) {
+        if (loginRef.role == LoginController.mainRole) {
           context.go(route);
-        }
-      } else {
-        if (mounted) {
-          context.go(loginScreen);
+        } else {
+          context.go(otherUsersRoute);
         }
       }
+    } else {
+      if (mounted) {
+        context.go(loginScreen);
+      }
+    }
   }
 
   @override
@@ -78,13 +82,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: AppColors.kPrimaryColor,
                     fontWeight: FontWeight.w100,
                   ),
-                  //  style:
-                  // TextStyle(
-                  //   fontFamily:"Suithen",
-                  //   color: AppColors.kPrimaryColor,
-                  //   fontSize: 100,
+              
 
-                  // ),
+                 
                   // GoogleFonts.hachiMaruPop(
                   //   fontSize: 59,
                   //   color: AppColors.kPrimaryColor,
@@ -132,11 +132,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             InkWell(
               onTap: goNext,
-              child: Text("Skip",
+              child: Text(
+                "Skip",
                 style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
-                ),
+              ),
             ),
-           
             Spacer(),
             FutureBuilder(
               future: getAppVersion(),

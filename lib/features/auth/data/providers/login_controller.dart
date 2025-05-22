@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
@@ -25,44 +26,52 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
     return null;
   }
 
+  static String mainRole = "Office";
   Future<void> onLogin(
     String username,
     String password,
+    String selectedRole,
     BuildContext context,
   ) async {
     state = const AsyncLoading();
-    
-      final response = await LoginRepo.onLogin(username, password);
-
-      if (response['error'] == false) {
-        final local = LocalUserRefModel(
+    final response = await LoginRepo.onLogin(username, password);
+    if (response['error'] == false) {
+      final local = LocalUserRefModel(
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
-        );
-        await LoginRefDataBase().setUseretails(local);
-        state = AsyncData(response);
-        if (context.mounted) {
+          role:selectedRole
+          //  response['role'] ??
+          //   mainRole
+            );
+      await LoginRefDataBase().setUseretails(local);
+      state = AsyncData(response);
+    
+      if (context.mounted) {
+        if (local.role == mainRole) {
           context.go(route);
+        } else {
+          context.go(otherUsersRoute);
         }
-      } else {
-        state = AsyncError("Error null", StackTrace.empty);
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            content: response['message'],
-            contentType: ContentType.failure,
-          );
-        }
-      
-    } 
+      }
+    } else {
+      state = AsyncError("Error null", StackTrace.empty);
+      if (context.mounted) {
+        showCustomSnackBar(
+          context,
+          content: response['message'],
+          contentType: ContentType.failure,
+        );
+      }
+    }
   }
 }
 
 final loginControllerProvider =
     AsyncNotifierProvider<LoginController, Map<String, dynamic>?>(
-      LoginController.new,
-    );
+  LoginController.new,
+);
 
-
-    final passwordObsecureControllerProvider=StateProvider((ref) => true,);
+final passwordObsecureControllerProvider = StateProvider(
+  (ref) => true,
+);

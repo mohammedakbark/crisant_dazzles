@@ -73,37 +73,7 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
         ),
       ),
       actions: [
-        // Padding(
-        //   padding: EdgeInsets.only(right: 10),
-        //   child: BuildStateManageComponent(
-        //       stateController: uploadManagerState,
-        //       successWidget: (data) {
-        //         final notif = data as List<UploadPhotoModel>;
-        //         return InkWell(
-        //           overlayColor: WidgetStatePropertyAll(Colors.transparent),
-        //           onTap: () {
-        //             context.push(notificationScreen);
-        //           },
-        //           child: badges.Badge(
-        //             showBadge: notif.isNotEmpty,
-        //             badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kWhite),
-        //             badgeContent: Text(notif.length.toString(),
-        //                 style: AppStyle.mediumStyle(
-        //                     fontSize: 8, color: AppColors.kErrorPrimary)),
-        //             position: badges.BadgePosition.topEnd(end: -2, top: -8),
-        //             badgeAnimation: badges.BadgeAnimation.slide(
-        //               curve: Curves.fastOutSlowIn,
-        //               colorChangeAnimationCurve: Curves.easeInCubic,
-        //             ),
-        //             child: CircleAvatar(
-        //               backgroundColor: AppColors.kPrimaryColor.withAlpha(50),
-        //               child: Icon(CupertinoIcons.camera,
-        //                   size: 18, color: AppColors.kWhite),
-        //             ),
-        //           ),
-        //         );
-        //       }),
-        // ),
+        
         Padding(
           padding: EdgeInsets.only(right: 10),
           child: BuildStateManageComponent(
@@ -113,7 +83,7 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                 return InkWell(
                   overlayColor: WidgetStatePropertyAll(Colors.transparent),
                   onTap: () {
-                    context.push(notificationScreen);
+                    context.push(uploadFialedScreen);
                   },
                   child: badges.Badge(
                     showBadge: notif.isNotEmpty,
@@ -134,6 +104,32 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                   ),
                 );
               }),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: InkWell(
+                  overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                  onTap: () {
+                    context.push(notificationScreen);
+                  },
+                  child: badges.Badge(
+                    showBadge: true,
+                    badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kErrorPrimary),
+                    badgeContent: Text("2",
+                        style: AppStyle.mediumStyle(
+                            fontSize: 8, color: AppColors.kWhite)),
+                    position: badges.BadgePosition.topEnd(end: -2, top: -8),
+                    badgeAnimation: badges.BadgeAnimation.slide(
+                      curve: Curves.fastOutSlowIn,
+                      colorChangeAnimationCurve: Curves.easeInCubic,
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: AppColors.kWhite,
+                      child: Icon(CupertinoIcons.bell,
+                          size: 18, color: AppColors.kBgColor),
+                    ),
+                  ),
+                )
         ),
       ],
     );

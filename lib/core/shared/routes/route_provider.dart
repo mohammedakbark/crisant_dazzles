@@ -6,9 +6,11 @@ import 'package:dazzles/features/home/presentation/view_all_recent_captured_scre
 import 'package:dazzles/features/navigation_screen.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/notification/presentation/notification_screen.dart';
+import 'package:dazzles/features/upload%20failed/presentation/failed_data_screen.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
+import 'package:dazzles/features/role_based_files/other_users_navigationScreen.dart';
 import 'package:dazzles/features/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,17 +25,15 @@ class RouteProvider {
       GoRoute(path: initialScreen, builder: (context, state) => SplashScreen()),
       GoRoute(path: loginScreen, builder: (context, state) => LoginScreen()),
       GoRoute(path: route, builder: (context, state) => NavigationScreen()),
-
+     
       GoRoute(
-        path: notificationScreen,
-        builder: (context, state) => NotificationScreen(),
+        path: uploadFialedScreen,
+        builder: (context, state) => UploadFaieldDataScreen(),
       ),
-
       GoRoute(
         path: recentlyCaptured,
         builder: (context, state) => ViewAllRecentCapturedScreen(),
       ),
-
       GoRoute(
         path: productsSelectionScreen,
         builder: (context, state) {
@@ -44,7 +44,6 @@ class RouteProvider {
           );
         },
       ),
-
       GoRoute(
         path: openImage,
         builder: (context, state) {
@@ -61,19 +60,28 @@ class RouteProvider {
           );
         },
       ),
-
       GoRoute(
         path: viewAndEditProductScreen,
         builder: (context, state) {
           final map = state.extra as Map<String, dynamic>;
           final id = map['id'] as int;
-          final productName=map['productName'] as String;
+          final productName = map['productName'] as String;
           return ViewAndEditProductScreen(
             productId: id,
             productName: productName,
           );
         },
       ),
+
+       GoRoute(
+          path: notificationScreen,
+          builder: (context, state) => NotificationScreen()),
+
+      // OTHER ROLE ROUTES
+
+       GoRoute(
+          path: otherUsersRoute,
+          builder: (context, state) => OtherUsersNaviagationScreen()),
     ],
   );
 }

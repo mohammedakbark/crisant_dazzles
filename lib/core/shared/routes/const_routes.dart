@@ -1,7 +1,9 @@
 const initialScreen = '/';
 const loginScreen = '/login';
 const route = '/route';
+const otherUsersRoute="/otherUsersRoute";
 const notificationScreen = '/notification';
+const uploadFialedScreen="/uploadFailedScreen";
 const searchScreen = "/search";
 const recentlyCaptured = "/viewRecentlyCaptured";
 // const imagePreview = '/imagePreview';
