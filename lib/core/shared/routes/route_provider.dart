@@ -44,27 +44,6 @@ class RouteProvider {
           );
         },
       ),
-      // GoRoute(
-      //   path: imagePreview,
-
-      //   builder: (context, state) {
-      //     final map = state.extra as Map<String, dynamic>;
-      //     final productModel = map['productModel'] as ProductModel;
-      //     final image = map['path'] as String;
-      //     return PreviewScreen(image: image, productModel: productModel);
-      //   },
-      // ),
-
-      // GoRoute(
-      //   path: copySameImageScreen,
-
-      //   builder: (context, state) {
-      //     final file = state.extra as Uint8List;
-      //     // final id = map['id'] as int;
-      //     // final path = map['path'] as String;
-      //     return CopyMoreProdutcsScreen(fileImage: file);
-      //   },
-      // ),
 
       GoRoute(
         path: openImage,
@@ -88,8 +67,10 @@ class RouteProvider {
         builder: (context, state) {
           final map = state.extra as Map<String, dynamic>;
           final id = map['id'] as int;
+          final productName=map['productName'] as String;
           return ViewAndEditProductScreen(
             productId: id,
+            productName: productName,
           );
         },
       ),

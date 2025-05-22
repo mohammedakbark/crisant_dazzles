@@ -63,3 +63,6 @@ final loginControllerProvider =
     AsyncNotifierProvider<LoginController, Map<String, dynamic>?>(
       LoginController.new,
     );
+
+
+    final passwordObsecureControllerProvider=StateProvider((ref) => true,);

@@ -96,7 +96,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                 SizedBox(
                   width: ResponsiveHelper.wp * .1,
                 ),
-                _buildIconSet(CupertinoIcons.cart_fill, "Products", 3),
+                _buildIconSet(CupertinoIcons.cube_box_fill, "Products", 3),
                 _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
               ],
             ),

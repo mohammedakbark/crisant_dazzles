@@ -102,43 +102,55 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor:
-                    status ? AppColors.kPrimaryColor : AppColors.kErrorPrimary,
-                child: Icon(
-                  status ? Icons.check_circle_outline : Icons.error_outline,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-              AppSpacer(
-                wp: .03,
-              ),
-              Flexible(
-                child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+              Expanded(
+                child: Row(
                   children: [
-                    Text(
-                      "Upload Failed!",
-                      style: AppStyle.boldStyle(
-                          fontSize: 16, color: AppColors.kBgColor),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: status
+                          ? AppColors.kPrimaryColor
+                          : AppColors.kErrorPrimary,
+                      child: Icon(
+                        status
+                            ? Icons.check_circle_outline
+                            : Icons.error_outline,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    AppSpacer(hp: .005,),
-                    Text(
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      title,
-                      style: AppStyle.normalStyle(
-                          fontSize: 12, color: AppColors.kFillColor),
+                    AppSpacer(
+                      wp: .03,
+                    ),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Upload Failed!",
+                            style: AppStyle.boldStyle(
+                                fontSize: 16, color: AppColors.kBgColor),
+                          ),
+                          AppSpacer(
+                            hp: .005,
+                          ),
+                          Text(
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            title,
+                            style: AppStyle.normalStyle(
+                                fontSize: 12, color: AppColors.kFillColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                    AppSpacer(
+                      wp: .03,
                     ),
                   ],
                 ),
-              ),
-              AppSpacer(
-                wp: .03,
               ),
               InkWell(
                 onTap: () async {
@@ -174,30 +186,35 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
             padding: const EdgeInsets.only(top: 10, bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
               children: [
                 Flexible(
-                  child: Row(children: [Icon(Icons.calendar_today,
-                      size: 14, color: AppColors.kTextPrimaryColor),
-                  SizedBox(width: 4),
-                  Text(
-                    date,
-                    style:
-                        AppStyle.normalStyle(color: AppColors.kTextPrimaryColor),
-                  ),],),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_today,
+                          size: 14, color: AppColors.kTextPrimaryColor),
+                      SizedBox(width: 4),
+                      Text(
+                        date,
+                        style: AppStyle.normalStyle(
+                            color: AppColors.kTextPrimaryColor),
+                      ),
+                    ],
+                  ),
                 ),
-              
                 Flexible(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [Icon(Icons.access_time,
-                      size: 14, color: AppColors.kTextPrimaryColor),
-                  SizedBox(width: 4),
-                  Text(
-                    time,
-                    style:
-                        AppStyle.normalStyle(color: AppColors.kTextPrimaryColor),
-                  ),],),
+                    children: [
+                      Icon(Icons.access_time,
+                          size: 14, color: AppColors.kTextPrimaryColor),
+                      SizedBox(width: 4),
+                      Text(
+                        time,
+                        style: AppStyle.normalStyle(
+                            color: AppColors.kTextPrimaryColor),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

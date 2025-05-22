@@ -1,4 +1,5 @@
-import 'package:animate_do/animate_do.dart';
+import 'dart:developer';
+
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_margin.dart';
@@ -19,7 +20,9 @@ import 'package:go_router/go_router.dart';
 
 class ViewAndEditProductScreen extends ConsumerStatefulWidget {
   final int productId;
-  ViewAndEditProductScreen({super.key, required this.productId});
+  final String productName;
+  ViewAndEditProductScreen(
+      {super.key, required this.productId, required this.productName});
 
   @override
   ConsumerState<ViewAndEditProductScreen> createState() =>
@@ -28,7 +31,7 @@ class ViewAndEditProductScreen extends ConsumerStatefulWidget {
 
 class _ViewAndEditProductScreenState
     extends ConsumerState<ViewAndEditProductScreen> {
-  final imageVersion = DateTime.timestamp().toIso8601String();
+  final imageVersion = DateTime.now().toIso8601String();
   @override
   Widget build(
     BuildContext context,
@@ -36,7 +39,7 @@ class _ViewAndEditProductScreenState
     return Scaffold(
       appBar: AppBar(
         leading: AppBackButton(),
-        title: Text("View Product"),
+        title: Text(widget.productName),
       ),
       body: AppMargin(
           child: BuildStateManageComponent(
@@ -45,6 +48,8 @@ class _ViewAndEditProductScreenState
         errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
         successWidget: (data) {
           final model = data as ProductDataModel;
+
+          log(ApiConstants.imageBaseUrl + model.productPicture);
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,34 +57,47 @@ class _ViewAndEditProductScreenState
                 AppSpacer(
                   hp: .01,
                 ),
-                InkWell(
-                  onTap: () {
-                    context.push(openImage, extra: {
-                      "path": ApiConstants.imageBaseUrl + model.productPicture,
-                      "heroTag": widget.productId.toString(),
-                      "enableEditButton": true,
-                      "prouctModel": ProductModel(
-                          id: widget.productId,
-                          productName: model.productName,
-                          productPicture: model.productPicture,
-                          category: model.productCategory,
-                          productSize: model.productsize,
-                          color: model.color)
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.kBorderColor.withAlpha(10),
-                    ),
-                    width: ResponsiveHelper.wp,
-                    height: ResponsiveHelper.hp * .3,
-                    child: Hero(
-                      tag: widget.productId.toString(),
-                      child: AppNetworkImage(
-                          imageVersion: imageVersion,
-                          imageFile:
-                              ApiConstants.imageBaseUrl + model.productPicture),
-                    ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.kBorderColor.withAlpha(10),
+                  ),
+                  width: ResponsiveHelper.wp,
+                  height: ResponsiveHelper.hp * .3,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Hero(
+                        tag: widget.productId.toString(),
+                        child: AppNetworkImage(
+                            fit: BoxFit.cover,
+                            imageVersion: imageVersion,
+                            imageFile: ApiConstants.imageBaseUrl +
+                                model.productPicture),
+                      ),
+                      Positioned(
+                          right: 10,
+                          bottom: 10,
+                          child: OutlinedButton(
+                              onPressed: () {
+                                context.push(openImage, extra: {
+                                  "path": ApiConstants.imageBaseUrl +
+                                      model.productPicture,
+                                  "heroTag": widget.productId.toString(),
+                                  "enableEditButton": true,
+                                  "prouctModel": ProductModel(
+                                      id: widget.productId,
+                                      productName: model.productName,
+                                      productPicture: model.productPicture,
+                                      category: model.productCategory,
+                                      productSize: model.productsize,
+                                      color: model.color)
+                                });
+                              },
+                              child: Text(
+                                "Edit and View",
+                                style: AppStyle.mediumStyle(),
+                              )))
+                    ],
                   ),
                 ),
                 AppSpacer(
@@ -177,7 +195,7 @@ class _ViewAndEditProductScreenState
                     : SizedBox(),
                 AppSpacer(
                   hp: .02,
-                ), 
+                ),
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.kBorderColor.withAlpha(10),

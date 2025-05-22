@@ -37,6 +37,9 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
           ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
         }
       });
+      Future.microtask(() {
+        ref.invalidate(getAllPendingProductControllerProvider);
+      },);
     } catch (e) {
       log("Pending screen initialization Error : $e");
     }
@@ -176,7 +179,7 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                   color: AppColors.kBgColor),
               alignment: Alignment.center,
               child: Text(
-                "Update Image",
+                "Upload Image",
                 style: AppStyle.largeStyle(),
               ),
             ),

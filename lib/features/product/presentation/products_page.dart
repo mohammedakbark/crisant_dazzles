@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class ProductsPage extends ConsumerStatefulWidget {
@@ -167,16 +168,18 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
   Widget _buildTile(ProductModel product) {
     return InkWell(
       onTap: () {
-        context.push(
-          openImage,
-          extra: {
-            "heroTag": product.id.toString(),
-            "path":
-                "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
-            "enableEditButton": true,
-            "prouctModel": product,
-          },
-        );
+        context.push(viewAndEditProductScreen,
+            extra: {"id": product.id, "productName": product.productName});
+        // context.push(
+        //   openImage,
+        //   extra: {
+        //     "heroTag": product.id.toString(),
+        //     "path":
+        //         "${ApiConstants.imageBaseUrl}${product.productPicture ?? ''}",
+        //     "enableEditButton": true,
+        //     "prouctModel": product,
+        //   },
+        // );
       },
       child: Stack(
         children: [
@@ -193,6 +196,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                     child: Hero(
                         tag: product.id.toString(),
                         child: AppNetworkImage(
+                        
                           imageVersion: imageVersion,
                           imageFile:
                               "${ApiConstants.imageBaseUrl}${product.productPicture}",
@@ -204,7 +208,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(product.productName, style: AppStyle.boldStyle()),
+                      Text(product.category, style: AppStyle.boldStyle()),
+                      AppSpacer(hp: .002,),
                       Container(
                         padding: EdgeInsets.all(4),
                         color: AppColors.kPrimaryColor,
@@ -212,7 +217,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              product.category,
+                              product.productName,
                               style: AppStyle.mediumStyle(
                                 color: AppColors.kSecondaryColor,
                               ),
@@ -235,22 +240,20 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
             ),
           ),
           Positioned(
-            left: 10,
-            right: 10,
-           top: 10,
-            child: Row( 
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              buildIdBadge(
-              context,
-              product.id.toString(),
-              enableCopy: true,
-            ),
-            InkWell(onTap: (){
-              context.push(viewAndEditProductScreen,extra: {"id":product.id});
-            }, child: Icon(CupertinoIcons.arrow_right_circle))
-            ],)
-          ),
+              left: 10,
+              right: 10,
+              top: 10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildIdBadge(
+                    context,
+                    product.id.toString(),
+                    enableCopy: true,
+                  ),
+                  Icon(CupertinoIcons.arrow_right_circle)
+                ],
+              )),
         ],
       ),
     );

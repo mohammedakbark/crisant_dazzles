@@ -8,6 +8,7 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/core/utils/validators.dart';
 import 'package:dazzles/features/auth/data/providers/login_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,17 @@ class LoginScreen extends ConsumerWidget {
   final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final team = [
+    'Office',
+    'Sales',
+    'Support',
+    'Supervisor',
+    'Stylist',
+    'Catalyst',
+    'Tailor',
+    'Master'
+  ];
+  String initialValue = "Office";
   @override
   Widget build(BuildContext context, ref) {
     final loginController = ref.watch(loginControllerProvider);
@@ -46,20 +58,97 @@ class LoginScreen extends ConsumerWidget {
                       fontSize: ResponsiveHelper.wp * .04,
                       letterSpacing: 4,
                     ),
-                   
                   ),
                   AppSpacer(hp: .15),
+                  DropdownButtonFormField(
+                    value: initialValue,
+                    decoration: InputDecoration(
+                      errorStyle:
+                          AppStyle.mediumStyle(color: AppColors.kErrorPrimary),
+                      hintStyle: AppStyle.mediumStyle(
+                        color:
+                            // hintColor ??
+                            AppColors.kTextPrimaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      suffixIconColor: AppColors.kWhite,
+                      prefixIconColor: AppColors.kWhite,
+                      fillColor: AppColors.kBgColor,
+                      filled: true,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color:
+                              // borderColor ??
+                              AppColors.kPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          ResponsiveHelper.borderRadiusSmall,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color:
+                              // borderColor ??
+                              AppColors.kPrimaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          ResponsiveHelper.borderRadiusSmall,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.kErrorPrimary),
+                        borderRadius: BorderRadius.circular(
+                          ResponsiveHelper.borderRadiusSmall,
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.kErrorPrimary),
+                        borderRadius: BorderRadius.circular(
+                          ResponsiveHelper.borderRadiusSmall,
+                        ),
+                      ),
+                    ),
+                    items: team
+                        .map(
+                          (e) => DropdownMenuItem(value: e, child: Text(e)),
+                        )
+                        .toList(),
+                    onChanged: (value) {},
+                  ),
+                  AppSpacer(hp: .015),
                   CustomTextField(
                     controller: _userNameController,
                     hintText: "User Name",
                     validator: AppValidator.requiredValidator,
                   ),
                   AppSpacer(hp: .02),
-                  CustomTextField(
-                    controller: _passwordController,
-                    hintText: "Password",
-                    validator: AppValidator.requiredValidator,
-                  ),
+                  Consumer(builder: (context, ref, _) {
+                    return CustomTextField(
+                      isObsecure: ref.watch(passwordObsecureControllerProvider),
+                      sufixicon: InkWell(
+                          onTap: () {
+                            if (ref.read(passwordObsecureControllerProvider) ==
+                                false) {
+                              ref
+                                  .read(passwordObsecureControllerProvider
+                                      .notifier)
+                                  .state = true;
+                            } else {
+                              ref
+                                  .read(passwordObsecureControllerProvider
+                                      .notifier)
+                                  .state = false;
+                            }
+                          },
+                          child: Icon(
+                              ref.watch(passwordObsecureControllerProvider)
+                                  ? CupertinoIcons.eye
+                                  : CupertinoIcons.eye_slash)),
+                      controller: _passwordController,
+                      hintText: "Password",
+                      validator: AppValidator.requiredValidator,
+                    );
+                  }),
 
                   AppSpacer(hp: .02),
 

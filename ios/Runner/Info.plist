@@ -32,7 +32,7 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to take pictures.</string>
+	<string>Dazzles uses the camera to let you take a photo when updating or adding a product image. Camera access is only used for this purpose.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needs microphone access.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
