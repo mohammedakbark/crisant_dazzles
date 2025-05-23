@@ -59,6 +59,7 @@ class LoginScreen extends ConsumerWidget {
     ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
           initialValue,
           _mobileNumberController.text.trim(),
+          showOTPSheet(context,ref),
           context,
         );
   }
