@@ -9,6 +9,7 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/auth/data/providers/login_controller.dart';
+import 'package:dazzles/features/notification/data/providers/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -46,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final loginRef = await LoginRefDataBase().getUserData;
     if (loginRef.token != null && loginRef.token!.isNotEmpty) {
       log("User Role -> ${loginRef.role}");
+      await FirebasePushNotification().initNotification(context);
       if (mounted) {
         if (loginRef.role == LoginController.mainRole) {
           context.go(route);

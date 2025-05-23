@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210531178502",
+    "project_id": "dazzles-c81e9",
+    "storage_bucket": "dazzles-c81e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210531178502:android:362934ba99449b2d640b87",
+        "android_client_info": {
+          "package_name": "com.dazzles.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1Ndr4siI5zYvkr9WrtxhjUccXAZzlw8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
