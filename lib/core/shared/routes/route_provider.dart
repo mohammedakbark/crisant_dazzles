@@ -25,13 +25,13 @@ class RouteProvider {
     routes: [
       GoRoute(path: initialScreen, builder: (context, state) => SplashScreen()),
       GoRoute(path: loginScreen, builder: (context, state) => LoginScreen()),
-      GoRoute(path: otpScreen, builder: (context, state) {
-        final mapData=state.extra as Map;
+      // GoRoute(path: otpScreen, builder: (context, state) {
+      //   final mapData=state.extra as Map;
 
-        final mobileNumber=mapData['mobileNumber'];
-        final role=mapData['role'];
-        return OtpScreen(mobileNumber: mobileNumber,role: role,);
-      }),
+      //   final mobileNumber=mapData['mobileNumber'];
+      //   final role=mapData['role'];
+      //   return OtpScreen(mobileNumber: mobileNumber,role: role,);
+      // }),
       GoRoute(path: route, builder: (context, state) => NavigationScreen()),
 
       GoRoute(

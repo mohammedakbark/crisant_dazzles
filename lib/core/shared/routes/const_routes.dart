@@ -1,6 +1,6 @@
 const initialScreen = '/';
 const loginScreen = '/login';
-const otpScreen="/otpScreen";
+//const otpScreen="/otpScreen";
 const route = '/route';
 const otherUsersRoute="/otherUsersRoute";
 const notificationScreen = '/notification';
