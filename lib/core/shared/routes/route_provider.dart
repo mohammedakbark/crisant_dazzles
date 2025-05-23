@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dazzles/features/auth/presentation/login_screen.dart';
+import 'package:dazzles/features/auth/presentation/otp_screen.dart';
 import 'package:dazzles/features/camera/presentation/products_selection_screen.dart';
 import 'package:dazzles/features/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/features/navigation_screen.dart';
@@ -24,8 +25,15 @@ class RouteProvider {
     routes: [
       GoRoute(path: initialScreen, builder: (context, state) => SplashScreen()),
       GoRoute(path: loginScreen, builder: (context, state) => LoginScreen()),
+      GoRoute(path: otpScreen, builder: (context, state) {
+        final mapData=state.extra as Map;
+
+        final mobileNumber=mapData['mobileNumber'];
+        final role=mapData['role'];
+        return OtpScreen(mobileNumber: mobileNumber,role: role,);
+      }),
       GoRoute(path: route, builder: (context, state) => NavigationScreen()),
-     
+
       GoRoute(
         path: uploadFialedScreen,
         builder: (context, state) => UploadFaieldDataScreen(),
@@ -73,13 +81,13 @@ class RouteProvider {
         },
       ),
 
-       GoRoute(
+      GoRoute(
           path: notificationScreen,
           builder: (context, state) => NotificationScreen()),
 
       // OTHER ROLE ROUTES
 
-       GoRoute(
+      GoRoute(
           path: otherUsersRoute,
           builder: (context, state) => OtherUsersNaviagationScreen()),
     ],
