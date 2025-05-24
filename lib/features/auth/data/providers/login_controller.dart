@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/core/utils/snackbars.dart';
+import 'package:dazzles/features/auth/data/providers/resed_otp_controller.dart';
 import 'package:dazzles/features/auth/data/repo/login_repo.dart';
 import 'package:dazzles/features/auth/data/repo/login_with_mobilenumber_repo.dart';
 import 'package:dazzles/features/auth/data/repo/verify_OTP_repo.dart';
@@ -38,6 +36,9 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   ) async {
     state = const AsyncLoading();
     final response = await LoginRepo.onLogin(username, password);
+    showMessageinUI(
+        response['error'] == false ? "Login succeessful" : response['message'],
+        response['error']);
     if (response['error'] == false) {
       final local = LocalUserRefModel(
           token: response['token'],
@@ -45,48 +46,50 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           userName: response['username'],
           role: selectedRole);
       await LoginRefDataBase().setUseretails(local);
-      state = AsyncData(response);
       await FirebasePushNotification().initNotification(context);
+      state = AsyncData(response);
 
       if (context.mounted) {
         context.go(route);
       }
     } else {
       state = AsyncError("Error null", StackTrace.empty);
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          content: response['message'],
-          contentType: ContentType.failure,
-        );
-      }
     }
   }
 
-  Future<void> loginWithMobileNumber(
+  Future<Map<String, dynamic>?> loginWithMobileNumber(
     String role,
     String mobileNumber,
-    VoidCallback callBack,
     BuildContext context,
   ) async {
     state = const AsyncLoading();
     final response =
         await LoginWithMobilenumberRepo.onLoginWithMobile(mobileNumber, role);
+    // ui response
+    showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
       state = AsyncData(response);
-
-      if (context.mounted) {
-        callBack();
-      }
+      return response['data'];
     } else {
       state = AsyncError("Error null", StackTrace.empty);
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          content: response['message'],
-          contentType: ContentType.failure,
-        );
-      }
+      return null;
+    }
+  }
+
+  Future<void> resendOTP(
+    String role,
+    String mobileNumber,
+    BuildContext context,
+  ) async {
+    state = const AsyncLoading();
+    final response =
+        await LoginWithMobilenumberRepo.onLoginWithMobile(mobileNumber, role);
+    // ui response
+    showMessageinUI(response['message'], response['error']);
+    if (response['error'] == false) {
+      state = AsyncData(response);
+    } else {
+      state = AsyncError("Error null", StackTrace.empty);
     }
   }
 
@@ -98,6 +101,8 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   ) async {
     state = const AsyncLoading();
     final response = await VerifyOtpRepo.onVerifyOTP(otp, role, id);
+    // ui response
+    showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
       final local = LocalUserRefModel(
           token: response['token'],
@@ -105,21 +110,31 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           userName: response['username'],
           role: role);
       await LoginRefDataBase().setUseretails(local);
+      await FirebasePushNotification().initNotification(context);
       state = AsyncData(response);
-
       if (context.mounted) {
+        final ref = ProviderContainer();
+        ref.read(resendOtpControllerProvider.notifier).dispose();
         context.go(otherUsersRoute);
       }
     } else {
       state = AsyncError("Error null", StackTrace.empty);
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          content: response['message'],
-          contentType: ContentType.failure,
-        );
-      }
     }
+  }
+
+  bool showMessage = false;
+  bool? isError;
+  String? message;
+
+  void showMessageinUI(String message, bool isError) async {
+    showMessage = true;
+    this.isError = isError;
+    this.message = message;
+    await Future.delayed(Duration(seconds: 3));
+    showMessage = false;
+    this.isError = null;
+    this.message = null;
+    state = AsyncData({});
   }
 }
 

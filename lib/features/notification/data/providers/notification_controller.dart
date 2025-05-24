@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:dazzles/core/shared/routes/const_routes.dart';
+import 'package:dazzles/core/shared/routes/route_provider.dart';
+import 'package:dazzles/features/notification/data/repo/set_notification_repo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -93,7 +97,7 @@ class FirebasePushNotification {
   }
 
   void _updateTokenInDatabase(String newToken, BuildContext context) async {
-    // await NotificationTokenRepo().setNotificationToken(newToken, context);
+    await SetNotificationRepo.setPushToken(newToken);
   }
 
   Future<void> _initLocalNotification() async {
@@ -166,22 +170,7 @@ class FirebasePushNotification {
 
   static void _navigateToScreen(Map<String, dynamic> data) async {
     try {
-      // log(data.toString());
-      // if (data['pageType'] == "chat") {
-      //   // final id = data['receiver_id'];
-      //   // navigatorKey.currentState?.push(AppRoutes.createRoute(ChatScreen(
-      //   //   anotherUserId: id,
-      //   //   initialIndex: 0,
-      //   // )));
-      // } else {
-      //   final id = data['adId'];
-      //   // rootNavigatorKey.currentState
-      //   //     ?.push(AppRoutes.createRoute(ProductDetailScreen(
-      //   //   id: id,
-      //   //   hideBottom: true,
-      //   //   isNavigationFromDashboard: true,
-      //   // )));
-      // }
+      rootNavigatorKey.currentContext?.push(notificationScreen);
     } catch (e) {
       log('Navigation failed: $e');
     }

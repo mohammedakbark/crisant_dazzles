@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dazzles/features/auth/presentation/login_screen.dart';
-import 'package:dazzles/features/auth/presentation/otp_screen.dart';
 import 'package:dazzles/features/camera/presentation/products_selection_screen.dart';
 import 'package:dazzles/features/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/features/navigation_screen.dart';

@@ -29,18 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-    // final loginRef = await LoginRefDataBase().getUserData;
     await AppPermissions.handleCameraPermission();
-    // await Future.delayed(Duration(seconds: 2));
-    // if (loginRef.token != null && loginRef.token!.isNotEmpty) {
-    //   if (mounted) {
-    //     context.go(route);
-    //   }
-    // } else {
-    //   if (mounted) {
-    //     context.go(loginScreen);
-    //   }
-    // }
+    
   }
 
   void goNext() async {

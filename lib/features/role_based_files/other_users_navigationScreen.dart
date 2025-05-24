@@ -1,13 +1,11 @@
-import 'package:dazzles/core/components/app_error_componet.dart';
+import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
-import 'package:dazzles/core/components/build_state_manage_button.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
-import 'package:dazzles/features/profile/data/providers/get_profile_controller.dart';
 import 'package:dazzles/features/profile/presentation/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,6 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final profileController = ref.watch(profileControllerProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -57,80 +54,100 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+
+
               Positioned(
-                  bottom: -60,
-                  child: BuildStateManageComponent(
-                    stateController: profileController,
-                    errorWidget: (p0, p1) => SizedBox(),
-                    loadingWidget: () => SizedBox(),
-                    successWidget: (data) {
-                      final userProfileModel = data as UserProfileModel;
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        alignment: Alignment.center,
-                        width: ResponsiveHelper.wp * .5,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: AppColors.kWhite, width: 2),
-                            shape: BoxShape.circle,
-                            color: AppColors.kBgColor),
-                        child: Text(
-                          userProfileModel.username[0].toUpperCase(),
-                          style: AppStyle.largeStyle(fontSize: 70),
-                        ),
-                      );
-                    },
-                  )),
+                bottom: -60,
+                child: FutureBuilder( future: LoginRefDataBase().getUserData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return AppLoading();
+                      }
+                      final userModel = snapshot.data;
+                      return userModel == null
+                          ? SizedBox()
+                          : Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                          width: ResponsiveHelper.wp * .5,
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: AppColors.kWhite, width: 2),
+                              shape: BoxShape.circle,
+                              color: AppColors.kBgColor),
+                          child: Text(
+                            userModel.userName![0].toUpperCase(),
+                            style: AppStyle.largeStyle(fontSize: 70),
+                          ),
+                        );}),
+              ),
+              // Positioned(
+              //     bottom: -60,
+              //     child: BuildStateManageComponent(
+              //       stateController: profileController,
+              //       errorWidget: (p0, p1) => SizedBox(),
+              //       loadingWidget: () => SizedBox(),
+              //       successWidget: (data) {
+              //         final userProfileModel = data as UserProfileModel;
+              //         return 
+              //       },
+              //     )),
             ],
           ),
           Expanded(
-            child: BuildStateManageComponent(
-              stateController: profileController,
-              errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
-              successWidget: (data) {
-                final userProfileModel = data as UserProfileModel;
-                return Column(children: [
-                  AppMargin(
-                    child: Column(
-                      children: [
-                        AppSpacer(
-                          hp: .1,
-                        ),
-                        Container(
-                            padding: EdgeInsets.all(15),
-                            width: ResponsiveHelper.wp,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color:
-                                    AppColors.kTextPrimaryColor.withAlpha(10)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildTile(
-                                    "User Name", userProfileModel.username),
-                                _buildDevider(),
-                                _buildTile("Store", userProfileModel.store),
-                                _buildDevider(),
-                                _buildTile("Role", userProfileModel.role)
-                              ],
-                            )),
-                        AppSpacer(
-                          hp: .05,
-                        ),
-                        _buildButton(
-                          "Notification",
-                          CupertinoIcons.arrow_right_circle,
-                          () {
-                            context.push(notificationScreen);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ]);
-              },
-            ),
-          ),
+              child: FutureBuilder(
+                  future: LoginRefDataBase().getUserData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return AppLoading();
+                    }
+                    final userModel = snapshot.data;
+                    return userModel == null
+                        ? SizedBox()
+                        : Column(children: [
+                            AppMargin(
+                              child: Column(
+                                children: [
+                                  AppSpacer(
+                                    hp: .1,
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.all(15),
+                                      width: ResponsiveHelper.wp,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: AppColors.kTextPrimaryColor
+                                              .withAlpha(10)),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          _buildTile("User Name",
+                                              userModel.userName ?? 'N/A'),
+                                          _buildDevider(),
+                                          // _buildTile(
+                                          //     "Store", userModel.store),
+                                          // _buildDevider(),
+                                          _buildTile(
+                                              "Role", userModel.role ?? 'N/A')
+                                        ],
+                                      )),
+                                  AppSpacer(
+                                    hp: .05,
+                                  ),
+                                  _buildButton(
+                                    "Notification",
+                                    CupertinoIcons.arrow_right_circle,
+                                    () {
+                                      context.push(notificationScreen);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ]);
+                  })),
           AppSpacer(
             hp: .1,
           ),
@@ -173,7 +190,6 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
   Widget _buildButton(String title, IconData icon, void Function()? onTap) =>
       InkWell(
         overlayColor: WidgetStatePropertyAll(Colors.transparent),
-
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.all(13),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
@@ -11,19 +12,34 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/core/utils/validators.dart';
 import 'package:dazzles/features/auth/data/providers/login_controller.dart';
+import 'package:dazzles/features/auth/data/providers/resed_otp_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   LoginScreen({super.key});
+
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  static String initialValue = "Office";
+
   final _userNameController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
   final _mobileNumberController = TextEditingController();
+
   final _pinputController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+  final _otpFormKey = GlobalKey<FormState>();
+
   final team = [
     'Office',
     'Sales',
@@ -34,9 +50,10 @@ class LoginScreen extends ConsumerWidget {
     'Tailor',
     'Master'
   ];
-  static String initialValue = "Office";
 
-  void _onChangeRole(value, WidgetRef ref) {
+  void _onChangeRole(
+    value,
+  ) {
     initialValue = value!;
     if (initialValue == LoginController.mainRole) {
       ref.watch(mobileLoginControllerProvider.notifier).state = false;
@@ -46,7 +63,10 @@ class LoginScreen extends ConsumerWidget {
     _clearController();
   }
 
-  void _loginWithPassword(context, WidgetRef ref) {
+// LOGIN WITH PASSWORD  (FOR OFFICE ___)
+  void _loginWithPassword(
+    context,
+  ) {
     ref.read(loginControllerProvider.notifier).onLogin(
           _userNameController.text.trim(),
           _passwordController.text.trim(),
@@ -55,16 +75,51 @@ class LoginScreen extends ConsumerWidget {
         );
   }
 
-  void _loginWithMobileNumber(context, WidgetRef ref) {
-    ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
+// LOGIN WITH OTP ( FOR OTHER USERS___)
+  void _genarateOTPforLogin(
+    context,
+  ) async {
+    final response =
+        await ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
+              initialValue,
+              _mobileNumberController.text.trim(),
+              context,
+            );
+
+    if (response != null) {
+      final id = response['id'] as int;
+      final role = response['role'] as String;
+      log("id : $id  --  role : $role");
+      showOTPSheet(context, id, role);
+    }
+  }
+
+  void _onVerifyOTP(
+    BuildContext context,
+    WidgetRef ref,
+    int id,
+    String role,
+  ) async {
+    if (_otpFormKey.currentState!.validate()) {
+      log("verifying OTP");
+      ref.read(loginControllerProvider.notifier).verifyOTP(
+            id,
+            _pinputController.text.trim(),
+            role,
+            context,
+          );
+    }
+  }
+
+  void _resendOTP() async {
+    log("RESEND OTP TRIGGERD");
+    ref.read(resendOtpControllerProvider.notifier).startTimer();
+    await ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
           initialValue,
           _mobileNumberController.text.trim(),
-          showOTPSheet(context,ref),
           context,
         );
   }
-
-  void _onVerifyOTP() {}
 
   void _clearController() {
     _mobileNumberController.clear();
@@ -74,7 +129,14 @@ class LoginScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, ref) {
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     final isMobileNumberLogin = ref.watch(mobileLoginControllerProvider);
 
     return Scaffold(
@@ -159,12 +221,15 @@ class LoginScreen extends ConsumerWidget {
                             (e) => DropdownMenuItem(value: e, child: Text(e)),
                           )
                           .toList(),
-                      onChanged: (value) => _onChangeRole(value, ref)),
+                      onChanged: (value) => _onChangeRole(
+                            value,
+                          )),
                   AppSpacer(hp: .02),
 //  TEXTFORMFIELD
                   isMobileNumberLogin
                       ? _buildMobileLoginUI()
                       : _buildUserNameLoginUI(),
+                  _errorWidgetBuilder(ref),
 
                   BuildStateManageComponent(
                     stateController: ref.watch(loginControllerProvider),
@@ -174,10 +239,14 @@ class LoginScreen extends ConsumerWidget {
                         if (_formKey.currentState!.validate()) {
                           if (isMobileNumberLogin) {
                             // mobile number with OTP
-                            _loginWithMobileNumber(context, ref);
+                            _genarateOTPforLogin(
+                              context,
+                            );
                           } else {
                             // user name with password
-                            _loginWithPassword(context, ref);
+                            _loginWithPassword(
+                              context,
+                            );
                           }
                         }
                       },
@@ -203,6 +272,7 @@ class LoginScreen extends ConsumerWidget {
           AppSpacer(hp: .02),
         ],
       );
+
   Widget _buildUserNameLoginUI() => Column(
         children: [
           CustomTextField(
@@ -238,89 +308,127 @@ class LoginScreen extends ConsumerWidget {
         ],
       );
 
-  showOTPSheet(BuildContext context, WidgetRef ref) {
+  showOTPSheet(BuildContext context, int id, String role) {
+    ref.read(resendOtpControllerProvider.notifier).startTimer();
+
     showModalBottomSheet(
+        isDismissible: false,
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        builder: (context) => AnimatedPadding(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-              ),
-              child: SlideInUp(
-                  duration: Duration(milliseconds: 400),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 14),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppColors.kBgColor,
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: Colors.white24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 30,
-                          offset: Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: SlideInUp(
-                      duration: Duration(milliseconds: 800),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Text("OTP Verification",
-                          //     style: AppStyle.boldStyle(
-                          //         fontSize: ResponsiveHelper.fontLarge)),
-                          AppSpacer(
-                            hp: .01,
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                text: "Enter the OTP sent to ",
-                                children: [
-                                  TextSpan(
-                                      style: AppStyle.largeStyle(),
-                                      text:
-                                          "+91 ${_mobileNumberController.text}")
-                                ]),
-                          ),
-                          AppSpacer(hp: .02),
-                          Pinput(
-                            keyboardType: TextInputType.number,
-                            length: 6,
-                            controller: _pinputController,
-                            defaultPinTheme: _pinTheme,
-                            focusedPinTheme: _pinTheme,
-                          ),
-                          AppSpacer(hp: .02),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Dont't receive the OTP ?"),
-                              TextButton(
-                                  onPressed: () {}, child: Text("RESEND OTP")),
-                            ],
-                          ),
-                          AppSpacer(hp: .02),
-                          BuildStateManageComponent(
-                            stateController: ref.watch(loginControllerProvider),
-                            successWidget: (data) => AppButton(
-                              title: 'Verify OTP',
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  _onVerifyOTP();
-                                }
-                              },
-                            ),
+        builder: (context) => Consumer(builder: (context, newRef, _) {
+              return AnimatedPadding(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                ),
+                child: SlideInUp(
+                    duration: Duration(milliseconds: 400),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 14),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.kBgColor,
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(color: Colors.white24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 30,
+                            offset: Offset(0, 10),
                           ),
                         ],
                       ),
-                    ),
-                  )),
-            ));
+                      child: SlideInUp(
+                        duration: Duration(milliseconds: 800),
+                        child: Form(
+                          key: _otpFormKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Text("OTP Verification",
+                              //     style: AppStyle.boldStyle(
+                              //         fontSize: ResponsiveHelper.fontLarge)),
+                              AppSpacer(
+                                hp: .01,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    text: "Enter the OTP sent to ",
+                                    children: [
+                                      TextSpan(
+                                          style: AppStyle.largeStyle(),
+                                          text:
+                                              "+91 ${_mobileNumberController.text}")
+                                    ]),
+                              ),
+                              AppSpacer(hp: .02),
+                              Pinput(
+                                errorTextStyle: AppStyle.mediumStyle(color: AppColors.kErrorPrimary),
+                                validator: (value) => AppValidator.requiredValidator(value),
+                                keyboardType: TextInputType.number,
+                                length: 6,
+                                controller: _pinputController,
+                                defaultPinTheme: _pinTheme,
+                                focusedPinTheme: _pinTheme,
+                                errorPinTheme: _errorPinThem,
+                              ),
+                              AppSpacer(hp: .02),
+                              _errorWidgetBuilder(newRef),
+                              Consumer(builder: (context, reff, child) {
+                                final isEnabled = reff
+                                    .watch(resendOtpControllerProvider)
+                                    .value?["isButtonEnables"];
+                                final timer = reff
+                                    .watch(resendOtpControllerProvider)
+                                    .value!["start"]
+                                    .toString();
+                          
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Dont't receive the OTP ?",
+                                      style: AppStyle.mediumStyle(
+                                          color: AppColors.kTextPrimaryColor),
+                                    ),
+                                    AppSpacer(
+                                      wp: .05,
+                                    ),
+                                    isEnabled
+                                        ? InkWell(
+                                            onTap: () => _resendOTP(),
+                                            child: Text(
+                                              "RESEND OTP",
+                                              style: AppStyle.boldStyle(
+                                                  color:
+                                                      AppColors.kPrimaryColor),
+                                            ))
+                                        : Text(
+                                            "00:${timer}",
+                                            style: AppStyle.boldStyle(
+                                                color: AppColors.kPrimaryColor),
+                                          ),
+                                  ],
+                                );
+                              }),
+                              AppSpacer(hp: .02),
+                              BuildStateManageComponent(
+                                stateController:
+                                    newRef.watch(loginControllerProvider),
+                                successWidget: (data) => AppButton(
+                                    title: 'Verify OTP',
+                                    onPressed: () => _onVerifyOTP(
+                                        context, newRef, id, role)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+              );
+            }));
   }
 
   final _pinTheme = PinTheme(
@@ -335,4 +443,39 @@ class LoginScreen extends ConsumerWidget {
       ),
     ),
   );
+
+  final _errorPinThem = PinTheme(
+    height: ResponsiveHelper.wp / 9,
+    width: ResponsiveHelper.wp / 5,
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: AppColors.kErrorPrimary,
+      ),
+      borderRadius: BorderRadius.circular(
+        ResponsiveHelper.borderRadiusSmall,
+      ),
+    ),
+  );
+
+  Widget _errorWidgetBuilder(WidgetRef ref) {
+    return ref.watch(loginControllerProvider.notifier).showMessage
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  ref.watch(loginControllerProvider.notifier).message ?? '',
+                  style: AppStyle.boldStyle(
+                      color:
+                          ref.watch(loginControllerProvider.notifier).isError ==
+                                  true
+                              ? AppColors.kErrorPrimary
+                              : AppColors.kGreen),
+                ),
+              ),
+            ],
+          )
+        : SizedBox();
+  }
 }

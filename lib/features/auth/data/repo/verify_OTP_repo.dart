@@ -19,6 +19,7 @@ class VerifyOtpRepo {
           "userId": data['user']['id'],
           'username': data['user']['username'],
           'role': data['user']['role'],
+          "message":response.message
         };
       } else {
         return {"error": true, "message": response.message};

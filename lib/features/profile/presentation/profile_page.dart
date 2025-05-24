@@ -9,6 +9,7 @@ import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/features/notification/data/providers/notification_controller.dart';
 import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
 import 'package:dazzles/features/profile/presentation/widgets/profile_shimmer.dart';
 import 'package:dazzles/features/profile/data/providers/get_profile_controller.dart';
@@ -124,7 +125,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
- static void showLogoutConfirmation(BuildContext context, WidgetRef ref) {
+  static void showLogoutConfirmation(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -203,6 +204,7 @@ class ProfilePage extends ConsumerWidget {
                               ),
                               onPressed: () async {
                                 await LoginRefDataBase().clearLoginCredential();
+                                await FirebasePushNotification().deleteToken();
                                 ref.read(navigationController.notifier).state =
                                     0;
                                 if (context.mounted) {
