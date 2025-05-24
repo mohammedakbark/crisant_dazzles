@@ -7,6 +7,7 @@ import 'package:dazzles/features/product/data/models/product_data_model.dart';
 
 class GetProductDataRepo {
   static Future<Map<String, dynamic>> onGetProductData(int id) async {
+    // log(id.toString());
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.getRequest(
       endpoint: ApiConstants.productData+"/$id",
@@ -18,6 +19,8 @@ class GetProductDataRepo {
 
     if (response.status == 200) {
       final data = response.data as Map;
+      // log(data.toString());
+      // log('//--------------------------------');
       return {
         "error": false,
         "data": ProductDataModel.fromJson(data as Map<String, dynamic>),

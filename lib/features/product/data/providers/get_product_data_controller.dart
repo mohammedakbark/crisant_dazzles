@@ -17,6 +17,7 @@ class GetProductDataController extends FamilyAsyncNotifier<ProductDataModel,int>
     try {
       state = AsyncValue.loading();
       final result = await GetProductDataRepo.onGetProductData(id);
+      
       if (result['error'] == false) return result['data'];
       throw result['data'];
     } catch (e) {

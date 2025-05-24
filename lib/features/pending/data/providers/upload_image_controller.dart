@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dazzles/core/local/hive/controllers/upload_manager.dart';
 import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
+import 'package:dazzles/core/services/navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/snackbars.dart';
@@ -40,7 +41,6 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
           ),
           IOSUiSettings(
             title: 'Cropper',
-            
             aspectRatioPresets: [
               CropAspectRatioPreset.ratio16x9,
             ],
@@ -70,6 +70,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
             _croppedFile.path,
             uploadManagerController,
           );
+          ref.read(navigationController.notifier).state = 0;
           context.go(route);
         }
       }
@@ -145,6 +146,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
       ids.add(i.id);
     }
     _uploadImage(ids, image.path, uploadManagerController);
+    ref.read(navigationController.notifier).state = 0;
     context.go(route);
   }
   // }Future<void> uploadMultipleIds(
