@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:dazzles/core/local/hive/controllers/upload_manager.dart';
 import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
-import 'package:dazzles/features/camera/data/providers/camera_controller.dart';
+import 'package:dazzles/office/camera/data/providers/camera_controller.dart';
 import 'package:dazzles/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/adapters.dart';

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/models/response_model.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
-import 'package:dazzles/features/profile/presentation/profile_page.dart';
+import 'package:dazzles/office/profile/presentation/profile_page.dart';
 import 'package:dio/dio.dart';
 
 class ApiConfig {

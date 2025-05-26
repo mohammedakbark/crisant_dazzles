@@ -12,3 +12,8 @@ const recentlyCaptured = "/viewRecentlyCaptured";
 const openImage = "/openImage";
 const productsSelectionScreen = "/productsSelectionScreen";
 const viewAndEditProductScreen = "/viewAndEditProductScreen";
+
+//  WEB VIEW
+
+const webViewScreen="/webView";
+const decisionScreen="/decisionScreen";

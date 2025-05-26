@@ -1,17 +1,19 @@
 import 'dart:io';
 
-import 'package:dazzles/features/auth/presentation/login_screen.dart';
-import 'package:dazzles/features/camera/presentation/products_selection_screen.dart';
-import 'package:dazzles/features/home/presentation/view_all_recent_captured_screen.dart';
-import 'package:dazzles/features/navigation_screen.dart';
+import 'package:dazzles/customer/web_view_screen.dart';
+import 'package:dazzles/office/auth/presentation/login_screen.dart';
+import 'package:dazzles/office/camera/presentation/products_selection_screen.dart';
+import 'package:dazzles/office/decision_screen.dart';
+import 'package:dazzles/office/home/presentation/view_all_recent_captured_screen.dart';
+import 'package:dazzles/office/navigation_screen.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/features/notification/presentation/notification_screen.dart';
-import 'package:dazzles/features/upload%20failed/presentation/failed_data_screen.dart';
-import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/product/presentation/view_and_edit_product.dart';
-import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
-import 'package:dazzles/features/role_based_files/other_users_navigationScreen.dart';
-import 'package:dazzles/features/splash_screen.dart';
+import 'package:dazzles/office/notification/presentation/notification_screen.dart';
+import 'package:dazzles/office/upload%20failed/presentation/failed_data_screen.dart';
+import 'package:dazzles/office/product/data/models/product_model.dart';
+import 'package:dazzles/office/product/presentation/view_and_edit_product.dart';
+import 'package:dazzles/office/product/presentation/widgets/product_image_view.dart';
+import 'package:dazzles/office/role_based_files/other_users_navigationScreen.dart';
+import 'package:dazzles/office/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -89,6 +91,11 @@ class RouteProvider {
       GoRoute(
           path: otherUsersRoute,
           builder: (context, state) => OtherUsersNaviagationScreen()),
+
+      // W E B  V I E W   R O U T E
+
+      GoRoute(path: webViewScreen, builder: (context, state) => WebViewScreen()),
+       GoRoute(path: decisionScreen, builder: (context, state) => DecisionScreen())
     ],
   );
 }

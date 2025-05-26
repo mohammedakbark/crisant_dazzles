@@ -4,7 +4,7 @@ import 'package:dazzles/core/services/navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-import 'package:dazzles/features/profile/presentation/profile_page.dart';
+import 'package:dazzles/office/profile/presentation/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
