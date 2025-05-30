@@ -37,17 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
     final loginRef = await LoginRefDataBase().getUserData;
     if (loginRef.token != null && loginRef.token!.isNotEmpty) {
       log("User Role -> ${loginRef.role}");
-      await FirebasePushNotification().initNotification(context);
+      
       if (mounted) {
         if (loginRef.role == LoginController.mainRole) {
           context.go(route);
         } else {
+          await FirebasePushNotification().initNotification(context);
           context.go(otherUsersRoute);
         }
       }
     } else {
       if (mounted) {
-        context.go(decisionScreen);
+        context.go(loginScreen);
       }
     }
   }

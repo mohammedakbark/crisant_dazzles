@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/office/camera/data/providers/camera_controller_state.dart';
 import 'package:dazzles/office/pending/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +22,7 @@ class CamerasController extends AsyncNotifier<Map<String, dynamic>> {
 
   Future<void> initCamera() async {
     if(cameras.isEmpty)return;
-    cameraController = CameraController(cameras[0], ResolutionPreset.high);
+    cameraController = CameraController(cameras[0], ResolutionPreset.high,enableAudio: false);
     return await cameraController!.initialize();
   }
 

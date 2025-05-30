@@ -46,7 +46,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           userName: response['username'],
           role: selectedRole);
       await LoginRefDataBase().setUseretails(local);
-      await FirebasePushNotification().initNotification(context);
+      // await FirebasePushNotification().initNotification(context);
       state = AsyncData(response);
 
       if (context.mounted) {
@@ -108,6 +108,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
+          
           role: role);
       await LoginRefDataBase().setUseretails(local);
       await FirebasePushNotification().initNotification(context);

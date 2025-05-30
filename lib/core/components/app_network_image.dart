@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class AppNetworkImage extends StatelessWidget {
   final String? imageFile;
-  final IconData? errorIcon;
+  final Widget? errorIcon;
   final String? imageVersion;
 
   final String? userName;
@@ -49,9 +49,9 @@ class AppNetworkImage extends StatelessWidget {
                     ),
                   ),
                 )
-              : Icon(
+              : errorIcon ?? Icon(
                   size: iconSize,
-                  errorIcon ?? Icons.broken_image_rounded,
+                  Icons.broken_image_rounded,
                   color: AppColors.kFillColor,
                 ),
     );

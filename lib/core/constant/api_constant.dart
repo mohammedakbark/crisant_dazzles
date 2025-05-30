@@ -8,8 +8,8 @@ class ApiConstants {
   static const String dashboard = "dashboard";
   static const String dashboardRecentlyCaptured = "dashboard/recentCaptured";
 
-  static const String setTokenURL="";
-  static const String getNotificationsURL="";
+  static const String setTokenURL="notification/token";
+  static const String getNotificationsURL="notification";
 
   static const String allProduct = "product";
   static const String productData = "product/view";

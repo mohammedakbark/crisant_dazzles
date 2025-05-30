@@ -105,32 +105,32 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                 );
               }),
         ),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: InkWell(
-                  overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                  onTap: () {
-                    context.push(notificationScreen);
-                  },
-                  child: badges.Badge(
-                    showBadge: true,
-                    badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kErrorPrimary),
-                    badgeContent: Text("2",
-                        style: AppStyle.mediumStyle(
-                            fontSize: 8, color: AppColors.kWhite)),
-                    position: badges.BadgePosition.topEnd(end: -2, top: -8),
-                    badgeAnimation: badges.BadgeAnimation.slide(
-                      curve: Curves.fastOutSlowIn,
-                      colorChangeAnimationCurve: Curves.easeInCubic,
-                    ),
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.kWhite,
-                      child: Icon(CupertinoIcons.bell,
-                          size: 18, color: AppColors.kBgColor),
-                    ),
-                  ),
-                )
-        ),
+        // Padding(
+        //   padding: EdgeInsets.only(right: 10),
+        //   child: InkWell(
+        //           overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        //           onTap: () {
+        //             context.push(notificationScreen);
+        //           },
+        //           child: badges.Badge(
+        //             showBadge: true,
+        //             badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kErrorPrimary),
+        //             badgeContent: Text("2",
+        //                 style: AppStyle.mediumStyle(
+        //                     fontSize: 8, color: AppColors.kWhite)),
+        //             position: badges.BadgePosition.topEnd(end: -2, top: -8),
+        //             badgeAnimation: badges.BadgeAnimation.slide(
+        //               curve: Curves.fastOutSlowIn,
+        //               colorChangeAnimationCurve: Curves.easeInCubic,
+        //             ),
+        //             child: CircleAvatar(
+        //               backgroundColor: AppColors.kWhite,
+        //               child: Icon(CupertinoIcons.bell,
+        //                   size: 18, color: AppColors.kBgColor),
+        //             ),
+        //           ),
+        //         )
+        // ),
       ],
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
@@ -463,23 +462,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget _errorWidgetBuilder(WidgetRef ref) {
     return ref.watch(loginControllerProvider.notifier).showMessage
-        ? Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(
-                  ref.watch(loginControllerProvider.notifier).message ?? '',
-                  style: AppStyle.boldStyle(
-                      color:
-                          ref.watch(loginControllerProvider.notifier).isError ==
-                                  true
-                              ? AppColors.kErrorPrimary
-                              : AppColors.kGreen),
-                ),
-              ),
-            ],
-          )
+        ? Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Text(
+            textAlign: TextAlign.start,
+            ref.watch(loginControllerProvider.notifier).message ?? '',
+            style: AppStyle.boldStyle(
+                color:
+                    ref.watch(loginControllerProvider.notifier).isError ==
+                            true
+                        ? AppColors.kErrorPrimary
+                        : AppColors.kGreen),
+          ),
+        ),)
         : SizedBox();
   }
 }

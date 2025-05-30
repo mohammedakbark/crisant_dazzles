@@ -16,4 +16,4 @@ const viewAndEditProductScreen = "/viewAndEditProductScreen";
 //  WEB VIEW
 
 const webViewScreen="/webView";
-const decisionScreen="/decisionScreen";
+// const decisionScreen="/decisionScreen";

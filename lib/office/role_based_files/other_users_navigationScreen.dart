@@ -1,3 +1,6 @@
+
+import 'dart:developer';
+
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -140,6 +143,7 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
                                     "Notification",
                                     CupertinoIcons.arrow_right_circle,
                                     () {
+                                      log(userModel.pushToken??'');
                                       context.push(notificationScreen);
                                     },
                                   ),

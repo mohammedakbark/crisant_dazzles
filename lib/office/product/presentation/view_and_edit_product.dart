@@ -7,6 +7,7 @@ import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
+import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -69,6 +70,7 @@ class _ViewAndEditProductScreenState
                       Hero(
                         tag: widget.productId.toString(),
                         child: AppNetworkImage(
+                             errorIcon: Image.asset(AppImages.defaultImage),
                             fit: BoxFit.cover,
                             imageVersion: imageVersion,
                             imageFile: ApiConstants.imageBaseUrl +
