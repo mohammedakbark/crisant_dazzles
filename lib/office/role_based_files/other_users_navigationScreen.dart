@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:dazzles/core/components/app_loading.dart';
@@ -12,6 +11,7 @@ import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/profile/presentation/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +23,6 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-      
       body: Column(
         children: [
           Stack(
@@ -59,10 +58,10 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
                 ),
               ),
 
-
               Positioned(
                 bottom: -60,
-                child: FutureBuilder( future: LoginRefDataBase().getUserData,
+                child: FutureBuilder(
+                    future: LoginRefDataBase().getUserData,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return AppLoading();
@@ -71,19 +70,20 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
                       return userModel == null
                           ? SizedBox()
                           : Container(
-                          padding: EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          width: ResponsiveHelper.wp * .5,
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: AppColors.kWhite, width: 2),
-                              shape: BoxShape.circle,
-                              color: AppColors.kBgColor),
-                          child: Text(
-                            userModel.userName![0].toUpperCase(),
-                            style: AppStyle.largeStyle(fontSize: 70),
-                          ),
-                        );}),
+                              padding: EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              width: ResponsiveHelper.wp * .5,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: AppColors.kWhite, width: 2),
+                                  shape: BoxShape.circle,
+                                  color: AppColors.kBgColor),
+                              child: Text(
+                                userModel.userName![0].toUpperCase(),
+                                style: AppStyle.largeStyle(fontSize: 70),
+                              ),
+                            );
+                    }),
               ),
               // Positioned(
               //     bottom: -60,
@@ -93,7 +93,7 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
               //       loadingWidget: () => SizedBox(),
               //       successWidget: (data) {
               //         final userProfileModel = data as UserProfileModel;
-              //         return 
+              //         return
               //       },
               //     )),
             ],
@@ -144,7 +144,7 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
                                     "Notification",
                                     CupertinoIcons.arrow_right_circle,
                                     () {
-                                      log(userModel.pushToken??'');
+                                      log(userModel.pushToken ?? '');
                                       context.push(notificationScreen);
                                     },
                                   ),
@@ -156,33 +156,15 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
           AppSpacer(
             hp: .1,
           ),
-          SizedBox(
-            width: ResponsiveHelper.wp * .5,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: AppColors.kErrorPrimary),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () => ProfilePage.showLogoutConfirmation(context, ref),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    SolarIconsOutline.logout,
-                    color: AppColors.kErrorPrimary,
-                  ),
-                  AppSpacer(wp: .02),
-                  Text(
-                    "Logout",
-                    style: AppStyle.mediumStyle(
-                      color: AppColors.kErrorPrimary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          ProfilePage.buildActionButton(
+            icon: SolarIconsOutline.logout,
+            label: 'Logout',
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              ProfilePage.showLogoutConfirmation(context, ref);
+            },
+            isPrimary: false,
+            isDestructive: true,
           ),
           AppSpacer(
             hp: .1,

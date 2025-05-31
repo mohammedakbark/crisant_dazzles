@@ -34,16 +34,16 @@ class FirebasePushNotification {
 
   static const AndroidNotificationChannel _androidChannel =
       AndroidNotificationChannel(
-    'high_importance_channel',
-    'High Importance Notifications',
-    description: 'This channel is used for important notifications.',
-    importance: Importance.high,
-  );
+          'high_importance_channel', 'High Importance Notifications',
+          description: 'This channel is used for important notifications.',
+          importance: Importance.high,
+          sound: RawResourceAndroidNotificationSound('notification_sound'));
 
   Future<void> initNotification(BuildContext context) async {
     log('Requesting push notification permissions...');
 
     if (Platform.isAndroid || Platform.isIOS) {
+      // _firebaseMessaging.subscribeToTopic("all-devices");
       await _firebaseMessaging.requestPermission(
         alert: true,
         badge: true,
@@ -147,15 +147,13 @@ class FirebasePushNotification {
       title,
       body,
       NotificationDetails(
-        iOS: const DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(sound: 'notification_sound.wav'),
         android: AndroidNotificationDetails(
-          // 'channelId',
-          // 'channelName',
-          _androidChannel.id,
-          _androidChannel.name,
-          icon: '@mipmap/ic_launcher',
-          importance: Importance.max,
-        ),
+            _androidChannel.id, _androidChannel.name,
+            icon: '@mipmap/ic_launcher',
+            importance: Importance.max,
+            priority: Priority.high,
+            sound: RawResourceAndroidNotificationSound('notification_sound')),
       ),
       payload: payload,
     );
