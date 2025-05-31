@@ -1,7 +1,7 @@
 class NotificationModel {
     final int notificationId;
     final String notification;
-    final String notificationImage;
+    final String ?notificationImage;
     final int isRead;
     final DateTime createdAt;
 
@@ -16,7 +16,7 @@ class NotificationModel {
     factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
         notificationId: json["notificationId"]??'',
         notification: json["notification"]??'',
-        notificationImage: json["notificationImage"]??'',
+        notificationImage: json["notificationImage"],
         isRead: json["isRead"]??3,
         createdAt: DateTime.parse(json["created_at"]),
     );

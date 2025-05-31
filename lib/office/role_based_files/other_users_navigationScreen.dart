@@ -23,6 +23,7 @@ class OtherUsersNaviagationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
+      
       body: Column(
         children: [
           Stack(
