@@ -8,6 +8,7 @@ import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/product/data/models/product_model.dart';
 import 'package:dazzles/office/pending/data/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:dazzles/office/pending/data/providers/get%20pending%20products/pending_products_state.dart';
@@ -86,10 +87,14 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                         itemCount: pending.length,
                         itemBuilder: (context, index) {
                           final product = pending[index];
-                          return _buildProductCard(product);
+                          return Padding(
+                            padding:  EdgeInsets.only(bottom: index==pending.length-1?ResponsiveHelper.hp*.05:0),
+                            child: _buildProductCard(product),
+                          );
                         },
                       ),
               ),
+             
             ],
           );
         },

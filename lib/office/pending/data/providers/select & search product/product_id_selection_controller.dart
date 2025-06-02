@@ -66,44 +66,46 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
         );
       }
     } else {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: "Already exist");
+      state = state.copyWith(isLoading: false, errorMessage: "Already exist");
       await disableErrro();
     }
   }
 
   Future<void> disableErrro() async {
     await Future.delayed(Duration(seconds: 2));
-    state = state.copyWith(
-      
-      errorMessage: null);
+    state = state.copyWith(errorMessage: null);
   }
 
   void remove(ProductModel model) {
     final ids = state.selectedIds;
     state = state.copyWith(
-      
       errorMessage: null,
       selectedIds: ids.where((element) => element != model).toList(),
     );
   }
 
+  void checkValue(String query) {
+    
+      state = state.copyWith(
+          enableAddButton: false,
+          errorMessage: null,
+          productModel: null,
+          isLoading: false);
+  }
+
   void onSearchProduct(String query) async {
     if (query.isEmpty) {
       state = state.copyWith(
-        enableAddButton: false,
-        errorMessage: null,
-        productModel: null,
-        isLoading: false
-      );
+          enableAddButton: false,
+          errorMessage: null,
+          productModel: null,
+          isLoading: false);
     } else {
-       state = state.copyWith(
-        enableAddButton: false,
-        errorMessage: null,
-        productModel: null,
-        isLoading: true
-      );
+      state = state.copyWith(
+          enableAddButton: false,
+          errorMessage: null,
+          productModel: null,
+          isLoading: true);
       final respnse = await SearchProductByIdRepo.onSearchProductById(query);
       if (respnse['error'] == false) {
         state = state.copyWith(
@@ -116,7 +118,7 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
         state = state.copyWith(
           isLoading: false,
           enableAddButton: false,
-          errorMessage: respnse['data'],
+          errorMessage: respnse['data']=="Product is not found"?"Product does not exist.W":respnse['data'],
           productModel: null,
         );
       }

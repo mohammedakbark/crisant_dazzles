@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
-import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
@@ -18,8 +17,8 @@ import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/product/data/models/product_model.dart';
 import 'package:dazzles/office/pending/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/office/pending/data/providers/upload_image_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
@@ -35,10 +34,10 @@ class ProductSelectionScreen extends ConsumerStatefulWidget {
 
 class _CopyMoreProdutcsScreenState
     extends ConsumerState<ProductSelectionScreen> {
-  final _debouncer = Debouncer(milliseconds: 500);
+  // final _debouncer = Debouncer(milliseconds: 500);
   @override
   void dispose() {
-    _debouncer.dispose();
+    //_debouncer.dispose();
     super.dispose();
   }
 
@@ -80,7 +79,7 @@ class _CopyMoreProdutcsScreenState
             ],
           ),
         ),
-        // bottomNavigationBar: 
+        // bottomNavigationBar:
       ),
     );
   }
@@ -103,9 +102,14 @@ class _CopyMoreProdutcsScreenState
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                    AppSpacer(hp: .01,),
-                Text("Selected Products", style: AppStyle.boldStyle(fontSize: 15)),
-                AppSpacer(hp: .01,),
+                AppSpacer(
+                  hp: .01,
+                ),
+                Text("Selected Products",
+                    style: AppStyle.boldStyle(fontSize: 15)),
+                AppSpacer(
+                  hp: .01,
+                ),
                 Expanded(
                   child: GridView.builder(
                     shrinkWrap: true,
@@ -249,85 +253,166 @@ class _CopyMoreProdutcsScreenState
         children: [
           Flexible(
             child: TextFormField(
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.search,
               controller: _findIDController,
               onChanged: (value) {
-                _debouncer.run(() {
-                  controller.onSearchProduct(value);
-                });
+                controller.checkValue(value);
+
+                // _debouncer.run(() {
+                //   controller.onSearchProduct(value);
+                // });
               },
               keyboardType: TextInputType.number,
               style: AppStyle.normalStyle(),
               cursorColor: AppColors.kBorderColor,
               decoration: InputDecoration(
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.kErrorPrimary),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.kErrorPrimary),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                errorText: productSelectionState.errorMessage,
-                errorStyle: AppStyle.smallStyle(color: AppColors.kErrorPrimary),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                hintText: "Search by product id.",
-                hintStyle: AppStyle.normalStyle(color: AppColors.kBorderColor),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.kBorderColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.kBorderColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.kBorderColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: productSelectionState.errorMessage != null
-                      ? AppColors.kErrorPrimary
-                      : AppColors.kBorderColor,
-                ),
-                suffixIcon: !productSelectionState.enableAddButton&&productSelectionState.isLoading?ZoomIn(child: CircularProgressIndicator.adaptive()):productSelectionState.enableAddButton &&
-                        productSelectionState.productModel != null
-                    ? ZoomIn(
-                        child: InkWell(
-                          onTap: () {
-                            controller.add(
-                              productSelectionState.productModel!,
-                              context,
-                              showSheet: (onCancel, onReplace) {
-                                _showReplacePicutreConfirmation(
-                                  context: context,
-                                  selectedProduct:
-                                      productSelectionState.productModel!,
-                                  onReplace: onReplace,
-                                  onCanel: onCancel,
-                                );
-                              },
-                            );
-                            _findIDController.clear();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(10),
-                              ),
-                              color: AppColors.kDeepPurple,
-                            ),
-                            child: Icon(Icons.add, color: AppColors.kWhite),
-                          ),
-                        ),
-                      )
-                    : null,
-              ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kErrorPrimary),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kErrorPrimary),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  errorText: productSelectionState.errorMessage,
+                  errorStyle:
+                      AppStyle.smallStyle(color: AppColors.kErrorPrimary),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  hintText: "Search by product id.",
+                  hintStyle:
+                      AppStyle.normalStyle(color: AppColors.kBorderColor),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kBorderColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kBorderColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kBorderColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  // prefixIcon: Icon(
+                  //   Icons.search,
+                  //   color: productSelectionState.errorMessage != null
+                  //       ? AppColors.kErrorPrimary
+                  //       : AppColors.kBorderColor,
+                  // ),
+                  suffixIcon: ZoomIn(
+                    child: productSelectionState.isLoading
+                        ? _buildIndicator()
+                        : productSelectionState.enableAddButton &&
+                                productSelectionState.productModel != null
+                            ? InkWell(
+                              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                                onTap: () {
+                                  controller.add(
+                                    productSelectionState.productModel!,
+                                    context,
+                                    showSheet: (onCancel, onReplace) {
+                                      _showReplacePicutreConfirmation(
+                                        context: context,
+                                        selectedProduct:
+                                            productSelectionState.productModel!,
+                                        onReplace: onReplace,
+                                        onCanel: onCancel,
+                                      );
+                                    },
+                                  );
+                                  _findIDController.clear();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.horizontal(
+                                      right: Radius.circular(10),
+                                    ),
+                                    color: AppColors.kDeepPurple,
+                                  ),
+                                  child:
+                                      Icon(Icons.add, color: AppColors.kWhite),
+                                ),
+                              )
+                            : productSelectionState.errorMessage != null
+                                ? InkWell(
+                                    overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                                    onTap: () {
+                                      if (_findIDController.text.isNotEmpty) {
+                                        _findIDController.clear();
+                                        controller.checkValue(
+                                            _findIDController.text.trim());
+                                      }
+                                    },
+                                    child: Icon(
+                                      CupertinoIcons.clear,
+                                      color: AppColors.kErrorPrimary,
+                                    ),
+                                  )
+                                : InkWell(
+                                    overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                                    onTap: () {
+                                      if (_findIDController.text.isNotEmpty) {
+                                        controller.onSearchProduct(
+                                            _findIDController.text.trim());
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.horizontal(
+                                          right: Radius.circular(10),
+                                        ),
+                                        color: productSelectionState
+                                                    .errorMessage !=
+                                                null
+                                            ? AppColors.kErrorPrimary
+                                                .withAlpha(180)
+                                            : AppColors.kTeal,
+                                      ),
+                                      child: Icon(CupertinoIcons.search,
+                                          color: AppColors.kWhite),
+                                    ),
+                                  ),
+                  )
+
+                  //  !productSelectionState.enableAddButton&&productSelectionState.isLoading?ZoomIn(child: CircularProgressIndicator.adaptive()):productSelectionState.enableAddButton &&
+                  //         productSelectionState.productModel != null
+                  //     ? ZoomIn(
+                  //         child: InkWell(
+                  //           onTap: () {
+                  //             controller.add(
+                  //               productSelectionState.productModel!,
+                  //               context,
+                  //               showSheet: (onCancel, onReplace) {
+                  //                 _showReplacePicutreConfirmation(
+                  //                   context: context,
+                  //                   selectedProduct:
+                  //                       productSelectionState.productModel!,
+                  //                   onReplace: onReplace,
+                  //                   onCanel: onCancel,
+                  //                 );
+                  //               },
+                  //             );
+                  //             _findIDController.clear();
+                  //           },
+                  //           child: Container(
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.horizontal(
+                  //                 right: Radius.circular(10),
+                  //               ),
+                  //               color: AppColors.kDeepPurple,
+                  //             ),
+                  //             child: Icon(Icons.add, color: AppColors.kWhite),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : null,
+                  ),
             ),
           ),
           AppSpacer(wp: .01),
           InkWell(
+            overlayColor: WidgetStatePropertyAll(Colors.transparent),
             onTap: () {},
             child: Container(
               height: 50,
@@ -336,10 +421,21 @@ class _CopyMoreProdutcsScreenState
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 border: Border.all(color: AppColors.kBorderColor),
               ),
-              child: Icon(Icons.qr_code_2_rounded, color: AppColors.kBorderColor),
+              child:
+                  Icon(Icons.qr_code_2_rounded, color: AppColors.kBorderColor),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  _buildIndicator() {
+    final isIos = Platform.isIOS;
+    return Padding(
+    padding: EdgeInsets.all(isIos?0:10),
+      child: CircularProgressIndicator.adaptive(
+        strokeWidth: isIos ? null : 2,
       ),
     );
   }
@@ -353,25 +449,71 @@ class _CopyMoreProdutcsScreenState
     return BuildStateManageComponent(
       stateController: uploadImageState,
       successWidget: (data) => Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ZoomIn(
-                  duration: Duration(milliseconds: 700),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ZoomIn(
+              duration: Duration(milliseconds: 700),
+              child: ElevatedButton.icon(
+                onPressed: () => context.go(route),
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: AppColors.kWhite,
+                ),
+                label: Text(
+                  "Discard",
+                  style: AppStyle.normalStyle(color: AppColors.kWhite),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.kErrorPrimary,
+                  foregroundColor: AppColors.kWhite,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
+                  textStyle: const TextStyle(fontSize: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+              ),
+            ),
+            AppSpacer(wp: .03),
+            Expanded(
+              child: ZoomIn(
+                duration: Duration(milliseconds: 700),
+                child: SizedBox(
                   child: ElevatedButton.icon(
-                    onPressed: () => context.go(route),
+                    onPressed: productSelectionState.selectedIds.isNotEmpty
+                        ? () {
+                            final container = ProviderContainer();
+                            container
+                                .read(uploadImageControllerProvider.notifier)
+                                .uploadMultipleIds(
+                                  context,
+                                  ref,
+                                  widget.fileImage,
+                                );
+                          }
+                        : null,
                     icon: Icon(
-                      Icons.delete_outline,
-                      color: AppColors.kWhite,
+                      Icons.cloud_upload_outlined,
+                      color: productSelectionState.selectedIds.isNotEmpty
+                          ? AppColors.kWhite
+                          : AppColors.kTextPrimaryColor,
                     ),
                     label: Text(
-                      "Discard",
-                      style: AppStyle.normalStyle(color: AppColors.kWhite),
+                      "Upload",
+                      style: AppStyle.normalStyle(
+                        color: productSelectionState.selectedIds.isNotEmpty
+                            ? AppColors.kWhite
+                            : AppColors.kTextPrimaryColor,
+                      ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.kErrorPrimary,
+                      backgroundColor: AppColors.kGreen,
                       foregroundColor: AppColors.kWhite,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
@@ -384,59 +526,11 @@ class _CopyMoreProdutcsScreenState
                     ),
                   ),
                 ),
-                AppSpacer(wp: .03),
-                Expanded(
-                  child: ZoomIn(
-                    duration: Duration(milliseconds: 700),
-                    child: SizedBox(
-                     
-                      child: ElevatedButton.icon(
-                        onPressed: productSelectionState.selectedIds.isNotEmpty
-                            ? () {
-                                final container = ProviderContainer();
-                                container
-                                    .read(
-                                        uploadImageControllerProvider.notifier)
-                                    .uploadMultipleIds(
-                                      context,
-                                      ref,
-                                      widget.fileImage,
-                                    );
-                              }
-                            : null,
-                        icon: Icon(
-                          Icons.cloud_upload_outlined,
-                          color: productSelectionState.selectedIds.isNotEmpty
-                              ? AppColors.kWhite
-                              : AppColors.kTextPrimaryColor,
-                        ),
-                        label: Text(
-                          "Upload",
-                          style: AppStyle.normalStyle(
-                            color: productSelectionState.selectedIds.isNotEmpty
-                                ? AppColors.kWhite
-                                : AppColors.kTextPrimaryColor,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.kGreen,
-                          foregroundColor: AppColors.kWhite,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 14,
-                          ),
-                          textStyle: const TextStyle(fontSize: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 

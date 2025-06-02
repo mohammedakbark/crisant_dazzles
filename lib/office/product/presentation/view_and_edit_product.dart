@@ -146,14 +146,7 @@ class _ViewAndEditProductScreenState
                     : SizedBox(),
 
                 // PRODUCT DETAILS
-                Text(
-                  "Product Details",
-                  style:
-                      AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
-                ),
-                AppSpacer(
-                  hp: .02,
-                ),
+               
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.kBorderColor.withAlpha(10),
