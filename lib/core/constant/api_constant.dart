@@ -1,7 +1,7 @@
 class ApiConstants {
   static const String baseUrl ="https://test.dazzles.in/Api/api/mobile/";
   //  "https://api.dazzles.in/api/mobile/";
-  static const String imageBaseUrl = "https://test.dazzles.in/products/";
+  static const String imageBaseUrl = "https://test.dazzles.in/";
   static const String login = "login";
   static const String loginWithMobile="mobilelogin";
   static const String verifyMobileOTP="verifyotp";

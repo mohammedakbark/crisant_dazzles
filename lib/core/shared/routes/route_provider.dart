@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:dazzles/customer/web_view_screen.dart';
 import 'package:dazzles/office/auth/presentation/login_screen.dart';
 import 'package:dazzles/office/camera/presentation/products_selection_screen.dart';
-import 'package:dazzles/customer/decision_screen.dart';
 import 'package:dazzles/office/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/office/navigation_screen.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';

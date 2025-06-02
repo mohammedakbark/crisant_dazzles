@@ -6,7 +6,7 @@ import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
-import 'package:dazzles/core/components/componets.dart';
+import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
@@ -20,7 +20,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class ProductsPage extends ConsumerStatefulWidget {

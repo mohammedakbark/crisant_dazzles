@@ -9,11 +9,11 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
   @override
   ProductSelectionState build() {
     return ProductSelectionState(
-      enableAddButton: false,
-      errorMessage: null,
-      selectedIds: [],
-      productModel: null,
-    );
+        enableAddButton: false,
+        errorMessage: null,
+        selectedIds: [],
+        productModel: null,
+        isLoading: false);
   }
 
   void add(
@@ -27,13 +27,15 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
       if (model.productPicture != null && showSheet != null) {
         showSheet(
           () {
-            state = state.copyWith(errorMessage: null, enableAddButton: false);
+            state = state.copyWith(
+                isLoading: false, errorMessage: null, enableAddButton: false);
             context.pop();
             FocusScope.of(context).unfocus();
           },
           () {
             state = state.copyWith(
               errorMessage: null,
+              isLoading: false,
               selectedIds: [...state.selectedIds, model],
             );
             context.pop();
@@ -59,23 +61,29 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
       } else {
         state = state.copyWith(
           errorMessage: null,
+          isLoading: false,
           selectedIds: [...state.selectedIds, model],
         );
       }
     } else {
-      state = state.copyWith(errorMessage: "Already exist");
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: "Already exist");
       await disableErrro();
     }
   }
 
   Future<void> disableErrro() async {
     await Future.delayed(Duration(seconds: 2));
-    state = state.copyWith(errorMessage: null);
+    state = state.copyWith(
+      
+      errorMessage: null);
   }
 
   void remove(ProductModel model) {
     final ids = state.selectedIds;
     state = state.copyWith(
+      
       errorMessage: null,
       selectedIds: ids.where((element) => element != model).toList(),
     );
@@ -87,17 +95,26 @@ class SelectAndSearchProductController extends Notifier<ProductSelectionState> {
         enableAddButton: false,
         errorMessage: null,
         productModel: null,
+        isLoading: false
       );
     } else {
+       state = state.copyWith(
+        enableAddButton: false,
+        errorMessage: null,
+        productModel: null,
+        isLoading: true
+      );
       final respnse = await SearchProductByIdRepo.onSearchProductById(query);
       if (respnse['error'] == false) {
         state = state.copyWith(
+          isLoading: false,
           enableAddButton: true,
           errorMessage: null,
           productModel: respnse['data'],
         );
       } else {
         state = state.copyWith(
+          isLoading: false,
           enableAddButton: false,
           errorMessage: respnse['data'],
           productModel: null,

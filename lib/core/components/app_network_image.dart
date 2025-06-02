@@ -4,7 +4,6 @@ import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class AppNetworkImage extends StatelessWidget {
@@ -33,7 +32,7 @@ class AppNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       fit: fit,
-      imageUrl: "${imageFile}?v=$imageVersion" ?? "",
+      imageUrl: "${imageFile}?v=$imageVersion" ,
       placeholder: (context, url) => AppLoading(),
       errorListener: (value) {},
       

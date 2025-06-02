@@ -1,9 +1,8 @@
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
-import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
-import 'package:dazzles/core/components/componets.dart';
+import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';

@@ -59,9 +59,9 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         children: [
           Padding(
               padding: EdgeInsets.only(
-                bottom: Platform.isAndroid
-                    ? ResponsiveHelper.hp * .09
-                    : ResponsiveHelper.hp * .12,
+                bottom:  Platform.isAndroid
+                ? ResponsiveHelper.hp * .09
+                : ResponsiveHelper.hp * .1,
               ),
               child: _pages[index]),
           Positioned(bottom: 0, child: _buildCustomeNav())
@@ -71,46 +71,50 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildCustomeNav() {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.kSecondaryColor,
-      ),
-      width: ResponsiveHelper.wp,
+    return SizedBox(
       height: Platform.isAndroid
-          ? ResponsiveHelper.hp * .09
-          : ResponsiveHelper.hp * .12,
+          ? ResponsiveHelper.hp * .12
+          : ResponsiveHelper.hp * .14,
       child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
+        alignment: AlignmentDirectional.bottomCenter,
         children: [
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 10,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Container(
+            padding: EdgeInsets.only(top: 6),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.kSecondaryColor,
+            ),
+            width: ResponsiveHelper.wp,
+            height: Platform.isAndroid
+                ? ResponsiveHelper.hp * .09
+                : ResponsiveHelper.hp * .1,
+            child: Column(
               children: [
-                _buildIconSet(SolarIconsBold.home, "Home", 0),
-                _buildIconSet(CupertinoIcons.square_list_fill, "Pending", 1),
-                SizedBox(
-                  width: ResponsiveHelper.wp * .1,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildIconSet(SolarIconsBold.home, "Home", 0),
+                    _buildIconSet(CupertinoIcons.square_list_fill, "Pending", 1),
+                    SizedBox(
+                      width: ResponsiveHelper.wp * .1,
+                    ),
+                    _buildIconSet(CupertinoIcons.cube_box_fill, "Products", 3),
+                    _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
+                  ],
                 ),
-                _buildIconSet(CupertinoIcons.cube_box_fill, "Products", 3),
-                _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
               ],
             ),
           ),
           Positioned(
-              top: -30,
+              top: 0,
               child: InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
                 onTap: () async {
-                  log("dddhd");
+                  log("Pressed...");
                   if (ref.watch(navigationController) == 2) {
                     ref.watch(camaraButtonScaleController.notifier).state = 0.9;
                     await Future.delayed(Duration(microseconds: 500));
-                    ref.watch(camaraButtonScaleController.notifier).state  = 1.0;
+                    ref.watch(camaraButtonScaleController.notifier).state = 1.0;
                     await ref
                         .read(cameraControllerProvider.notifier)
                         .takePhoto(context);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
@@ -16,6 +18,7 @@ class SearchProductByIdRepo {
 
     if (response.status == 200) {
       final data = response.data as Map;
+      log(data.toString());
       return {
         "error": false,
         "data": ProductModel.fromJson(data as Map<String, dynamic>),

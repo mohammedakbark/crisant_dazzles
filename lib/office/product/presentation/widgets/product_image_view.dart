@@ -1,10 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
-import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';

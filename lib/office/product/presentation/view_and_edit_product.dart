@@ -70,7 +70,7 @@ class _ViewAndEditProductScreenState
                       Hero(
                         tag: widget.productId.toString(),
                         child: AppNetworkImage(
-                             errorIcon: Image.asset(AppImages.defaultImage),
+                            errorIcon: Image.asset(AppImages.defaultImage),
                             fit: BoxFit.cover,
                             imageVersion: imageVersion,
                             imageFile: ApiConstants.imageBaseUrl +
@@ -121,21 +121,29 @@ class _ViewAndEditProductScreenState
                 AppSpacer(
                   hp: .01,
                 ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: ResponsiveHelper.wp,
-                  decoration: BoxDecoration(
-                    color: AppColors.kBorderColor.withAlpha(10),
-                  ),
-                  child: Text(
-                    model.productDescription,
-                    style: AppStyle.smallStyle(
-                        fontSize: ResponsiveHelper.fontSmall),
-                  ),
-                ),
-                AppSpacer(
-                  hp: .02,
-                ),
+                model.productDescription != null
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+
+                            padding: EdgeInsets.all(10),
+                            width: ResponsiveHelper.wp,
+                            decoration: BoxDecoration(
+                              color: AppColors.kBorderColor.withAlpha(10),
+                            ),
+                            child: Text(
+                              model.productDescription!,
+                              style: AppStyle.smallStyle(
+                                  fontSize: ResponsiveHelper.fontSmall),
+                            ),
+                          ),
+                          AppSpacer(
+                            hp: .02,
+                          ),
+                        ],
+                      )
+                    : SizedBox(),
 
                 // PRODUCT DETAILS
                 Text(

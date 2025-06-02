@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
+import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
-import 'package:dazzles/core/components/componets.dart';
+import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -270,7 +271,7 @@ class _CopyMoreProdutcsScreenState
                 errorText: productSelectionState.errorMessage,
                 errorStyle: AppStyle.smallStyle(color: AppColors.kErrorPrimary),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                hintText: "Enter product id or scan QRcode",
+                hintText: "Search by product id.",
                 hintStyle: AppStyle.normalStyle(color: AppColors.kBorderColor),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.kBorderColor),
@@ -290,7 +291,7 @@ class _CopyMoreProdutcsScreenState
                       ? AppColors.kErrorPrimary
                       : AppColors.kBorderColor,
                 ),
-                suffixIcon: productSelectionState.enableAddButton &&
+                suffixIcon: !productSelectionState.enableAddButton&&productSelectionState.isLoading?ZoomIn(child: CircularProgressIndicator.adaptive()):productSelectionState.enableAddButton &&
                         productSelectionState.productModel != null
                     ? ZoomIn(
                         child: InkWell(
