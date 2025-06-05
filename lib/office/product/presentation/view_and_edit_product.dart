@@ -32,7 +32,7 @@ class ViewAndEditProductScreen extends ConsumerStatefulWidget {
 
 class _ViewAndEditProductScreenState
     extends ConsumerState<ViewAndEditProductScreen> {
-  final imageVersion = DateTime.now().toIso8601String();
+  final imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
   @override
   Widget build(
     BuildContext context,
@@ -123,10 +123,9 @@ class _ViewAndEditProductScreenState
                 ),
                 model.productDescription != null
                     ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-
                             padding: EdgeInsets.all(10),
                             width: ResponsiveHelper.wp,
                             decoration: BoxDecoration(
@@ -146,7 +145,7 @@ class _ViewAndEditProductScreenState
                     : SizedBox(),
 
                 // PRODUCT DETAILS
-               
+
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.kBorderColor.withAlpha(10),

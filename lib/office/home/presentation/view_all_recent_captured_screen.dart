@@ -34,6 +34,7 @@ class _ViewAllRecentCapturedScreenState
     });
   }
 
+  final imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
   @override
   Widget build(BuildContext context) {
     final recentCapturedController = ref.watch(
@@ -93,7 +94,8 @@ class _ViewAllRecentCapturedScreenState
                             Hero(
                               tag: data[index].productId.toString(),
                               child: AppNetworkImage(
-                                   errorIcon: Image.asset(AppImages.defaultImage),
+                                imageVersion: imageVersion,
+                                errorIcon: Image.asset(AppImages.defaultImage),
                                 fit: BoxFit.cover,
                                 imageFile: ApiConstants.imageBaseUrl +
                                     data[index].productPicture,
