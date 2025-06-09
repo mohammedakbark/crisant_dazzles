@@ -37,9 +37,7 @@ class _ViewAllRecentCapturedScreenState
   final imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
   @override
   Widget build(BuildContext context) {
-    final recentCapturedController = ref.watch(
-      recntlyCapturedControllerProvider,
-    );
+    // final recentCapturedController = ;
     return Scaffold(
       appBar: AppBar(
         leading: AppBackButton(),
@@ -50,7 +48,9 @@ class _ViewAllRecentCapturedScreenState
           return ref.refresh(recntlyCapturedControllerProvider);
         },
         child: BuildStateManageComponent(
-          stateController: recentCapturedController,
+          stateController: ref.watch(
+            recntlyCapturedControllerProvider,
+          ),
           errorWidget: (p0, p1) => AppErrorView(
             error: p0.toString(),
             onRetry: () {
@@ -95,7 +95,7 @@ class _ViewAllRecentCapturedScreenState
                               tag: data[index].productId.toString(),
                               child: AppNetworkImage(
                                 imageVersion: imageVersion,
-                                errorIcon: Image.asset(AppImages.defaultImage),
+                                // errorIcon: Image.asset(AppImages.defaultImage),
                                 fit: BoxFit.cover,
                                 imageFile: ApiConstants.imageBaseUrl +
                                     data[index].productPicture,

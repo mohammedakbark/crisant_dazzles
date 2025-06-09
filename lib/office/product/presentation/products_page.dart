@@ -197,7 +197,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                         tag: product.id.toString(),
                         child: AppNetworkImage(
 
-                           errorIcon: Image.asset(AppImages.defaultImage),
+                          //  errorIcon: Image.asset(AppImages.defaultImage),
                         
                           imageVersion: imageVersion,
                           imageFile:

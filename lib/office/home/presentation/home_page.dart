@@ -288,7 +288,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   tag: model.recentCaptured[index].productId
                                       .toString(),
                                   child: AppNetworkImage(
-                                       errorIcon: Image.asset(AppImages.defaultImage),
+                                      //  errorIcon: Image.asset(AppImages.defaultImage),
                                     imageVersion: imageVersion,
                                     fit: BoxFit.cover,
                                     imageFile: ApiConstants.imageBaseUrl +

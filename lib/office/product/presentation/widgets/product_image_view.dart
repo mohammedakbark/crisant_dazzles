@@ -19,6 +19,7 @@ class ImageViewScreen extends ConsumerStatefulWidget {
   final String heroTag;
   final ProductModel? productModel;
   final bool enableEditButton;
+
   const ImageViewScreen({
     super.key,
     required this.heroTag,
@@ -34,43 +35,47 @@ class ImageViewScreen extends ConsumerStatefulWidget {
 class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
   File? fileImage;
   String? netWorkImage;
+
+  // Append a version query param to force reload of image
+  final version = DateTime.now().microsecondsSinceEpoch.toString();
+
   @override
   void initState() {
+    super.initState();
     try {
       if (widget.image is File) {
         fileImage = widget.image as File;
-      } else {
+      } else if (widget.image is String) {
         netWorkImage = widget.image as String;
       }
     } catch (e) {
-      log(e.toString());
+      log("Image parsing error: $e");
     }
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading: AppBackButton()),
+      appBar: AppBar(
+        leading: AppBackButton(),
+        // actions: [)],
+      ),
       body: Container(
         alignment: Alignment.center,
         height: ResponsiveHelper.hp * .8,
         child: Center(
           child: PhotoView(
-            errorBuilder: (context, error, stackTrace) =>   Image.asset(AppImages.defaultImage),
-             
+            errorBuilder: (context, error, stackTrace) =>
+                Image.asset(AppImages.defaultImage),
             imageProvider: netWorkImage != null
                 ? CachedNetworkImageProvider(
-                    "${netWorkImage}?v=${DateTime.now().microsecondsSinceEpoch}",
-                    errorListener: (p0) {
-                      log(p0.toString());
-                    },
+                    "${netWorkImage}?v=$version", // ✅ Cache-busting query
                   )
                 : FileImage(fileImage!) as ImageProvider,
             maxScale: 1.0,
             minScale: .1,
             heroAttributes: PhotoViewHeroAttributes(tag: widget.heroTag),
-            loadingBuilder: (context, event) => AppLoading(),
+            loadingBuilder: (context, event) => const AppLoading(),
           ),
         ),
       ),
@@ -94,6 +99,6 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
               ),
             ),
           )
-        : SizedBox();
+        : const SizedBox();
   }
 }
