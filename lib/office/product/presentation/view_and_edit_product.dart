@@ -32,7 +32,18 @@ class ViewAndEditProductScreen extends ConsumerStatefulWidget {
 
 class _ViewAndEditProductScreenState
     extends ConsumerState<ViewAndEditProductScreen> {
-  final imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
+  @override
+  void initState() {
+    Future.microtask(
+      () {
+        ref.invalidate(getProductDataControllerProvider(widget.productId));
+      },
+    );
+    super.initState();
+  }
+
+  final imageVersion = DateTime.timestamp().toString();
+
   @override
   Widget build(
     BuildContext context,
@@ -50,7 +61,6 @@ class _ViewAndEditProductScreenState
         successWidget: (data) {
           final model = data as ProductDataModel;
 
-          log(ApiConstants.imageBaseUrl + model.productPicture);
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +80,8 @@ class _ViewAndEditProductScreenState
                       Hero(
                         tag: widget.productId.toString(),
                         child: AppNetworkImage(
-                            errorIcon: Image.asset(AppImages.defaultImage),
+
+                            // errorIcon: Image.asset(AppImages.defaultImage),
                             fit: BoxFit.cover,
                             imageVersion: imageVersion,
                             imageFile: ApiConstants.imageBaseUrl +
