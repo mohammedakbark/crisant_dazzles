@@ -1,23 +1,24 @@
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
+import 'package:dazzles/office/auth/data/models/user_role_mode.dart';
 
-class LoginWithMobilenumberRepo {
-  static Future<Map<String, dynamic>> onLoginWithMobile(
-    String mobileNumber,
-    int role,
-  ) async {
+class GetRolesRepo {
+  static Future<Map<String, dynamic>> onGetRoles() async {
     try {
       final response = await ApiConfig.postRequest(
-        endpoint: ApiConstants.loginWithMobile,
+        endpoint: ApiConstants.userRoles,
         header: {"Content-Type": "application/json"},
-        body: {"phone": mobileNumber, "mobileRole": role},
       );
 
       if (response.status == 200) {
-        final data = response.data as Map;
+        final data = response.data as List;
         return {
           "error": false,
-          "data": {"role": data['user']['role'], "id": data['user']['id']},
+          "data": data
+              .map(
+                (e) => UserRoleModel.fromJson(e),
+              )
+              .toList(),
           "message": response.message
         };
       } else {

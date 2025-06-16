@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
+import 'package:dazzles/office/auth/data/models/user_role_mode.dart';
 import 'package:dazzles/office/auth/data/providers/resed_otp_controller.dart';
+import 'package:dazzles/office/auth/data/repo/get_roles_repo.dart';
 import 'package:dazzles/office/auth/data/repo/login_repo.dart';
 import 'package:dazzles/office/auth/data/repo/login_with_mobilenumber_repo.dart';
 import 'package:dazzles/office/auth/data/repo/verify_OTP_repo.dart';
@@ -27,24 +30,25 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
     return null;
   }
 
-  static String mainRole = "Office";
+  static int mainRoleId = 0;
+  static String mainRole="Office";
   Future<void> onLogin(
     String username,
     String password,
-    String selectedRole,
+    UserRoleModel userRole,
     BuildContext context,
   ) async {
     state = const AsyncLoading();
     final response = await LoginRepo.onLogin(username, password);
     showMessageinUI(
-        response['error'] == false ? "Login succeessful" : response['message'],
+        response['error'] == false ? "Login successful" : response['message'],
         response['error']);
     if (response['error'] == false) {
       final local = LocalUserRefModel(
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
-          role: selectedRole);
+          role: userRole.roleName);
       await LoginRefDataBase().setUseretails(local);
       // await FirebasePushNotification().initNotification(context);
       state = AsyncData(response);
@@ -58,7 +62,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   }
 
   Future<Map<String, dynamic>?> loginWithMobileNumber(
-    String role,
+    int role,
     String mobileNumber,
     BuildContext context,
   ) async {
@@ -77,7 +81,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   }
 
   Future<void> resendOTP(
-    String role,
+    int role,
     String mobileNumber,
     BuildContext context,
   ) async {
@@ -108,7 +112,6 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
-          
           role: role);
       await LoginRefDataBase().setUseretails(local);
       await FirebasePushNotification().initNotification(context);

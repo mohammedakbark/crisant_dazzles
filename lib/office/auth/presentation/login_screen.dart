@@ -11,6 +11,8 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/core/utils/validators.dart';
+import 'package:dazzles/office/auth/data/models/user_role_mode.dart';
+import 'package:dazzles/office/auth/data/providers/get_user_role_controller.dart';
 import 'package:dazzles/office/auth/data/providers/login_controller.dart';
 import 'package:dazzles/office/auth/data/providers/resed_otp_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,8 +29,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  static String initialValue = "Office";
-
   final _userNameController = TextEditingController();
 
   final _passwordController = TextEditingController();
@@ -40,22 +40,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _otpFormKey = GlobalKey<FormState>();
 
-  final team = [
-    'Office',
-    'Sales',
-    'Support',
-    'Supervisor',
-    'Stylist',
-    'Catalyst',
-    'Tailor',
-    'Master'
-  ];
+  // final team = [
+  //   'Office',
+  //   'Sales',
+  //   'Support',
+  //   'Supervisor',
+  //   'Stylist',
+  //   'Catalyst',
+  //   'Tailor',
+  //   'Master'
+  // ];
+  UserRoleModel selectedRoleModel =
+      UserRoleModel(roleId: 0, roleName: "Office");
 
   void _onChangeRole(
-    value,
+    UserRoleModel value,
   ) {
-    initialValue = value!;
-    if (initialValue == LoginController.mainRole) {
+    selectedRoleModel = value;
+    if (selectedRoleModel.roleId == LoginController.mainRoleId) {
       ref.watch(mobileLoginControllerProvider.notifier).state = false;
     } else {
       ref.watch(mobileLoginControllerProvider.notifier).state = true;
@@ -70,7 +72,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.read(loginControllerProvider.notifier).onLogin(
           _userNameController.text.trim(),
           _passwordController.text.trim(),
-          initialValue,
+          selectedRoleModel,
           context,
         );
   }
@@ -81,7 +83,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   ) async {
     final response =
         await ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
-              initialValue,
+              selectedRoleModel.roleId,
               _mobileNumberController.text.trim(),
               context,
             );
@@ -115,7 +117,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     log("RESEND OTP TRIGGERD");
     ref.read(resendOtpControllerProvider.notifier).startTimer();
     await ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
-          initialValue,
+         selectedRoleModel.roleId,
           _mobileNumberController.text.trim(),
           context,
         );
@@ -169,64 +171,72 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   AppSpacer(hp: .15),
-                  DropdownButtonFormField(
-                      value: initialValue,
-                      decoration: InputDecoration(
-                        errorStyle: AppStyle.mediumStyle(
-                            color: AppColors.kErrorPrimary),
-                        hintStyle: AppStyle.mediumStyle(
-                          color:
-                              // hintColor ??
-                              AppColors.kTextPrimaryColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        suffixIconColor: AppColors.kWhite,
-                        prefixIconColor: AppColors.kWhite,
-                        fillColor: AppColors.kBgColor,
-                        filled: true,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color:
-                                // borderColor ??
-                                AppColors.kPrimaryColor,
+                  BuildStateManageComponent(
+                    stateController: ref.watch(userRoleControllerProvider),
+                    errorWidget: (p0, p1) => SizedBox.shrink(),
+                    successWidget: (data) {
+                      final listOfRole = data as List<UserRoleModel>;
+                      return DropdownButtonFormField<UserRoleModel>(
+                          value: selectedRoleModel,
+                          decoration: InputDecoration(
+                            errorStyle: AppStyle.mediumStyle(
+                                color: AppColors.kErrorPrimary),
+                            hintStyle: AppStyle.mediumStyle(
+                              color:
+                                  // hintColor ??
+                                  AppColors.kTextPrimaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            suffixIconColor: AppColors.kWhite,
+                            prefixIconColor: AppColors.kWhite,
+                            fillColor: AppColors.kBgColor,
+                            filled: true,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color:
+                                    // borderColor ??
+                                    AppColors.kPrimaryColor,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                ResponsiveHelper.borderRadiusSmall,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color:
+                                    // borderColor ??
+                                    AppColors.kPrimaryColor,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                ResponsiveHelper.borderRadiusSmall,
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AppColors.kErrorPrimary),
+                              borderRadius: BorderRadius.circular(
+                                ResponsiveHelper.borderRadiusSmall,
+                              ),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AppColors.kErrorPrimary),
+                              borderRadius: BorderRadius.circular(
+                                ResponsiveHelper.borderRadiusSmall,
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(
-                            ResponsiveHelper.borderRadiusSmall,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color:
-                                // borderColor ??
-                                AppColors.kPrimaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            ResponsiveHelper.borderRadiusSmall,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColors.kErrorPrimary),
-                          borderRadius: BorderRadius.circular(
-                            ResponsiveHelper.borderRadiusSmall,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColors.kErrorPrimary),
-                          borderRadius: BorderRadius.circular(
-                            ResponsiveHelper.borderRadiusSmall,
-                          ),
-                        ),
-                      ),
-                      items: team
-                          .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e)),
-                          )
-                          .toList(),
-                      onChanged: (value) => _onChangeRole(
-                            value,
-                          )),
+                          items: listOfRole
+                              .map(
+                                (e) => DropdownMenuItem(
+                                    value: e, child: Text(e.roleName)),
+                              )
+                              .toList(),
+                          onChanged: (value) => _onChangeRole(
+                                value!,
+                              ));
+                    },
+                  ),
                   AppSpacer(hp: .02),
 //  TEXTFORMFIELD
                   isMobileNumberLogin
@@ -368,8 +378,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                               AppSpacer(hp: .02),
                               Pinput(
-                                errorTextStyle: AppStyle.mediumStyle(color: AppColors.kErrorPrimary),
-                                validator: (value) => AppValidator.requiredValidator(value),
+                                errorTextStyle: AppStyle.mediumStyle(
+                                    color: AppColors.kErrorPrimary),
+                                validator: (value) =>
+                                    AppValidator.requiredValidator(value),
                                 keyboardType: TextInputType.number,
                                 length: 6,
                                 controller: _pinputController,
@@ -387,7 +399,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     .watch(resendOtpControllerProvider)
                                     .value!["start"]
                                     .toString();
-                          
+
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -463,20 +475,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _errorWidgetBuilder(WidgetRef ref) {
     return ref.watch(loginControllerProvider.notifier).showMessage
         ? Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Text(
-            textAlign: TextAlign.start,
-            ref.watch(loginControllerProvider.notifier).message ?? '',
-            style: AppStyle.boldStyle(
-                color:
-                    ref.watch(loginControllerProvider.notifier).isError ==
-                            true
-                        ? AppColors.kErrorPrimary
-                        : AppColors.kGreen),
-          ),
-        ),)
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(
+                textAlign: TextAlign.start,
+                ref.watch(loginControllerProvider.notifier).message ?? '',
+                style: AppStyle.boldStyle(
+                    color:
+                        ref.watch(loginControllerProvider.notifier).isError ==
+                                true
+                            ? AppColors.kErrorPrimary
+                            : AppColors.kGreen),
+              ),
+            ),
+          )
         : SizedBox();
   }
 }
