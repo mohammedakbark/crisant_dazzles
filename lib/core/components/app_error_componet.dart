@@ -96,26 +96,31 @@ class AppErrorView extends StatelessWidget {
                       onPressed: isTokenExpire
                           ? () => ProfilePage.logout(context)
                           : onRetry,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        textDirection: isTokenExpire ? TextDirection.rtl : null,
-                        children: [
-                          Text(
-                            isTokenExpire ? "Logout" : "Try again",
-                            style: AppStyle.boldStyle(
-                              color: AppColors.kTextPrimaryColor,
-                              fontSize: ResponsiveHelper.isTablet()
-                                  ? ResponsiveHelper.fontSmall
-                                  : null,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                            ResponsiveHelper.isTablet() ? 20 : 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          textDirection:
+                              isTokenExpire ? TextDirection.rtl : null,
+                          children: [
+                            Text(
+                              isTokenExpire ? "Logout" : "Try again",
+                              style: AppStyle.boldStyle(
+                                color: AppColors.kPrimaryColor,
+                                fontSize: ResponsiveHelper.isTablet()
+                                    ? ResponsiveHelper.fontSmall
+                                    : null,
+                              ),
                             ),
-                          ),
-                          AppSpacer(wp: .01),
-                          Icon(
-                              size: ResponsiveHelper.isTablet() ? 40 : null,
-                              isTokenExpire
-                                  ? SolarIconsOutline.logout
-                                  : Icons.refresh),
-                        ],
+                            AppSpacer(wp: .01),
+                            Icon(
+                                size: ResponsiveHelper.isTablet() ? 40 : null,
+                                isTokenExpire
+                                    ? SolarIconsOutline.logout
+                                    : Icons.refresh),
+                          ],
+                        ),
                       ),
                     ),
                   ],

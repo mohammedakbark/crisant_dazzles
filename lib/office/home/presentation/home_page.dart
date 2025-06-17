@@ -161,16 +161,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                 color: AppColors.kPrimaryColor,
               ),
             ),
-            AppSpacer(hp: .01),
-            Expanded(
-              child: Text(
-                  // overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                data,
-                style: AppStyle.mediumStyle(
-                    fontSize: isTab ? ResponsiveHelper.fontExtraSmall : null,
-                    color: AppColors.kPrimaryColor),
-              ),
+            // AppSpacer(hp: .01),
+            Text(
+              // overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              data,
+              style: AppStyle.mediumStyle(
+                  fontSize: isTab ? ResponsiveHelper.fontExtraSmall : null,
+                  color: AppColors.kPrimaryColor),
             ),
           ],
         ),
@@ -273,7 +271,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                     borderRadius: BorderRadius.circular(10),
                     color: AppColors.kBorderColor.withAlpha(10)),
                 child: model.recentCaptured.isEmpty
-                    ? AppErrorView(error: "Nothing is captured recently")
+                    ? AppErrorView(
+
+                        error:
+                            "No new data found. Try refreshing or uploading.",
+                        onRetry: () => ref.refresh(dashboardControllerProvider),
+                      )
                     : GridView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.all(0),
@@ -281,7 +284,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 20,
-                          crossAxisCount: ResponsiveHelper.isTablet() ? 3 : 2,
+                          crossAxisCount:  2,
                         ),
                         itemCount: model.recentCaptured.length,
                         itemBuilder: (context, index) => InkWell(
@@ -305,7 +308,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     fit: StackFit.expand,
                                     children: [
                                       Hero(
-                                        tag: model.recentCaptured[index].productId
+                                        tag: model
+                                            .recentCaptured[index].productId
                                             .toString(),
                                         child: AppNetworkImage(
                                           //  errorIcon: Image.asset(AppImages.defaultImage),
@@ -321,48 +325,43 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           top: 10,
                                           child: buildIdBadge(
                                               context,
-                                              model.recentCaptured[index].productId
+                                              model.recentCaptured[index]
+                                                  .productId
                                                   .toString(),
                                               enableCopy: true)),
-                                      
                                     ],
                                   ),
                                 ),
                                 Container(
-                                       width: ResponsiveHelper.wp,
-                                        padding: EdgeInsets.only(
-                                            left: 15,
-                                            right: 15,
-                                            top: 3,
-                                            bottom: 3),
-                                        decoration: BoxDecoration(
-                                            color: AppColors.kBgColor),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              model.recentCaptured[index]
-                                                  .productName,
-                                              style: AppStyle.mediumStyle(
-                                                  fontSize:
-                                                      ResponsiveHelper.isTablet()
-                                                          ? ResponsiveHelper
-                                                              .fontExtraSmall
-                                                          : null,
-                                                  color: AppColors.kWhite),
-                                            ),
-                                            Icon(
-                                              CupertinoIcons.arrow_right_circle,
-                                              color: AppColors.kWhite,
-                                              size: ResponsiveHelper.isTablet()
-                                                  ? 30
-                                                  : 18,
-                                            )
-                                          ],
-                                        ),
+                                  width: ResponsiveHelper.wp,
+                                  padding: EdgeInsets.only(
+                                      left: 15, right: 15, top: 3, bottom: 3),
+                                  decoration:
+                                      BoxDecoration(color: AppColors.kBgColor),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        model.recentCaptured[index].productName,
+                                        style: AppStyle.mediumStyle(
+                                            fontSize:
+                                                ResponsiveHelper.isTablet()
+                                                    ? ResponsiveHelper
+                                                        .fontExtraSmall
+                                                    : null,
+                                            color: AppColors.kWhite),
+                                      ),
+                                      Icon(
+                                        CupertinoIcons.arrow_right_circle,
+                                        color: AppColors.kWhite,
+                                        size: ResponsiveHelper.isTablet()
+                                            ? 30
+                                            : 18,
                                       )
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),

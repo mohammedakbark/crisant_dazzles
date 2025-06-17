@@ -709,9 +709,9 @@ class _CopyMoreProdutcsScreenState
                               ),
                             ),
                             child: Text("Cancel",
-                                style: AppStyle.boldStyle(
+                                style: AppStyle.mediumStyle(
                                     fontSize: isTab
-                                        ? ResponsiveHelper.fontSmall
+                                        ? ResponsiveHelper.fontExtraSmall
                                         : null)),
                           ),
                         ),
@@ -734,9 +734,9 @@ class _CopyMoreProdutcsScreenState
                             ),
                             onPressed: () => onReplace(),
                             child: Text("Replace",
-                                style: AppStyle.boldStyle(
+                                style: AppStyle.mediumStyle(
                                     fontSize: isTab
-                                        ? ResponsiveHelper.fontSmall
+                                        ? ResponsiveHelper.fontExtraSmall
                                         : null)),
                           ),
                         ),

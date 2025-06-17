@@ -4,6 +4,7 @@ class ResponsiveHelper {
   static late double _screenWidth;
   static late double _screenHight;
   static late double _shortSide;
+  // static late Orientation _orientation;
 
   static get hp => _screenHight;
   static get wp => _screenWidth;
@@ -13,6 +14,7 @@ class ResponsiveHelper {
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHight = MediaQuery.of(context).size.height;
     _shortSide = MediaQuery.of(context).size.shortestSide;
+    // _orientation = MediaQuery.of(context).orientation;
   }
 
   // Padding values (adjusting based on screen width)

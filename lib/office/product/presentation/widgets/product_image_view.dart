@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_loading.dart';
+import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -65,8 +66,20 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
         height: ResponsiveHelper.hp * .8,
         child: Center(
           child: PhotoView(
-            errorBuilder: (context, error, stackTrace) =>
-                Image.asset(AppImages.defaultImage),
+            errorBuilder: (context, error, stackTrace) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  size: ResponsiveHelper.isTablet() ? 60 : null,
+                  Icons.broken_image_rounded,
+                  color: AppColors.kFillColor,
+                ),
+                Text(
+                  "Image not found!",
+                  style: AppStyle.boldStyle(color: AppColors.kFillColor),
+                )
+              ],
+            ),
             imageProvider: netWorkImage != null
                 ? CachedNetworkImageProvider(
                     "${netWorkImage}?v=$version", // ✅ Cache-busting query

@@ -71,6 +71,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildCustomeNav() {
+    final isTab = ResponsiveHelper.isTablet();
     return SizedBox(
       height: Platform.isAndroid
           ? ResponsiveHelper.hp * .12
@@ -128,10 +129,10 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   duration: const Duration(milliseconds: 150),
                   curve: Curves.easeOut,
                   child: Container(
-                    width: ResponsiveHelper.isTablet()
+                    width: isTab
                         ? ResponsiveHelper.wp * .3
                         : ResponsiveHelper.wp * .3,
-                    height: ResponsiveHelper.isTablet()
+                    height: isTab
                         ? ResponsiveHelper.wp * .13
                         : ResponsiveHelper.wp * .18,
                     decoration: BoxDecoration(
@@ -164,7 +165,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                                   : AppColors.kWhite,
                           shape: BoxShape.circle),
                       child: Icon(
-                        size: ResponsiveHelper.isTablet()?40:null,
+                        size: isTab ? 40 : null,
                         CupertinoIcons.camera_fill,
                         color:
                             ref.watch(navigationController.notifier).state == 2
@@ -181,6 +182,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildIconSet(IconData icon, String label, int index) {
+    final isTab = ResponsiveHelper.isTablet();
     bool isSelected = ref.read(navigationController.notifier).state == index;
     return IconButton(
         onPressed: () {
@@ -193,7 +195,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                 ? _buildBadge(
                     Icon(
                       icon,
-                      size: ResponsiveHelper.isTablet() ? 50 : null,
+                      size: isTab ? 50 : null,
                       color: isSelected
                           ? AppColors.kPrimaryColor
                           : AppColors.kWhite,
@@ -201,7 +203,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   )
                 : Icon(
                     icon,
-                    size: ResponsiveHelper.isTablet() ? 50 : null,
+                    size: isTab ? 50 : null,
                     color:
                         isSelected ? AppColors.kPrimaryColor : AppColors.kWhite,
                   ),
@@ -217,6 +219,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   }
 
   Widget _buildBadge(Widget child) {
+    final isTab = ResponsiveHelper.isTablet();
+
     int? data = 0;
     try {
       data = ref.watch(dashboardControllerProvider).value?.imagePending;
@@ -228,8 +232,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
       badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent),
       badgeContent: Text(
         data != null ? data.toString() : "0",
-        style: AppStyle.mediumStyle(
-            fontSize: ResponsiveHelper.isTablet() ? 25 : 8),
+        style: AppStyle.mediumStyle(fontSize: isTab ? 25 : 8),
       ),
       position: badges.BadgePosition.topEnd(end: -10, top: -8),
       badgeAnimation: badges.BadgeAnimation.slide(

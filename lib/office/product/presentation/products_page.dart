@@ -65,7 +65,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
   Widget build(BuildContext context) {
     final productsState = ref.watch(allProductControllerProvider);
     final productsController = ref.read(allProductControllerProvider.notifier);
-
+    final isTab = ResponsiveHelper.isTablet();
     return AppMargin(
       child: Column(
         children: [
@@ -81,17 +81,16 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
             },
             style: AppStyle.normalStyle(
                 color: AppColors.kPrimaryColor,
-                fontSize: ResponsiveHelper.isTablet()
-                    ? ResponsiveHelper.fontSmall
-                    : null),
+                fontSize: isTab ? ResponsiveHelper.fontSmall : null),
             decoration: InputDecoration(
               suffixIcon: productsController.searchContoller.text.isNotEmpty
                   ? IconButton(
                       icon: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: isTab ? 20 : 8),
                         child: Icon(
                           Icons.clear,
-                          size: ResponsiveHelper.isTablet() ? 40 : null,
+                          size: isTab ? 40 : null,
                         ),
                       ),
                       onPressed: () {
@@ -100,14 +99,11 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                     )
                   : null,
               contentPadding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: ResponsiveHelper.isTablet() ? 20 : 0),
+                  horizontal: 20, vertical: isTab ? 20 : 0),
               hintText: "Product Search",
               hintStyle: AppStyle.normalStyle(
                 color: AppColors.kPrimaryColor,
-                fontSize: ResponsiveHelper.isTablet()
-                    ? ResponsiveHelper.fontSmall
-                    : null,
+                fontSize: isTab ? ResponsiveHelper.fontSmall : null,
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.kBgColor),
@@ -124,9 +120,9 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                 borderRadius: BorderRadius.circular(50),
               ),
               prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding:   EdgeInsets.only(left: isTab ? 20 : 8,right:isTab? 10:0),
                 child: Icon(
-                  size: ResponsiveHelper.isTablet() ? 40 : null,
+                  size: isTab ? 40 : null,
                   SolarIconsOutline.magnifier,
                   color: AppColors.kPrimaryColor,
                 ),
@@ -168,8 +164,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                                 itemCount: products.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      ResponsiveHelper.isTablet() ? 3 : 2,
+                                  crossAxisCount: isTab ? 3 : 2,
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10,
                                 ),

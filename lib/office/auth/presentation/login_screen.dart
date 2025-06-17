@@ -189,139 +189,115 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   AppSpacer(hp: .15),
-                  SizedBox(
-                    child: Column(
-                      children: [
-                        BuildStateManageComponent(
-                          stateController:
-                              ref.watch(userRoleControllerProvider),
-                          errorWidget: (p0, p1) => SizedBox.shrink(),
-                          successWidget: (data) {
-                            final listOfRole = data as List<UserRoleModel>;
+                  Column(
+                    children: [
+                      BuildStateManageComponent(
+                        stateController: ref.watch(userRoleControllerProvider),
+                        errorWidget: (p0, p1) => SizedBox.shrink(),
+                        successWidget: (data) {
+                          final listOfRole = data as List<UserRoleModel>;
 
-                            return DropdownButtonFormField<UserRoleModel>(
-                                iconSize: isTab ? 50 : 24,
-                                hint: Text(
-                                  selectedRoleModel.roleName,
-                                  style: AppStyle.mediumStyle(
-                                      fontSize: ResponsiveHelper.isTablet()
-                                          ? ResponsiveHelper.fontExtraSmall
-                                          : null),
+                          return DropdownButtonFormField<UserRoleModel>(
+                              iconSize: isTab ? 50 : 24,
+                              hint: Text(
+                                selectedRoleModel.roleName,
+                                style: AppStyle.mediumStyle(
+                                    fontSize: ResponsiveHelper.isTablet()
+                                        ? ResponsiveHelper.fontExtraSmall
+                                        : null),
+                              ),
+                              decoration: InputDecoration(
+                                errorStyle: AppStyle.mediumStyle(
+                                    fontSize: ResponsiveHelper.isTablet()
+                                        ? ResponsiveHelper.fontExtraSmall
+                                        : null,
+                                    color: AppColors.kErrorPrimary),
+                                suffixIconColor: AppColors.kWhite,
+                                prefixIconColor: AppColors.kWhite,
+                                fillColor: AppColors.kBgColor,
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.kPrimaryColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    ResponsiveHelper.borderRadiusSmall,
+                                  ),
                                 ),
-                                decoration: InputDecoration(
-                                  // contentPadding: ResponsiveHelper.isTablet()
-                                  //     ? EdgeInsets.symmetric(
-                                  //         horizontal: 15, vertical: 25)
-                                  //     : null,
-                                  errorStyle: AppStyle.mediumStyle(
-                                      fontSize: ResponsiveHelper.isTablet()
-                                          ? ResponsiveHelper.fontExtraSmall
-                                          : null,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.kPrimaryColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    ResponsiveHelper.borderRadiusSmall,
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
                                       color: AppColors.kErrorPrimary),
-                                  // hintStyle: AppStyle.mediumStyle(
-                                  //   fontSize: ResponsiveHelper.isTablet()
-                                  //       ? ResponsiveHelper.fontExtraSmall
-                                  //       : null,
-                                  //   color:
-                                  //       // hintColor ??
-                                  //       AppColors.kTextPrimaryColor,
-                                  //   fontWeight: FontWeight.w500,
-                                  // ),
-                                  suffixIconColor: AppColors.kWhite,
-                                  prefixIconColor: AppColors.kWhite,
-                                  fillColor: AppColors.kBgColor,
-                                  filled: true,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color:
-                                          // borderColor ??
-                                          AppColors.kPrimaryColor,
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                      ResponsiveHelper.borderRadiusSmall,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color:
-                                          // borderColor ??
-                                          AppColors.kPrimaryColor,
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                      ResponsiveHelper.borderRadiusSmall,
-                                    ),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppColors.kErrorPrimary),
-                                    borderRadius: BorderRadius.circular(
-                                      ResponsiveHelper.borderRadiusSmall,
-                                    ),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppColors.kErrorPrimary),
-                                    borderRadius: BorderRadius.circular(
-                                      ResponsiveHelper.borderRadiusSmall,
-                                    ),
+                                  borderRadius: BorderRadius.circular(
+                                    ResponsiveHelper.borderRadiusSmall,
                                   ),
                                 ),
-                                // itemHeight: 100,
-                                items: listOfRole
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(
-                                          e.roleName,
-                                          style: AppStyle.mediumStyle(
-                                            fontSize:
-                                                ResponsiveHelper.isTablet()
-                                                    ? ResponsiveHelper
-                                                        .fontExtraSmall
-                                                    : null,
-                                          ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: AppColors.kErrorPrimary),
+                                  borderRadius: BorderRadius.circular(
+                                    ResponsiveHelper.borderRadiusSmall,
+                                  ),
+                                ),
+                              ),
+                              items: listOfRole
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(
+                                        e.roleName,
+                                        style: AppStyle.mediumStyle(
+                                          fontSize: ResponsiveHelper.isTablet()
+                                              ? ResponsiveHelper.fontExtraSmall
+                                              : null,
                                         ),
                                       ),
-                                    )
-                                    .toList(),
-                                onChanged: (value) => _onChangeRole(
-                                      value!,
-                                    ));
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) => _onChangeRole(
+                                    value!,
+                                  ));
+                        },
+                      ),
+                      AppSpacer(hp: .02),
+                      //  TEXTFORMFIELD
+                      isMobileNumberLogin
+                          ? _buildMobileLoginUI()
+                          : _buildUserNameLoginUI(),
+                      _errorWidgetBuilder(ref),
+                      AppSpacer(
+                        hp: .03,
+                      ),
+                      BuildStateManageComponent(
+                        stateController: ref.watch(loginControllerProvider),
+                        successWidget: (data) => AppButton(
+                          title: isMobileNumberLogin ? "GET OTP" : "Login",
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              if (isMobileNumberLogin) {
+                                // mobile number with OTP
+                                _genarateOTPforLogin(
+                                  context,
+                                );
+                              } else {
+                                // user name with password
+                                _loginWithPassword(
+                                  context,
+                                );
+                              }
+                            }
                           },
                         ),
-                        AppSpacer(hp: .02),
-                        //  TEXTFORMFIELD
-                        isMobileNumberLogin
-                            ? _buildMobileLoginUI()
-                            : _buildUserNameLoginUI(),
-                        _errorWidgetBuilder(ref),
-                        AppSpacer(
-                          hp: .03,
-                        ),
-                        BuildStateManageComponent(
-                          stateController: ref.watch(loginControllerProvider),
-                          successWidget: (data) => AppButton(
-                            title: isMobileNumberLogin ? "GET OTP" : "Login",
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                if (isMobileNumberLogin) {
-                                  // mobile number with OTP
-                                  _genarateOTPforLogin(
-                                    context,
-                                  );
-                                
-                                } else {
-                                  // user name with password
-                                  _loginWithPassword(
-                                    context,
-                                  );
-                                }
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -367,9 +343,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           .state = false;
                     }
                   },
-                  child: Icon(ref.watch(passwordObsecureControllerProvider)
-                      ? CupertinoIcons.eye
-                      : CupertinoIcons.eye_slash)),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: ResponsiveHelper.isTablet() ? 20 : 10,
+                    ),
+                    child: Icon(
+                        size: ResponsiveHelper.isTablet() ? 40 : null,
+                        ref.watch(passwordObsecureControllerProvider)
+                            ? CupertinoIcons.eye
+                            : CupertinoIcons.eye_slash),
+                  )),
               controller: _passwordController,
               hintText: "Password",
               validator: AppValidator.requiredValidator,
@@ -431,13 +414,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                  
                                     style: AppStyle.normalStyle(
                                         fontSize: isTab ? 28 : null),
                                     text: "Enter the OTP sent to \n",
                                     children: [
                                       TextSpan(
-                                        
                                           style: AppStyle.largeStyle(
                                               fontSize: isTab ? 28 : null),
                                           text:
@@ -449,7 +430,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 errorTextStyle: AppStyle.mediumStyle(
                                     fontSize: isTab ? 30 : null,
                                     color: AppColors.kErrorPrimary),
-                                
                                 validator: (value) =>
                                     AppValidator.requiredValidator(value),
                                 keyboardType: TextInputType.number,
@@ -523,7 +503,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   final _pinTheme = PinTheme(
-    textStyle: AppStyle.boldStyle(fontSize: ResponsiveHelper.isTablet()?25:null),
+    textStyle:
+        AppStyle.boldStyle(fontSize: ResponsiveHelper.isTablet() ? 25 : null),
     height: ResponsiveHelper.wp / 9,
     width: ResponsiveHelper.wp / 5,
     decoration: BoxDecoration(
@@ -537,9 +518,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   );
 
   final _errorPinThem = PinTheme(
-     textStyle: AppStyle.boldStyle(
-      color: AppColors.kErrorPrimary,
-      fontSize: ResponsiveHelper.isTablet()?25:null),
+    textStyle: AppStyle.boldStyle(
+        color: AppColors.kErrorPrimary,
+        fontSize: ResponsiveHelper.isTablet() ? 25 : null),
     height: ResponsiveHelper.wp / 9,
     width: ResponsiveHelper.wp / 5,
     decoration: BoxDecoration(
