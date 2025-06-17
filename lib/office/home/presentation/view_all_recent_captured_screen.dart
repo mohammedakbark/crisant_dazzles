@@ -40,9 +40,8 @@ class _ViewAllRecentCapturedScreenState
     // final recentCapturedController = ;
     return Scaffold(
       appBar: AppBar(
-        leading: AppBackButton(),
-        title: Text("Recently Captured", style: AppStyle.boldStyle()),
-      ),
+          leading: AppBackButton(),
+          title: AppBarText(title: 'Recently Captured')),
       body: RefreshIndicator.adaptive(
         onRefresh: () async {
           return ref.refresh(recntlyCapturedControllerProvider);
@@ -64,7 +63,7 @@ class _ViewAllRecentCapturedScreenState
                 : GridView.builder(
                     itemCount: data.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: ResponsiveHelper.isTablet() ? 3 : 2,
                     ),
                     itemBuilder: (context, index) => InkWell(
                       onTap: () {
@@ -88,51 +87,93 @@ class _ViewAllRecentCapturedScreenState
                           // border: Border.all(color: AppColors.kPrimaryColor),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Stack(
-                          fit: StackFit.expand,
+                        child: Column(
                           children: [
-                            Hero(
-                              tag: data[index].productId.toString(),
-                              child: AppNetworkImage(
-                                imageVersion: imageVersion,
-                                // errorIcon: Image.asset(AppImages.defaultImage),
-                                fit: BoxFit.cover,
-                                imageFile: ApiConstants.imageBaseUrl +
-                                    data[index].productPicture,
+                            Expanded(
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  Hero(
+                                    tag: data[index].productId.toString(),
+                                    child: AppNetworkImage(
+                                      imageVersion: imageVersion,
+                                      // errorIcon: Image.asset(AppImages.defaultImage),
+                                      fit: BoxFit.cover,
+                                      imageFile: ApiConstants.imageBaseUrl +
+                                          data[index].productPicture,
+                                    ),
+                                  ),
+                                  Positioned(
+                                      left: 10,
+                                      top: 10,
+                                      child: buildIdBadge(context,
+                                          data[index].productId.toString(),
+                                          enableCopy: true)),
+                                  // Positioned(
+                                  //     bottom: 0,
+                                  // child: Container(
+                                  //   // width: ResponsiveHelper.isTablet()
+                                  //   //           ? ResponsiveHelper.wp * .32
+                                  //   //           : ResponsiveHelper.wp * .42,
+                                  //   padding: EdgeInsets.only(
+                                  //       left: 10, right: 10, top: 3, bottom: 3),
+                                  //   decoration:
+                                  //       BoxDecoration(color: AppColors.kBgColor),
+                                  //   child: Row(
+                                  //     mainAxisSize: MainAxisSize.min,
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.spaceBetween,
+                                  //     children: [
+                                  //       Text(
+                                  //         data[index].productName,
+                                  //         style: AppStyle.mediumStyle(
+                                  //             fontSize:
+                                  //                 ResponsiveHelper.isTablet()
+                                  //                     ? ResponsiveHelper
+                                  //                         .fontExtraSmall
+                                  //                     : null,
+                                  //             color: AppColors.kWhite),
+                                  //       ),
+                                  //       Icon(
+                                  //         CupertinoIcons.arrow_right_circle,
+                                  //         color: AppColors.kWhite,
+                                  //         size: ResponsiveHelper.isTablet()
+                                  //             ? 30
+                                  //             : 18,
+                                  //       )
+                                  //     ],
+                                  //   ),
+                                  // ))
+                                ],
                               ),
                             ),
-                            Positioned(
-                                left: 10,
-                                top: 10,
-                                child: buildIdBadge(
-                                    context, data[index].productId.toString(),
-                                    enableCopy: true)),
-                            Positioned(
-                                bottom: 0,
-                                child: Container(
-                                  width: ResponsiveHelper.wp * .45,
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 3, bottom: 3),
-                                  decoration:
-                                      BoxDecoration(color: AppColors.kBgColor),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        data[index].productName,
-                                        style: AppStyle.mediumStyle(
-                                            color: AppColors.kWhite),
-                                      ),
-                                      Icon(
-                                        CupertinoIcons.arrow_right_circle,
-                                        color: AppColors.kWhite,
-                                        size: 18,
-                                      )
-                                    ],
+                            Container(
+                              width: ResponsiveHelper.wp,
+                              padding: EdgeInsets.only(
+                                  left: 10, right: 10, top: 3, bottom: 3),
+                              decoration:
+                                  BoxDecoration(color: AppColors.kBgColor),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    data[index].productName,
+                                    style: AppStyle.mediumStyle(
+                                        fontSize: ResponsiveHelper.isTablet()
+                                            ? ResponsiveHelper.fontExtraSmall
+                                            : null,
+                                        color: AppColors.kWhite),
                                   ),
-                                ))
+                                  Icon(
+                                    CupertinoIcons.arrow_right_circle,
+                                    color: AppColors.kWhite,
+                                    size: ResponsiveHelper.isTablet() ? 30 : 18,
+                                  )
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),

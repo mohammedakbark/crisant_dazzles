@@ -13,6 +13,7 @@ import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/product/data/models/product_model.dart';
 import 'package:dazzles/office/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/office/product/data/providers/product_controller/product_state.dart';
@@ -78,19 +79,36 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                     .onSearchProduct(value);
               });
             },
-            style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
+            style: AppStyle.normalStyle(
+                color: AppColors.kPrimaryColor,
+                fontSize: ResponsiveHelper.isTablet()
+                    ? ResponsiveHelper.fontSmall
+                    : null),
             decoration: InputDecoration(
               suffixIcon: productsController.searchContoller.text.isNotEmpty
                   ? IconButton(
-                      icon: const Icon(Icons.clear),
+                      icon: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(
+                          Icons.clear,
+                          size: ResponsiveHelper.isTablet() ? 40 : null,
+                        ),
+                      ),
                       onPressed: () {
                         return ref.refresh(allProductControllerProvider);
                       },
                     )
                   : null,
-              contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: ResponsiveHelper.isTablet() ? 20 : 0),
               hintText: "Product Search",
-              hintStyle: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
+              hintStyle: AppStyle.normalStyle(
+                color: AppColors.kPrimaryColor,
+                fontSize: ResponsiveHelper.isTablet()
+                    ? ResponsiveHelper.fontSmall
+                    : null,
+              ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.kBgColor),
                 borderRadius: BorderRadius.circular(50),
@@ -105,9 +123,13 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                 borderSide: BorderSide(color: AppColors.kBgColor),
                 borderRadius: BorderRadius.circular(50),
               ),
-              prefixIcon: Icon(
-                SolarIconsOutline.magnifier,
-                color: AppColors.kPrimaryColor,
+              prefixIcon: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(
+                  size: ResponsiveHelper.isTablet() ? 40 : null,
+                  SolarIconsOutline.magnifier,
+                  color: AppColors.kPrimaryColor,
+                ),
               ),
             ),
           ),
@@ -146,7 +168,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                                 itemCount: products.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
+                                  crossAxisCount:
+                                      ResponsiveHelper.isTablet() ? 3 : 2,
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10,
                                 ),
@@ -196,9 +219,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                     child: Hero(
                         tag: product.id.toString(),
                         child: AppNetworkImage(
-
                           //  errorIcon: Image.asset(AppImages.defaultImage),
-                        
+
                           imageVersion: imageVersion,
                           imageFile:
                               "${ApiConstants.imageBaseUrl}${product.productPicture}",
@@ -210,26 +232,44 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(product.category, style: AppStyle.boldStyle()),
-                      AppSpacer(hp: .002,),
+                      Text(product.category,
+                          style: AppStyle.boldStyle(
+                              fontSize: ResponsiveHelper.isTablet()
+                                  ? ResponsiveHelper.fontExtraSmall
+                                  : null)),
+                      AppSpacer(
+                        hp: .002,
+                      ),
                       Container(
                         padding: EdgeInsets.all(4),
                         color: AppColors.kPrimaryColor,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              product.productName,
-                              style: AppStyle.mediumStyle(
-                                color: AppColors.kSecondaryColor,
+                            Expanded(
+                              child: Text(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                product.productName,
+                                style: AppStyle.mediumStyle(
+                                  fontSize: ResponsiveHelper.isTablet()
+                                      ? ResponsiveHelper.fontExtraSmall
+                                      : null,
+                                  color: AppColors.kSecondaryColor,
+                                ),
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      ResponsiveHelper.isTablet() ? 12 : 6),
                               color: AppColors.kBgColor,
                               child: Text(
                                 product.productSize,
-                                style: AppStyle.mediumStyle(),
+                                style: AppStyle.mediumStyle(
+                                    fontSize: ResponsiveHelper.isTablet()
+                                        ? ResponsiveHelper.fontExtraSmall
+                                        : null),
                               ),
                             ),
                           ],
@@ -253,7 +293,10 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                     product.id.toString(),
                     enableCopy: true,
                   ),
-                  Icon(CupertinoIcons.arrow_right_circle)
+                  Icon(
+                    CupertinoIcons.arrow_right_circle,
+                    size: ResponsiveHelper.isTablet() ? 40 : null,
+                  )
                 ],
               )),
         ],

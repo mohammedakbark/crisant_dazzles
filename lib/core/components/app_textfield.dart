@@ -49,36 +49,43 @@ class CustomTextField extends StatelessWidget {
       children: [
         title != null
             ? Column(
-              children: [
-                Text(title!, style: AppStyle.boldStyle()),
-                AppSpacer(hp: .015),
-              ],
-            )
+                children: [
+                  Text(title!, style: AppStyle.boldStyle()),
+                  AppSpacer(hp: .015),
+                ],
+              )
             : SizedBox(),
         TextFormField(
           onTap: onTap,
           maxLines: maxLine ?? 1,
-          textCapitalization:
-              isTextCapital == null
-                  ? TextCapitalization.words
-                  : isTextCapital == true
+          textCapitalization: isTextCapital == null
+              ? TextCapitalization.words
+              : isTextCapital == true
                   ? TextCapitalization.characters
                   : TextCapitalization.none,
-          inputFormatters:
-              maxLenght == null
-                  ? []
-                  : [LengthLimitingTextInputFormatter(maxLenght)],
+          inputFormatters: maxLenght == null
+              ? []
+              : [LengthLimitingTextInputFormatter(maxLenght)],
           validator: validator,
           keyboardType: keyBoardType,
           obscureText: isObsecure ?? false,
           obscuringCharacter: '*',
           controller: controller,
           cursorColor: AppColors.kPrimaryColor,
-          style: AppStyle.mediumStyle(),
+          style: AppStyle.mediumStyle(
+              fontSize: ResponsiveHelper.isTablet()
+                  ? ResponsiveHelper.fontExtraSmall
+                  : null),
           decoration: InputDecoration(
-            
-            errorStyle: AppStyle.mediumStyle(color: AppColors.kErrorPrimary),
+            errorStyle: AppStyle.mediumStyle(
+                color: AppColors.kErrorPrimary,
+                fontSize: ResponsiveHelper.isTablet()
+                    ? ResponsiveHelper.fontExtraSmall
+                    : null),
             hintStyle: AppStyle.mediumStyle(
+               fontSize: ResponsiveHelper.isTablet()
+                  ? ResponsiveHelper.fontExtraSmall
+                  : null,
               color:
                   // hintColor ??
                   AppColors.kTextPrimaryColor,
@@ -91,7 +98,6 @@ class CustomTextField extends StatelessWidget {
             suffixIcon: sufixicon,
             prefixIcon: prefixIcon,
             hintText: hintText,
-
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color:

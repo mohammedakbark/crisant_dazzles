@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/camera/data/providers/camera_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
                                   .read(cameraControllerProvider.notifier)
                                   .pickFromGallery(context),
                               icon: Icon(
+                                size: ResponsiveHelper.isTablet()?50:null,
                                 CupertinoIcons.photo_on_rectangle,
                                 color: AppColors.kWhite,
                               ))

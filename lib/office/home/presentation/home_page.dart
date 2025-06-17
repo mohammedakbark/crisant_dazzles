@@ -67,8 +67,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Search
               InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () =>
-                    ref.read(navigationController.notifier).state = 3,
+                onTap: () => ref.read(navigationController.notifier).state = 3,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     vertical: ResponsiveHelper.paddingSmall,
@@ -85,10 +84,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Text(
                         "Global Search",
                         style: AppStyle.normalStyle(
+                          fontSize: ResponsiveHelper.isTablet()
+                              ? ResponsiveHelper.fontSmall
+                              : null,
                           color: AppColors.kPrimaryColor,
                         ),
                       ),
                       Icon(
+                        size: ResponsiveHelper.isTablet() ? 40 : null,
                         SolarIconsOutline.magnifier,
                         color: AppColors.kPrimaryColor,
                       ),
@@ -96,7 +99,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-        
+
               AppSpacer(hp: .02),
               _buildSuccessState()
               // Grid
@@ -126,47 +129,57 @@ class _HomePageState extends ConsumerState<HomePage> {
     String title,
     String data, {
     required void Function()? onTap,
-  }) =>
-      InkWell(
-        overlayColor: WidgetStatePropertyAll(Colors.transparent),
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
-          decoration: BoxDecoration(
-            color: AppColors.kSecondaryColor,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.kPrimaryColor.withAlpha(30),
-                blurRadius: 1,
-                spreadRadius: 1,
+  }) {
+    final isTab = ResponsiveHelper.isTablet();
+    return InkWell(
+      overlayColor: WidgetStatePropertyAll(Colors.transparent),
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
+        decoration: BoxDecoration(
+          color: AppColors.kSecondaryColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.kPrimaryColor.withAlpha(30),
+              blurRadius: 1,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              title,
+              style: AppStyle.largeStyle(
+                fontSize: isTab
+                    ? ResponsiveHelper.wp * .04
+                    : ResponsiveHelper.wp * .09,
+                color: AppColors.kPrimaryColor,
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                title,
-                style: AppStyle.largeStyle(
-                  fontSize: ResponsiveHelper.wp * .09,
-                  color: AppColors.kPrimaryColor,
-                ),
-              ),
-              AppSpacer(hp: .01),
-              Text(
+            ),
+            AppSpacer(hp: .01),
+            Expanded(
+              child: Text(
+                  // overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 data,
-                style: AppStyle.mediumStyle(color: AppColors.kPrimaryColor),
+                style: AppStyle.mediumStyle(
+                    fontSize: isTab ? ResponsiveHelper.fontExtraSmall : null,
+                    color: AppColors.kPrimaryColor),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildSuccessState() {
+    final isTab = ResponsiveHelper.isTablet();
     final dashboardController = ref.watch(dashboardControllerProvider);
 
     if (dashboardController.hasError) {
@@ -190,7 +203,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               mainAxisSpacing: 20,
               crossAxisSpacing: 20,
-              crossAxisCount: 2,
+              crossAxisCount: isTab ? 4 : 2,
             ),
             itemCount: 4,
             itemBuilder: (context, index) => _buildGridTile(
@@ -207,7 +220,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     }
 
                   case 2:
-                   
                     return;
 
                   case 3:
@@ -226,7 +238,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Recently Captured", style: AppStyle.largeStyle()),
+            Text("Recently Captured",
+                style: AppStyle.largeStyle(
+                  fontSize: ResponsiveHelper.isTablet()
+                      ? ResponsiveHelper.fontSmall
+                      : null,
+                )),
             TextButton(
               onPressed: () {
                 context.push(recentlyCaptured);
@@ -264,7 +281,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 20,
-                          crossAxisCount: 2,
+                          crossAxisCount: ResponsiveHelper.isTablet() ? 3 : 2,
                         ),
                         itemCount: model.recentCaptured.length,
                         itemBuilder: (context, index) => InkWell(
@@ -281,66 +298,78 @@ class _HomePageState extends ConsumerState<HomePage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             clipBehavior: Clip.antiAlias,
-                            child: Stack(
-                              fit: StackFit.expand,
+                            child: Column(
                               children: [
-                                Hero(
-                                  tag: model.recentCaptured[index].productId
-                                      .toString(),
-                                  child: AppNetworkImage(
-                                      //  errorIcon: Image.asset(AppImages.defaultImage),
-                                    imageVersion: imageVersion,
-                                    fit: BoxFit.cover,
-                                    imageFile: ApiConstants.imageBaseUrl +
-                                        model.recentCaptured[index]
-                                            .productPicture,
+                                Expanded(
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      Hero(
+                                        tag: model.recentCaptured[index].productId
+                                            .toString(),
+                                        child: AppNetworkImage(
+                                          //  errorIcon: Image.asset(AppImages.defaultImage),
+                                          imageVersion: imageVersion,
+                                          fit: BoxFit.cover,
+                                          imageFile: ApiConstants.imageBaseUrl +
+                                              model.recentCaptured[index]
+                                                  .productPicture,
+                                        ),
+                                      ),
+                                      Positioned(
+                                          left: 10,
+                                          top: 10,
+                                          child: buildIdBadge(
+                                              context,
+                                              model.recentCaptured[index].productId
+                                                  .toString(),
+                                              enableCopy: true)),
+                                      
+                                    ],
                                   ),
                                 ),
-                                Positioned(
-                                    left: 10,
-                                    top: 10,
-                                    child: buildIdBadge(
-                                        context,
-                                        model.recentCaptured[index].productId
-                                            .toString(),
-                                        enableCopy: true)),
-                                Positioned(
-                                    bottom: 0,
-                                    child: Container(
-                                      width: ResponsiveHelper.wp * .42,
-                                      padding: EdgeInsets.only(
-                                          left: 15,
-                                          right: 15,
-                                          top: 3,
-                                          bottom: 3),
-                                      decoration: BoxDecoration(
-                                          color: AppColors.kBgColor),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            model.recentCaptured[index]
-                                                .productName,
-                                            style: AppStyle.mediumStyle(
-                                                color: AppColors.kWhite),
-                                          ),
-                                          Icon(
-                                            CupertinoIcons.arrow_right_circle,
-                                            color: AppColors.kWhite,
-                                            size: 18,
-                                          )
-                                        ],
-                                      ),
-                                    ))
+                                Container(
+                                       width: ResponsiveHelper.wp,
+                                        padding: EdgeInsets.only(
+                                            left: 15,
+                                            right: 15,
+                                            top: 3,
+                                            bottom: 3),
+                                        decoration: BoxDecoration(
+                                            color: AppColors.kBgColor),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              model.recentCaptured[index]
+                                                  .productName,
+                                              style: AppStyle.mediumStyle(
+                                                  fontSize:
+                                                      ResponsiveHelper.isTablet()
+                                                          ? ResponsiveHelper
+                                                              .fontExtraSmall
+                                                          : null,
+                                                  color: AppColors.kWhite),
+                                            ),
+                                            Icon(
+                                              CupertinoIcons.arrow_right_circle,
+                                              color: AppColors.kWhite,
+                                              size: ResponsiveHelper.isTablet()
+                                                  ? 30
+                                                  : 18,
+                                            )
+                                          ],
+                                        ),
+                                      )
                               ],
                             ),
                           ),
                         ),
                       ),
               ),
-               AppSpacer(hp: .05),
+        AppSpacer(hp: .05),
       ],
     );
   }

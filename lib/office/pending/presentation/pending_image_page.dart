@@ -38,9 +38,11 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
           ref.read(getAllPendingProductControllerProvider.notifier).loadMore();
         }
       });
-      Future.microtask(() {
-        ref.invalidate(getAllPendingProductControllerProvider);
-      },);
+      Future.microtask(
+        () {
+          ref.invalidate(getAllPendingProductControllerProvider);
+        },
+      );
     } catch (e) {
       log("Pending screen initialization Error : $e");
     }
@@ -88,13 +90,15 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                         itemBuilder: (context, index) {
                           final product = pending[index];
                           return Padding(
-                            padding:  EdgeInsets.only(bottom: index==pending.length-1?ResponsiveHelper.hp*.05:0),
+                            padding: EdgeInsets.only(
+                                bottom: index == pending.length - 1
+                                    ? ResponsiveHelper.hp * .05
+                                    : 0),
                             child: _buildProductCard(product),
                           );
                         },
                       ),
               ),
-             
             ],
           );
         },
@@ -123,7 +127,10 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                   children: [
                     Text(
                       product.productName,
-                      style: AppStyle.largeStyle(fontSize: 20),
+                      style: AppStyle.largeStyle(
+                          fontSize: ResponsiveHelper.isTablet()
+                              ? ResponsiveHelper.fontSmall
+                              : 20),
                     ),
                     buildIdBadge(
                       context,
@@ -138,6 +145,9 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                 Text(
                   "Category: ${product.category}",
                   style: AppStyle.normalStyle(
+                    fontSize: ResponsiveHelper.isTablet()
+                        ? ResponsiveHelper.fontExtraSmall
+                        : null,
                     color: AppColors.kTextPrimaryColor,
                   ),
                 ),
@@ -147,6 +157,9 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                     Text(
                       "Color: ${product.color}",
                       style: AppStyle.normalStyle(
+                        fontSize: ResponsiveHelper.isTablet()
+                            ? ResponsiveHelper.fontExtraSmall
+                            : null,
                         color: AppColors.kTextPrimaryColor,
                       ),
                     ),
@@ -162,6 +175,9 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
                       child: Text(
                         "Size: ${product.productSize}",
                         style: AppStyle.mediumStyle(
+                          fontSize: ResponsiveHelper.isTablet()
+                              ? ResponsiveHelper.fontExtraSmall
+                              : null,
                           color: AppColors.kWhite,
                         ),
                       ),
@@ -185,7 +201,11 @@ class _PendingImagePageState extends ConsumerState<PendingImagePage> {
               alignment: Alignment.center,
               child: Text(
                 "Upload Image",
-                style: AppStyle.largeStyle(),
+                style: AppStyle.largeStyle(
+                  fontSize: ResponsiveHelper.isTablet()
+                      ? ResponsiveHelper.fontSmall
+                      : null,
+                ),
               ),
             ),
           )
@@ -231,7 +251,7 @@ void showGallerySheet(
                 Text(
                   'Select Image Source',
                   style: AppStyle.mediumStyle(
-                    fontSize: 20,
+                    fontSize: ResponsiveHelper.isTablet() ? 40 : 20,
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
@@ -257,8 +277,15 @@ void showGallerySheet(
                           onPressed: () => UploadImageNotifier()
                               .pickImageAndUpload(context, ImageSource.gallery,
                                   productModel, ref),
-                          icon: Icon(Icons.photo, color: AppColors.kWhite),
-                          label: Text("Gallery"),
+                          icon: Icon(
+                              size:  ResponsiveHelper.isTablet() ? 30 : null,
+                            Icons.photo, color: AppColors.kWhite),
+                          label: Text(
+                            "Gallery",
+                            style: AppStyle.boldStyle(
+                              fontSize: ResponsiveHelper.isTablet() ? 30 : null,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -282,10 +309,16 @@ void showGallerySheet(
                               .pickImageAndUpload(context, ImageSource.camera,
                                   productModel, ref),
                           icon: Icon(
+                            size:  ResponsiveHelper.isTablet() ? 30 : null,
                             Icons.camera_alt,
                             color: AppColors.kWhite,
                           ),
-                          label: Text("Camera"),
+                          label: Text(
+                            "Camera",
+                            style: AppStyle.boldStyle(
+                              fontSize: ResponsiveHelper.isTablet() ? 30 : null,
+                            ),
+                          ),
                         ),
                       ),
                     ),

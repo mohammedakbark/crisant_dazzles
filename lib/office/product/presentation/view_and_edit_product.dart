@@ -50,9 +50,8 @@ class _ViewAndEditProductScreenState
   ) {
     return Scaffold(
       appBar: AppBar(
-        leading: AppBackButton(),
-        title: Text(widget.productName),
-      ),
+          leading: AppBackButton(),
+          title: AppBarText(title: widget.productName,)),
       body: AppMargin(
           child: BuildStateManageComponent(
         stateController:
@@ -106,9 +105,16 @@ class _ViewAndEditProductScreenState
                                       color: model.color)
                                 });
                               },
-                              child: Text(
-                                "Edit and View",
-                                style: AppStyle.mediumStyle(),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    ResponsiveHelper.isTablet() ? 10 : 0),
+                                child: Text(
+                                  "Edit and View",
+                                  style: AppStyle.mediumStyle(
+                                      fontSize: ResponsiveHelper.isTablet()
+                                          ? ResponsiveHelper.fontSmall
+                                          : null),
+                                ),
                               )))
                     ],
                   ),
@@ -121,11 +127,17 @@ class _ViewAndEditProductScreenState
                   children: [
                     Text(
                       model.productName,
-                      style: AppStyle.largeStyle(),
+                      style: AppStyle.largeStyle(
+                          fontSize: ResponsiveHelper.isTablet()
+                              ? ResponsiveHelper.fontSmall
+                              : null),
                     ),
                     Text(
                       "₹${model.productSellingPrice}",
-                      style: AppStyle.largeStyle(),
+                      style: AppStyle.largeStyle(
+                          fontSize: ResponsiveHelper.isTablet()
+                              ? ResponsiveHelper.fontSmall
+                              : null),
                     ),
                   ],
                 ),
@@ -251,7 +263,10 @@ class _ViewAndEditProductScreenState
           children: [
             Text(
               title,
-              style: AppStyle.normalStyle(),
+              style: AppStyle.normalStyle(
+                  fontSize: ResponsiveHelper.isTablet()
+                      ? ResponsiveHelper.fontExtraSmall
+                      : null),
             ),
             AppSpacer(
               hp: .01,

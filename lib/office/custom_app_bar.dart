@@ -1,4 +1,3 @@
-
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/local/hive/controllers/upload_manager.dart';
 import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
@@ -17,7 +16,8 @@ class CustomAppBar extends ConsumerStatefulWidget
     implements PreferredSizeWidget {
   @override
   final Size preferredSize;
-  const CustomAppBar({super.key}) : preferredSize = const Size.fromHeight(70);
+  CustomAppBar({super.key})
+      : preferredSize = Size.fromHeight(ResponsiveHelper.isTablet() ? 150 : 70);
 
   @override
   ConsumerState<CustomAppBar> createState() => _CustomAppBarState();
@@ -48,11 +48,34 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
   Widget build(BuildContext context) {
     final uploadManagerState = ref.watch(uploadManagerProvider);
     return AppBar(
+      toolbarHeight: widget.preferredSize.height,
+      // toolbarHeight:
+
       bottom: PreferredSize(
         preferredSize: Size(ResponsiveHelper.wp, ResponsiveHelper.hp * .01),
         child: SizedBox(),
       ),
       automaticallyImplyLeading: false,
+      // title: Column(
+      //   children: [
+      //     Text(
+      //       "Hi,$userName",
+      //       style: AppStyle.largeStyle(
+      //         fontSize: ResponsiveHelper.fontMedium,
+      //         color: AppColors.kWhite,
+      //       ),
+      //     ),
+      //     Text(
+      //       "Welcome back to Dazzles !",
+      //       style: AppStyle.smallStyle(
+      //         fontWeight: FontWeight.bold,
+      //         fontSize: ResponsiveHelper.fontSmall,
+      //         color: AppColors.kPrimaryColor,
+      //       ),
+      //     ),
+      //   ],
+      // ),
+
       title: ListTile(
         contentPadding: EdgeInsets.all(0),
         // leading: CircleAvatar(radius: 30),
@@ -73,7 +96,6 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
         ),
       ),
       actions: [
-        
         Padding(
           padding: EdgeInsets.only(right: 10),
           child: BuildStateManageComponent(
@@ -90,16 +112,19 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                     badgeStyle: badges.BadgeStyle(badgeColor: AppColors.kWhite),
                     badgeContent: Text(notif.length.toString(),
                         style: AppStyle.mediumStyle(
-                            fontSize: 8, color: AppColors.kErrorPrimary)),
+                            fontSize: ResponsiveHelper.isTablet() ? 25 : 8,
+                            color: AppColors.kErrorPrimary)),
                     position: badges.BadgePosition.topEnd(end: -2, top: -8),
                     badgeAnimation: badges.BadgeAnimation.slide(
                       curve: Curves.fastOutSlowIn,
                       colorChangeAnimationCurve: Curves.easeInCubic,
                     ),
                     child: CircleAvatar(
+                      radius: ResponsiveHelper.isTablet() ? 40 : null,
                       backgroundColor: AppColors.kPrimaryColor.withAlpha(50),
                       child: Icon(CupertinoIcons.cloud_upload,
-                          size: 18, color: AppColors.kWhite),
+                          size: ResponsiveHelper.isTablet() ? 40 : 18,
+                          color: AppColors.kWhite),
                     ),
                   ),
                 );

@@ -30,14 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void init() async {
     await AppPermissions.handleCameraPermission();
-    
   }
 
   void goNext() async {
     final loginRef = await LoginRefDataBase().getUserData;
     if (loginRef.token != null && loginRef.token!.isNotEmpty) {
       log("User Role -> ${loginRef.role}");
-      
+
       if (mounted) {
         if (loginRef.role == LoginController.mainRole) {
           context.go(route);
@@ -55,6 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isTab = ResponsiveHelper.isTablet();
     return Scaffold(
       body: Center(
         child: Column(
@@ -71,13 +71,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: DefaultTextStyle(
                   style: TextStyle(
                     letterSpacing: -3,
-                    fontSize: 60,
+                    fontSize: isTab ? 120 : 60,
                     color: AppColors.kPrimaryColor,
                     fontWeight: FontWeight.w100,
                   ),
-              
 
-                 
                   // GoogleFonts.hachiMaruPop(
                   //   fontSize: 59,
                   //   color: AppColors.kPrimaryColor,
@@ -124,10 +122,12 @@ class _SplashScreenState extends State<SplashScreen> {
               hp: .05,
             ),
             InkWell(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
               onTap: goNext,
               child: Text(
                 "Skip",
-                style: AppStyle.normalStyle(color: AppColors.kPrimaryColor),
+                style: AppStyle.normalStyle(
+                    fontSize: isTab ? 40 : 20, color: AppColors.kPrimaryColor),
               ),
             ),
             Spacer(),

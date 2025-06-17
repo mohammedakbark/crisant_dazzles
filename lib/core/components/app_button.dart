@@ -11,20 +11,25 @@ class AppButton extends StatelessWidget {
     super.key,
     this.onPressed,
     required this.title,
-     this.bgColor,
+    this.bgColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: ResponsiveHelper.wp,
-      height: ResponsiveHelper.hp * .07,
+      height: ResponsiveHelper.hp * .06,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: bgColor ?? AppColors.kPrimaryColor,
         ),
         onPressed: onPressed,
-        child: Text(title, style: AppStyle.largeStyle(color: AppColors.kBgColor)),
+        child: Text(title,
+            style: AppStyle.largeStyle(
+                fontSize: ResponsiveHelper.isTablet()
+                    ? ResponsiveHelper.fontSmall
+                    : null,
+                color: AppColors.kBgColor)),
       ),
     );
   }

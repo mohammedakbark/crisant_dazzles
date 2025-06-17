@@ -88,9 +88,10 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
         ? InkWell(
             onTap: () => showGallerySheet(context, widget.productModel!, ref),
             child: Container(
+              margin: EdgeInsets.all(50),
               alignment: Alignment.center,
               color: AppColors.kBgColor,
-              height: 100,
+              height: ResponsiveHelper.isTablet() ? 100 : 30,
               child: Text(
                 "Update Image",
                 style: AppStyle.largeStyle(

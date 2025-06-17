@@ -32,10 +32,9 @@ class AppNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       fit: fit,
-      imageUrl: "${imageFile}?v=$imageVersion" ,
+      imageUrl: "${imageFile}?v=$imageVersion",
       placeholder: (context, url) => AppLoading(),
       errorListener: (value) {},
-      
       errorWidget: (context, url, error) =>
           (userName != null && userName!.isNotEmpty)
               ? Center(
@@ -48,11 +47,12 @@ class AppNetworkImage extends StatelessWidget {
                     ),
                   ),
                 )
-              : errorIcon ?? Icon(
-                  size: iconSize,
-                  Icons.broken_image_rounded,
-                  color: AppColors.kFillColor,
-                ),
+              : errorIcon ??
+                  Icon(
+                    size: ResponsiveHelper.isTablet() ? 60 : iconSize,
+                    Icons.broken_image_rounded,
+                    color: AppColors.kFillColor,
+                  ),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:dazzles/core/local/hive/models/upload_photo_adapter.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/intl_c.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/pending/data/providers/upload_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +40,7 @@ class _NotificationScreenState extends ConsumerState<UploadFaieldDataScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: AppBackButton(),
-        title: Text("Upload Failed", style: AppStyle.boldStyle()),
+        title: AppBarText(title: "Upload Failed"),
         actions: [
           uploadManagerState.value != null &&
                   uploadManagerState.value!.isNotEmpty
@@ -79,6 +80,7 @@ class _NotificationScreenState extends ConsumerState<UploadFaieldDataScreen> {
   }
 
   Widget _buildItemTile(UploadPhotoModel model) {
+    final isTab=ResponsiveHelper.isTablet();
     final status = model.isUploadSuccess;
     final title = status ? "Photo uploaded successfully" : model.failedReason;
     final date = IntlC.convertToDate(model.dateTime ?? DateTime(2000));

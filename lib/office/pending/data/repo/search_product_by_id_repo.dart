@@ -18,7 +18,7 @@ class SearchProductByIdRepo {
 
     if (response.status == 200) {
       final data = response.data as Map;
-      log(data.toString());
+      log("Resposne"+data.toString());
       return {
         "error": false,
         "data": ProductModel.fromJson(data as Map<String, dynamic>),

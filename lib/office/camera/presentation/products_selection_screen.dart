@@ -12,7 +12,6 @@ import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/office/product/data/models/product_model.dart';
 import 'package:dazzles/office/pending/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
@@ -61,7 +60,7 @@ class _CopyMoreProdutcsScreenState
       child: Scaffold(
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title: Text("Update More Product", style: AppStyle.boldStyle()),
+          title: AppBarText(title: 'Update More Product'),
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: AppBackButton(),
@@ -85,6 +84,7 @@ class _CopyMoreProdutcsScreenState
   }
 
   _buildSelectedIds() {
+    final isTab = ResponsiveHelper.isTablet();
     final selectedProuducts = ref.watch(
       selectAndSearchProductControllerProvider,
     );
@@ -106,7 +106,7 @@ class _CopyMoreProdutcsScreenState
                   hp: .01,
                 ),
                 Text("Selected Products",
-                    style: AppStyle.boldStyle(fontSize: 15)),
+                    style: AppStyle.boldStyle(fontSize: isTab ? 30 : 15)),
                 AppSpacer(
                   hp: .01,
                 ),
@@ -115,7 +115,7 @@ class _CopyMoreProdutcsScreenState
                     shrinkWrap: true,
                     itemCount: selectedProuducts.selectedIds.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: isTab ? 3 : 2,
                     ),
                     itemBuilder: (context, index) {
                       final model = selectedProuducts.selectedIds[index];
@@ -175,6 +175,10 @@ class _CopyMoreProdutcsScreenState
                                         Text(
                                           model.productName.toString(),
                                           style: AppStyle.boldStyle(
+                                            fontSize: isTab
+                                                ? ResponsiveHelper
+                                                    .fontExtraSmall
+                                                : null,
                                             color: AppColors.kTeal,
                                           ),
                                         ),
@@ -193,6 +197,10 @@ class _CopyMoreProdutcsScreenState
                                             maxLines: 1,
                                             "Color : ${model.color}",
                                             style: AppStyle.smallStyle(
+                                              fontSize: isTab
+                                                  ? ResponsiveHelper
+                                                      .fontExtraSmall
+                                                  : null,
                                               color:
                                                   AppColors.kTextPrimaryColor,
                                             ),
@@ -201,6 +209,10 @@ class _CopyMoreProdutcsScreenState
                                         Text(
                                           " Size : ${model.productSize}",
                                           style: AppStyle.smallStyle(
+                                            fontSize: isTab
+                                                ? ResponsiveHelper
+                                                    .fontExtraSmall
+                                                : null,
                                             color: AppColors.kTextPrimaryColor,
                                           ),
                                         ),
@@ -217,7 +229,7 @@ class _CopyMoreProdutcsScreenState
                                 },
                                 child: Icon(
                                   SolarIconsBold.closeCircle,
-                                  size: 20,
+                                  size: isTab ? 50 : 20,
                                   color: AppColors.kErrorPrimary,
                                 ),
                               ),
@@ -240,6 +252,8 @@ class _CopyMoreProdutcsScreenState
 
   // List<int> similarProducts = [
   Widget _buildSearchBox() {
+    bool isTab = ResponsiveHelper.isTablet();
+
     final productSelectionState = ref.watch(
       selectAndSearchProductControllerProvider,
     );
@@ -263,7 +277,7 @@ class _CopyMoreProdutcsScreenState
                 // });
               },
               keyboardType: TextInputType.number,
-              style: AppStyle.normalStyle(),
+              style: AppStyle.normalStyle(fontSize: isTab ? 30 : null),
               cursorColor: AppColors.kBorderColor,
               decoration: InputDecoration(
                   errorBorder: OutlineInputBorder(
@@ -275,13 +289,15 @@ class _CopyMoreProdutcsScreenState
                     borderRadius: BorderRadius.circular(10),
                   ),
                   errorText: productSelectionState.errorMessage,
-                  errorStyle:
-                      AppStyle.smallStyle(color: AppColors.kErrorPrimary),
+                  errorStyle: AppStyle.smallStyle(
+                      color: AppColors.kErrorPrimary,
+                      fontSize: isTab ? 30 : null),
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                   hintText: "Search by product id.",
-                  hintStyle:
-                      AppStyle.normalStyle(color: AppColors.kBorderColor),
+                  hintStyle: AppStyle.normalStyle(
+                      color: AppColors.kBorderColor,
+                      fontSize: isTab ? 30 : null),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: AppColors.kBorderColor),
                     borderRadius: BorderRadius.circular(10),
@@ -306,7 +322,8 @@ class _CopyMoreProdutcsScreenState
                         : productSelectionState.enableAddButton &&
                                 productSelectionState.productModel != null
                             ? InkWell(
-                              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                                overlayColor:
+                                    WidgetStatePropertyAll(Colors.transparent),
                                 onTap: () {
                                   controller.add(
                                     productSelectionState.productModel!,
@@ -324,19 +341,23 @@ class _CopyMoreProdutcsScreenState
                                   _findIDController.clear();
                                 },
                                 child: Container(
+                                  padding: EdgeInsets.all(isTab ? 15 : 0),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.horizontal(
                                       right: Radius.circular(10),
                                     ),
                                     color: AppColors.kDeepPurple,
                                   ),
-                                  child:
-                                      Icon(Icons.add, color: AppColors.kWhite),
+                                  child: Icon(
+                                      size: isTab ? 40 : null,
+                                      Icons.add,
+                                      color: AppColors.kWhite),
                                 ),
                               )
                             : productSelectionState.errorMessage != null
                                 ? InkWell(
-                                    overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                                    overlayColor: WidgetStatePropertyAll(
+                                        Colors.transparent),
                                     onTap: () {
                                       if (_findIDController.text.isNotEmpty) {
                                         _findIDController.clear();
@@ -344,13 +365,18 @@ class _CopyMoreProdutcsScreenState
                                             _findIDController.text.trim());
                                       }
                                     },
-                                    child: Icon(
-                                      CupertinoIcons.clear,
-                                      color: AppColors.kErrorPrimary,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(isTab ? 15 : 0),
+                                      child: Icon(
+                                        size: isTab ? 40 : null,
+                                        CupertinoIcons.clear,
+                                        color: AppColors.kErrorPrimary,
+                                      ),
                                     ),
                                   )
                                 : InkWell(
-                                    overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                                    overlayColor: WidgetStatePropertyAll(
+                                        Colors.transparent),
                                     onTap: () {
                                       if (_findIDController.text.isNotEmpty) {
                                         controller.onSearchProduct(
@@ -358,6 +384,7 @@ class _CopyMoreProdutcsScreenState
                                       }
                                     },
                                     child: Container(
+                                      padding: EdgeInsets.all(isTab ? 15 : 0),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.horizontal(
                                           right: Radius.circular(10),
@@ -370,6 +397,7 @@ class _CopyMoreProdutcsScreenState
                                             : AppColors.kTeal,
                                       ),
                                       child: Icon(CupertinoIcons.search,
+                                          size: isTab ? 40 : null,
                                           color: AppColors.kWhite),
                                     ),
                                   ),
@@ -410,21 +438,21 @@ class _CopyMoreProdutcsScreenState
                   ),
             ),
           ),
-          AppSpacer(wp: .01),
-          InkWell(
-            overlayColor: WidgetStatePropertyAll(Colors.transparent),
-            onTap: () {},
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(color: AppColors.kBorderColor),
-              ),
-              child:
-                  Icon(Icons.qr_code_2_rounded, color: AppColors.kBorderColor),
-            ),
-          ),
+          // AppSpacer(wp: .01),
+          // InkWell(
+          //   overlayColor: WidgetStatePropertyAll(Colors.transparent),
+          //   onTap: () {},
+          //   child: Container(
+          //     height: 50,
+          //     width: 50,
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.all(Radius.circular(10)),
+          //       border: Border.all(color: AppColors.kBorderColor),
+          //     ),
+          //     child:
+          //         Icon(Icons.qr_code_2_rounded, color: AppColors.kBorderColor),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -433,7 +461,12 @@ class _CopyMoreProdutcsScreenState
   _buildIndicator() {
     final isIos = Platform.isIOS;
     return Padding(
-    padding: EdgeInsets.all(isIos?0:10),
+      padding: EdgeInsets.all(ResponsiveHelper.isTablet()
+          ? 15
+          : isIos
+              ? 0
+              : 10),
+      // padding: EdgeInsets.all(),
       child: CircularProgressIndicator.adaptive(
         strokeWidth: isIos ? null : 2,
       ),
@@ -441,6 +474,7 @@ class _CopyMoreProdutcsScreenState
   }
 
   _buidButton() {
+    bool isTab = ResponsiveHelper.isTablet();
     final uploadImageState = ref.watch(uploadImageControllerProvider);
 
     final productSelectionState = ref.watch(
@@ -459,12 +493,15 @@ class _CopyMoreProdutcsScreenState
               child: ElevatedButton.icon(
                 onPressed: () => context.go(route),
                 icon: Icon(
+                  size: isTab ? 40 : null,
                   Icons.delete_outline,
                   color: AppColors.kWhite,
                 ),
                 label: Text(
                   "Discard",
-                  style: AppStyle.normalStyle(color: AppColors.kWhite),
+                  style: AppStyle.mediumStyle(
+                      fontSize: isTab ? ResponsiveHelper.fontSmall : null,
+                      color: AppColors.kWhite),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.kErrorPrimary,
@@ -499,6 +536,7 @@ class _CopyMoreProdutcsScreenState
                           }
                         : null,
                     icon: Icon(
+                      size: isTab ? 40 : null,
                       Icons.cloud_upload_outlined,
                       color: productSelectionState.selectedIds.isNotEmpty
                           ? AppColors.kWhite
@@ -506,7 +544,8 @@ class _CopyMoreProdutcsScreenState
                     ),
                     label: Text(
                       "Upload",
-                      style: AppStyle.normalStyle(
+                      style: AppStyle.mediumStyle(
+                        fontSize: isTab ? ResponsiveHelper.fontSmall : null,
                         color: productSelectionState.selectedIds.isNotEmpty
                             ? AppColors.kWhite
                             : AppColors.kTextPrimaryColor,
@@ -549,6 +588,7 @@ class _CopyMoreProdutcsScreenState
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
+        final isTab = ResponsiveHelper.isTablet();
         return AnimatedPadding(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeOut,
@@ -577,13 +617,15 @@ class _CopyMoreProdutcsScreenState
                 children: [
                   Text(
                     "Replace Product Image?",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: AppStyle.mediumStyle(
+                        fontSize: isTab ? 30 : 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     "You're about to replace the current product image. Please confirm.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: AppStyle.normalStyle(
+                        fontSize: isTab ? 20 : null, color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 16),
                   SlideInDown(
@@ -593,12 +635,18 @@ class _CopyMoreProdutcsScreenState
                         Expanded(
                           child: Column(
                             children: [
-                              Text("Current"),
+                              Text(
+                                "Current",
+                                style: AppStyle.mediumStyle(
+                                  color: AppColors.kWhite,
+                                  fontSize: isTab ? 25 : null,
+                                ),
+                              ),
                               const SizedBox(height: 8),
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: SizedBox(
-                                  height: 120,
+                                  height: isTab ? 180 : 120,
                                   child: AppNetworkImage(
                                     imageVersion:
                                         DateTime.timestamp().toString(),
@@ -611,18 +659,28 @@ class _CopyMoreProdutcsScreenState
                           ),
                         ),
                         const SizedBox(width: 16),
-                        Icon(Icons.arrow_forward, color: Colors.grey),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.grey,
+                          size: isTab ? 40 : null,
+                        ),
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             children: [
-                              Text("New"),
+                              Text(
+                                "New",
+                                style: AppStyle.mediumStyle(
+                                  color: AppColors.kWhite,
+                                  fontSize: isTab ? 25 : null,
+                                ),
+                              ),
                               const SizedBox(height: 8),
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.file(
                                   widget.fileImage,
-                                  height: 120,
+                                  height: isTab ? 180 : 120,
                                 ),
                               ),
                             ],
@@ -631,7 +689,7 @@ class _CopyMoreProdutcsScreenState
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   Row(
                     children: [
                       Expanded(
@@ -650,7 +708,11 @@ class _CopyMoreProdutcsScreenState
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            child: Text("Cancel"),
+                            child: Text("Cancel",
+                                style: AppStyle.boldStyle(
+                                    fontSize: isTab
+                                        ? ResponsiveHelper.fontSmall
+                                        : null)),
                           ),
                         ),
                       ),
@@ -671,7 +733,11 @@ class _CopyMoreProdutcsScreenState
                               ),
                             ),
                             onPressed: () => onReplace(),
-                            child: Text("Replace"),
+                            child: Text("Replace",
+                                style: AppStyle.boldStyle(
+                                    fontSize: isTab
+                                        ? ResponsiveHelper.fontSmall
+                                        : null)),
                           ),
                         ),
                       ),

@@ -59,9 +59,9 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         children: [
           Padding(
               padding: EdgeInsets.only(
-                bottom:  Platform.isAndroid
-                ? ResponsiveHelper.hp * .09
-                : ResponsiveHelper.hp * .1,
+                bottom: Platform.isAndroid
+                    ? ResponsiveHelper.hp * .09
+                    : ResponsiveHelper.hp * .1,
               ),
               child: _pages[index]),
           Positioned(bottom: 0, child: _buildCustomeNav())
@@ -94,7 +94,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildIconSet(SolarIconsBold.home, "Home", 0),
-                    _buildIconSet(CupertinoIcons.square_list_fill, "Pending", 1),
+                    _buildIconSet(
+                        CupertinoIcons.square_list_fill, "Pending", 1),
                     SizedBox(
                       width: ResponsiveHelper.wp * .1,
                     ),
@@ -127,8 +128,12 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   duration: const Duration(milliseconds: 150),
                   curve: Curves.easeOut,
                   child: Container(
-                    width: ResponsiveHelper.wp * .3,
-                    height: ResponsiveHelper.wp * .18,
+                    width: ResponsiveHelper.isTablet()
+                        ? ResponsiveHelper.wp * .3
+                        : ResponsiveHelper.wp * .3,
+                    height: ResponsiveHelper.isTablet()
+                        ? ResponsiveHelper.wp * .13
+                        : ResponsiveHelper.wp * .18,
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
@@ -159,6 +164,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                                   : AppColors.kWhite,
                           shape: BoxShape.circle),
                       child: Icon(
+                        size: ResponsiveHelper.isTablet()?40:null,
                         CupertinoIcons.camera_fill,
                         color:
                             ref.watch(navigationController.notifier).state == 2
@@ -187,6 +193,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                 ? _buildBadge(
                     Icon(
                       icon,
+                      size: ResponsiveHelper.isTablet() ? 50 : null,
                       color: isSelected
                           ? AppColors.kPrimaryColor
                           : AppColors.kWhite,
@@ -194,6 +201,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   )
                 : Icon(
                     icon,
+                    size: ResponsiveHelper.isTablet() ? 50 : null,
                     color:
                         isSelected ? AppColors.kPrimaryColor : AppColors.kWhite,
                   ),
@@ -220,7 +228,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
       badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent),
       badgeContent: Text(
         data != null ? data.toString() : "0",
-        style: AppStyle.mediumStyle(fontSize: 8),
+        style: AppStyle.mediumStyle(
+            fontSize: ResponsiveHelper.isTablet() ? 25 : 8),
       ),
       position: badges.BadgePosition.topEnd(end: -10, top: -8),
       badgeAnimation: badges.BadgeAnimation.slide(
