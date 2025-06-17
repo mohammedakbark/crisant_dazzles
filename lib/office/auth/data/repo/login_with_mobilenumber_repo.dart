@@ -17,7 +17,7 @@ class LoginWithMobilenumberRepo {
         final data = response.data as Map;
         return {
           "error": false,
-          "data": {"role": data['user']['role'], "id": data['user']['id']},
+          "data": { "id": data['user']['id']},
           "message": response.message
         };
       } else {

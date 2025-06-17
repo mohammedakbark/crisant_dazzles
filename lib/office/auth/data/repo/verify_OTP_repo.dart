@@ -3,12 +3,12 @@ import 'package:dazzles/core/constant/api_constant.dart';
 
 class VerifyOtpRepo {
   static Future<Map<String, dynamic>> onVerifyOTP(
-      String otp, String role, int id) async {
+      String otp, int id) async {
     try {
       final response = await ApiConfig.postRequest(
         endpoint: ApiConstants.verifyMobileOTP,
         header: {"Content-Type": "application/json"},
-        body: {"otp": otp, "mobileRole": role, "id": id},
+        body: {"otp": otp,"id": id},
       );
 
       if (response.status == 200) {
@@ -18,7 +18,7 @@ class VerifyOtpRepo {
           "token": data['token'],
           "userId": data['user']['id'],
           'username': data['user']['username'],
-          'role': data['user']['role'],
+          'roleName': data['user']['role']['roleName'],
           "message":response.message
         };
       } else {

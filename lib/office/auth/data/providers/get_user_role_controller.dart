@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dazzles/office/auth/data/models/user_role_mode.dart';
 import 'package:dazzles/office/auth/data/repo/get_roles_repo.dart';
@@ -12,9 +13,14 @@ class GetUserRoleController extends AsyncNotifier<List<UserRoleModel>> {
       final response = await GetRolesRepo.onGetRoles();
       if (response['error'] == false) {
         final data = response['data'] as List<UserRoleModel>;
-        final list = [UserRoleModel(roleId: 0000, roleName: "Office"), ...data];
+        // log(data.length.toString());
+        final first = [UserRoleModel(roleId: 0000, roleName: "Office")];
+        final list = [...first, ...data];
+        // log(list.length.toString());
+        state = AsyncValue.data(list);
         return list;
       } else {
+        state = AsyncValue.data([]);
         return [];
       }
     } catch (e) {

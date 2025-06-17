@@ -31,7 +31,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   }
 
   static int mainRoleId = 0;
-  static String mainRole="Office";
+  static String mainRole = "Office";
   Future<void> onLogin(
     String username,
     String password,
@@ -48,7 +48,8 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
-          role: userRole.roleName);
+          role: userRole.roleName,
+          roleId: userRole.roleId);
       await LoginRefDataBase().setUseretails(local);
       // await FirebasePushNotification().initNotification(context);
       state = AsyncData(response);
@@ -62,13 +63,13 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   }
 
   Future<Map<String, dynamic>?> loginWithMobileNumber(
-    int role,
+    UserRoleModel roleModel,
     String mobileNumber,
     BuildContext context,
   ) async {
     state = const AsyncLoading();
-    final response =
-        await LoginWithMobilenumberRepo.onLoginWithMobile(mobileNumber, role);
+    final response = await LoginWithMobilenumberRepo.onLoginWithMobile(
+        mobileNumber, roleModel.roleId);
     // ui response
     showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
@@ -81,13 +82,13 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   }
 
   Future<void> resendOTP(
-    int role,
+    UserRoleModel roleModel,
     String mobileNumber,
     BuildContext context,
   ) async {
     state = const AsyncLoading();
-    final response =
-        await LoginWithMobilenumberRepo.onLoginWithMobile(mobileNumber, role);
+    final response = await LoginWithMobilenumberRepo.onLoginWithMobile(
+        mobileNumber, roleModel.roleId);
     // ui response
     showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
@@ -98,21 +99,23 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   }
 
   Future<void> verifyOTP(
-    int id,
+    int userId,
     String otp,
-    String role,
+    UserRoleModel roleModel,
     BuildContext context,
   ) async {
     state = const AsyncLoading();
-    final response = await VerifyOtpRepo.onVerifyOTP(otp, role, id);
+    final response = await VerifyOtpRepo.onVerifyOTP(otp, userId);
     // ui response
     showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
       final local = LocalUserRefModel(
+      
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
-          role: role);
+          role: response['roleName'],
+          roleId: roleModel.roleId);
       await LoginRefDataBase().setUseretails(local);
       await FirebasePushNotification().initNotification(context);
       state = AsyncData(response);

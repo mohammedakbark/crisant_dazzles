@@ -1,4 +1,3 @@
-
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,7 +6,8 @@ class LoginRefDataBase {
   final _userName = "USER_NAME";
   final _userID = "USER_ID";
   final _pushToken = "PUSH_TOKEN";
-  final _role="ROLE";
+  final _role = "ROLE";
+  final _roleId = "ROLE_ID";
   LocalUserRefModel? _localUserRefModel;
   LocalUserRefModel get localUserRefModel => _localUserRefModel!;
 
@@ -29,7 +29,14 @@ class LoginRefDataBase {
       _pushToken,
       userDataModel.pushToken ?? userData.pushToken ?? '',
     );
-    await pref.setString(_role, userDataModel.role ?? userData.role ?? '',);
+    await pref.setString(
+      _role,
+      userDataModel.role ?? userData.role ?? '',
+    );
+    await pref.setInt(
+      _roleId,
+      userDataModel.roleId ?? userData.roleId ?? 00,
+    );
 
     await _getUserData();
   }
@@ -41,17 +48,18 @@ class LoginRefDataBase {
     final userName = pref.getString(_userName) ?? '';
     final userId = pref.getInt(_userID) ?? 0;
     final pushToken = pref.getString(_pushToken) ?? '';
-     final role = pref.getString(_role) ?? '';
+    final role = pref.getString(_role) ?? '';
+    final roleId = pref.getInt(_roleId) ?? 00;
     // log(token.toString());
     // log(userId.toString());
 
     return LocalUserRefModel(
-      token: token,
-      userId: userId,
-      userName: userName,
-      pushToken: pushToken,
-      role: role
-    );
+        token: token,
+        userId: userId,
+        userName: userName,
+        pushToken: pushToken,
+        role: role,
+        roleId: roleId);
   }
 
   Future<void> clearLoginCredential() async {
@@ -62,5 +70,6 @@ class LoginRefDataBase {
     await pref.remove(_userName);
     await pref.remove(_pushToken);
     await pref.remove(_role);
+    await pref.remove(_roleId);
   }
 }

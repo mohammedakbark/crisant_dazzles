@@ -57,12 +57,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     UserRoleModel value,
   ) {
     selectedRoleModel = value;
-    if (selectedRoleModel.roleId == LoginController.mainRoleId) {
+    if (selectedRoleModel.roleName == LoginController.mainRole) {
       ref.watch(mobileLoginControllerProvider.notifier).state = false;
     } else {
       ref.watch(mobileLoginControllerProvider.notifier).state = true;
     }
-    _clearController();
+    // _clearController();
   }
 
 // LOGIN WITH PASSWORD  (FOR OFFICE ___)
@@ -83,16 +83,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   ) async {
     final response =
         await ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
-              selectedRoleModel.roleId,
+              selectedRoleModel,
               _mobileNumberController.text.trim(),
               context,
             );
 
     if (response != null) {
+      log(response.toString());
       final id = response['id'] as int;
-      final role = response['role'] as String;
-      log("id : $id  --  role : $role");
-      showOTPSheet(context, id, role);
+
+      log("id : $id  --  role : ${selectedRoleModel.roleName}");
+      showOTPSheet(
+        context,
+        id,
+      );
     }
   }
 
@@ -100,14 +104,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     BuildContext context,
     WidgetRef ref,
     int id,
-    String role,
   ) async {
     if (_otpFormKey.currentState!.validate()) {
       log("verifying OTP");
       ref.read(loginControllerProvider.notifier).verifyOTP(
             id,
             _pinputController.text.trim(),
-            role,
+            selectedRoleModel,
             context,
           );
     }
@@ -117,7 +120,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     log("RESEND OTP TRIGGERD");
     ref.read(resendOtpControllerProvider.notifier).startTimer();
     await ref.read(loginControllerProvider.notifier).loginWithMobileNumber(
-         selectedRoleModel.roleId,
+          selectedRoleModel,
           _mobileNumberController.text.trim(),
           context,
         );
@@ -176,8 +179,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     errorWidget: (p0, p1) => SizedBox.shrink(),
                     successWidget: (data) {
                       final listOfRole = data as List<UserRoleModel>;
+
                       return DropdownButtonFormField<UserRoleModel>(
-                          value: selectedRoleModel,
+                        hint:Text(selectedRoleModel.roleName),
+                          // value: selectedRoleModel,
                           decoration: InputDecoration(
                             errorStyle: AppStyle.mediumStyle(
                                 color: AppColors.kErrorPrimary),
@@ -321,7 +326,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ],
       );
 
-  showOTPSheet(BuildContext context, int id, String role) {
+  showOTPSheet(
+    BuildContext context,
+    int id,
+  ) {
     ref.read(resendOtpControllerProvider.notifier).startTimer();
 
     showModalBottomSheet(
@@ -435,7 +443,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 successWidget: (data) => AppButton(
                                     title: 'Verify OTP',
                                     onPressed: () => _onVerifyOTP(
-                                        context, newRef, id, role)),
+                                          context,
+                                          newRef,
+                                          id,
+                                        )),
                               ),
                             ],
                           ),

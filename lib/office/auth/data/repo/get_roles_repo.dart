@@ -5,7 +5,7 @@ import 'package:dazzles/office/auth/data/models/user_role_mode.dart';
 class GetRolesRepo {
   static Future<Map<String, dynamic>> onGetRoles() async {
     try {
-      final response = await ApiConfig.postRequest(
+      final response = await ApiConfig.getRequest(
         endpoint: ApiConstants.userRoles,
         header: {"Content-Type": "application/json"},
       );
