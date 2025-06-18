@@ -59,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return ref.refresh(dashboardControllerProvider);
       },
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+      physics: AlwaysScrollableScrollPhysics(), // <-- important!
         child: AppMargin(
           child: Column(
             children: [

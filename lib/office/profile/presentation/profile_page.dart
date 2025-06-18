@@ -71,6 +71,7 @@ class ProfilePage extends ConsumerWidget {
                   FadeInUp(
                     duration: const Duration(milliseconds: 800),
                     child: Container(
+                      padding: EdgeInsets.all(24),
                       margin: const EdgeInsets.symmetric(horizontal: 8),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -94,18 +95,15 @@ class ProfilePage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: BuildStateManageComponent(
-                          stateController: profileController,
-                          errorWidget: (p0, p1) =>
-                              AppErrorView(error: p0.toString()),
-                          loadingWidget: () => const AnimatedProfileShimmer(),
-                          successWidget: (data) {
-                            final datas = data as UserProfileModel;
-                            return _buildProfileContent(datas);
-                          },
-                        ),
+                      child: BuildStateManageComponent(
+                        stateController: profileController,
+                        errorWidget: (p0, p1) =>
+                            AppErrorView(error: p0.toString()),
+                        loadingWidget: () => const AnimatedProfileShimmer(),
+                        successWidget: (data) {
+                          final datas = data as UserProfileModel;
+                          return _buildProfileContent(datas);
+                        },
                       ),
                     ),
                   ),
@@ -148,6 +146,9 @@ class ProfilePage extends ConsumerWidget {
         Stack(
           children: [
             Container(
+             
+              width: ResponsiveHelper.wp*.7,
+              height: ResponsiveHelper.hp*.2,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
@@ -301,7 +302,8 @@ class ProfilePage extends ConsumerWidget {
             : AppColors.kWhite.withOpacity(0.8);
 
     return Container(
-      width: ResponsiveHelper.wp * .7,
+      
+      width: ResponsiveHelper.wp * .75,
       height: ResponsiveHelper.hp * .06,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(

@@ -1,4 +1,3 @@
-
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
@@ -50,8 +49,8 @@ class _AnimatedProfileShimmerState extends State<AnimatedProfileShimmer>
             Stack(
               children: [
                 Container(
-                  width: 120,
-                  height: 120,
+                  width: ResponsiveHelper.wp * .7,
+                  height: ResponsiveHelper.hp * .2,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
@@ -71,7 +70,7 @@ class _AnimatedProfileShimmerState extends State<AnimatedProfileShimmer>
                     ],
                   ),
                 ),
-                
+
                 // Animated status indicator
                 Positioned(
                   bottom: 8,
@@ -88,9 +87,9 @@ class _AnimatedProfileShimmerState extends State<AnimatedProfileShimmer>
                 ),
               ],
             ),
-            
+
             AppSpacer(hp: .03),
-            
+
             // Animated username bar
             Container(
               height: 28,
@@ -109,7 +108,7 @@ class _AnimatedProfileShimmerState extends State<AnimatedProfileShimmer>
               ),
             ),
             AppSpacer(hp: .015),
-            
+
             // Animated role badge
             Container(
               height: 28,
@@ -123,13 +122,14 @@ class _AnimatedProfileShimmerState extends State<AnimatedProfileShimmer>
                 ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppColors.kPrimaryColor.withOpacity(_animation.value * 0.2),
+                  color: AppColors.kPrimaryColor
+                      .withOpacity(_animation.value * 0.2),
                 ),
               ),
             ),
-            
+
             AppSpacer(hp: .03),
-            
+
             // Animated store info
             Container(
               height: 44,
