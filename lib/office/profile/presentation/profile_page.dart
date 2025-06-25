@@ -4,7 +4,7 @@ import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
-import 'package:dazzles/core/services/navigation_controller.dart';
+import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -504,7 +504,7 @@ class ProfilePage extends ConsumerWidget {
                                   await FirebasePushNotification()
                                       .deleteToken();
                                   ref
-                                      .read(navigationController.notifier)
+                                      .read(officeNavigationController.notifier)
                                       .state = 0;
 
                                   if (context.mounted) {
@@ -547,7 +547,7 @@ class ProfilePage extends ConsumerWidget {
   static Future<void> logout(BuildContext context) async {
     await LoginRefDataBase().clearLoginCredential();
     final ref = ProviderContainer();
-    ref.read(navigationController.notifier).state = 0;
+    ref.read(officeNavigationController.notifier).state = 0;
     if (context.mounted) {
       context.go(initialScreen);
     }

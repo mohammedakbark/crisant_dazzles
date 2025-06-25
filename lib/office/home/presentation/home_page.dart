@@ -8,7 +8,7 @@ import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/constant/app_images.dart';
-import 'package:dazzles/core/services/navigation_controller.dart';
+import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -67,7 +67,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Search
               InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () => ref.read(navigationController.notifier).state = 3,
+                onTap: () => ref.read(officeNavigationController.notifier).state = 3,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     vertical: ResponsiveHelper.paddingSmall,
@@ -209,12 +209,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                 switch (index) {
                   case 0:
                     {
-                      ref.read(navigationController.notifier).state = 3;
+                      ref.read(officeNavigationController.notifier).state = 3;
                     }
 
                   case 1:
                     {
-                      ref.read(navigationController.notifier).state = 1;
+                      ref.read(officeNavigationController.notifier).state = 1;
                     }
 
                   case 2:

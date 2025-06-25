@@ -15,5 +15,9 @@ const viewAndEditProductScreen = "/viewAndEditProductScreen";
 
 //  WEB VIEW
 
-const webViewScreen="/webView";
+// const webViewScreen="/webView";
 // const decisionScreen="/decisionScreen";
+
+// DRIVER MODULE
+
+const driverNavScreen="/driverNavScreen";

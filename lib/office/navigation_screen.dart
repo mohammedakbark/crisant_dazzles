@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dazzles/core/services/navigation_controller.dart';
+import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
@@ -51,7 +51,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int index = ref.watch(navigationController);
+    int index = ref.watch(officeNavigationController);
     return Scaffold(
       appBar: index == 4 ? null : CustomAppBar(),
       body: Stack(
@@ -113,7 +113,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
                 onTap: () async {
                   log("Pressed...");
-                  if (ref.watch(navigationController) == 2) {
+                  if (ref.watch(officeNavigationController) == 2) {
                     ref.watch(camaraButtonScaleController.notifier).state = 0.9;
                     await Future.delayed(Duration(microseconds: 500));
                     ref.watch(camaraButtonScaleController.notifier).state = 1.0;
@@ -121,7 +121,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                         .read(cameraControllerProvider.notifier)
                         .takePhoto(context);
                   } else {
-                    ref.watch(navigationController.notifier).state = 2;
+                    ref.watch(officeNavigationController.notifier).state = 2;
                   }
                 },
                 child: AnimatedScale(
@@ -140,7 +140,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                         border: Border.all(
                             width: 4,
                             color: ref
-                                        .watch(navigationController.notifier)
+                                        .watch(officeNavigationController.notifier)
                                         .state ==
                                     2
                                 ? AppColors.kPrimaryColor
@@ -159,7 +159,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                             //     : AppColors.kSecondaryColor
                           ),
                           color:
-                              ref.watch(navigationController.notifier).state ==
+                              ref.watch(officeNavigationController.notifier).state ==
                                       2
                                   ? AppColors.kPrimaryColor
                                   : AppColors.kWhite,
@@ -168,7 +168,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                         size: isTab ? 40 : null,
                         CupertinoIcons.camera_fill,
                         color:
-                            ref.watch(navigationController.notifier).state == 2
+                            ref.watch(officeNavigationController.notifier).state == 2
                                 ? AppColors.kWhite
                                 : AppColors.kBgColor,
                       ),
@@ -183,10 +183,10 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
 
   Widget _buildIconSet(IconData icon, String label, int index) {
     final isTab = ResponsiveHelper.isTablet();
-    bool isSelected = ref.read(navigationController.notifier).state == index;
+    bool isSelected = ref.read(officeNavigationController.notifier).state == index;
     return IconButton(
         onPressed: () {
-          ref.read(navigationController.notifier).state = index;
+          ref.read(officeNavigationController.notifier).state = index;
         },
         icon: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context.go(route);
         } else {
           await FirebasePushNotification().initNotification(context);
-          context.go(otherUsersRoute);
+          context.go(driverNavScreen);
         }
       }
     } else {

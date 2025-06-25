@@ -110,7 +110,6 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
     showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
       final local = LocalUserRefModel(
-      
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
@@ -122,7 +121,9 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
       if (context.mounted) {
         final ref = ProviderContainer();
         ref.read(resendOtpControllerProvider.notifier).dispose();
-        context.go(otherUsersRoute);
+        // context.go(otherUsersRoute);
+
+        context.go(driverNavScreen);
       }
     } else {
       state = AsyncError("Error null", StackTrace.empty);
