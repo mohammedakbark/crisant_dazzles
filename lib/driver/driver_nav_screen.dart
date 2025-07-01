@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/services/driver_nav_controller.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/driver/home/presentation/driver_home.dart';
 import 'package:dazzles/driver/profile/presentation/driver_profile.dart';
 
@@ -49,6 +52,7 @@ class DriverNavScreen extends StatelessWidget {
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
           return Container(
+            height: Platform.isAndroid?ResponsiveHelper.hp*.1:null,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(

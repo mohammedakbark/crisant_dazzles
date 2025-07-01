@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dazzles/driver/driver_nav_screen.dart';
+import 'package:dazzles/driver/home/presentation/driver_qr_scanner_screen.dart';
+import 'package:dazzles/driver/check%20in/presentation/driver_user_reg_screen.dart';
 import 'package:dazzles/office/auth/presentation/login_screen.dart';
 import 'package:dazzles/office/camera/presentation/products_selection_screen.dart';
 import 'package:dazzles/office/home/presentation/view_all_recent_captured_screen.dart';
@@ -82,9 +84,27 @@ class RouteProvider {
       ),
       // DRIVER ROLE ROUTES
 
-        GoRoute(
-          path: driverNavScreen,
-          builder: (context, state) => DriverNavScreen()),
+      GoRoute(
+          path: drNavScreen, builder: (context, state) => DriverNavScreen()),
+
+      GoRoute(
+          path: drQrScannerScreen,
+          builder: (context, state) {
+            final map = state.extra as Map<String, dynamic>;
+            final scanFor = map["scanFor"];
+            return DriverQRScannerPage(
+              scanFor: scanFor,
+            );
+          }),
+      GoRoute(
+          path: drCustomerRegScreen,
+          builder: (context, state) {
+            final map = state.extra as Map<String, dynamic>;
+            final qrId = map["qrId"];
+            return DriverCustomerRegScreen(
+              qrId: qrId,
+            );
+          }),
 
       // OTHER ROLE ROUTES
 

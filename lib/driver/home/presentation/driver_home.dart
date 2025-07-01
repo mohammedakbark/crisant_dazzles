@@ -1,9 +1,11 @@
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class DriverHome extends StatefulWidget {
@@ -13,8 +15,7 @@ class DriverHome extends StatefulWidget {
   State<DriverHome> createState() => _DriverHomeState();
 }
 
-class _DriverHomeState extends State<DriverHome>    with TickerProviderStateMixin{
-
+class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -51,72 +52,87 @@ class _DriverHomeState extends State<DriverHome>    with TickerProviderStateMixi
     _animationController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-      return FadeTransition(
-          opacity: _fadeAnimation,
-          child: SlideTransition(
-            position: _slideAnimation,
-          child: Center(
-            child: AppMargin(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildEnhancedButtonTile(
-                    "Check In",
-                    CupertinoIcons.arrow_down_circle_fill,
-                    Colors.green,
-                    () {},
-                  ),
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Center(
+          child: AppMargin(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AppSpacer(hp: .03),
+                _buildEnhancedButtonTile(
+                  "Check In",
+                  CupertinoIcons.arrow_down_circle_fill,
+                  Colors.green,
+                  () {
+                    context
+                        .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
+                
+                  },
+                ),
 
-                  AppSpacer(hp: .04),
+                // AppSpacer(hp: .04),
 
-                  // Check Out Button
-                  _buildEnhancedButtonTile(
-                    "Check Out",
-                    CupertinoIcons.arrow_up_circle_fill,
-                    Colors.red,
-                    () {},
-                  ),
+                // Check Out Button
+                _buildEnhancedButtonTile(
+                  "Check Out",
+                  CupertinoIcons.arrow_up_circle_fill,
+                  Colors.red,
+                  () {
+                    context.push(drQrScannerScreen,
+                        extra: {"scanFor": "checkOut"});
+                  },
+                ),
 
-                  AppSpacer(hp: .03),
+                AppSpacer(hp: .03),
 
-                  Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        "Today Insight",
-                        style: AppStyle.boldStyle(),
-                      )),
-                  AppSpacer(hp: .02),
+                Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          "Today Insight",
+                          style: AppStyle.boldStyle(),
+                        )),
+                    AppSpacer(hp: .02),
 
-                  // Quick Stats Row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatCard(
-                          'Check In',
-                          '12',
-                          SolarIconsOutline.arrowDown,
-                          Colors.blue,
+                    // Quick Stats Row
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            'Check In',
+                            '12',
+                            SolarIconsOutline.arrowDown,
+                            Colors.blue,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildStatCard(
-                          'Check Out',
-                          '4',
-                          SolarIconsOutline.arrowUp,
-                          Colors.orange,
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildStatCard(
+                            'Check Out',
+                            '4',
+                            SolarIconsOutline.arrowUp,
+                            Colors.orange,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                AppSpacer(hp: .03),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 
   Widget _buildEnhancedButtonTile(
@@ -130,7 +146,7 @@ class _DriverHomeState extends State<DriverHome>    with TickerProviderStateMixi
       child: Material(
         elevation: 4,
         borderRadius: BorderRadius.circular(ResponsiveHelper.borderRadiusLarge),
-        shadowColor: accentColor.withOpacity(0.3),
+        shadowColor: accentColor.withAlpha(80),
         child: InkWell(
           onTap: onTap,
           borderRadius:
@@ -143,15 +159,15 @@ class _DriverHomeState extends State<DriverHome>    with TickerProviderStateMixi
                   BorderRadius.circular(ResponsiveHelper.borderRadiusLarge),
               gradient: LinearGradient(
                 colors: [
-                  accentColor.withOpacity(0.1),
-                  accentColor.withOpacity(0.05),
+                  accentColor.withAlpha(80),
+                  accentColor.withAlpha(10),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               // color: isEnabled ? null : Colors.grey.shade100,
               border: Border.all(
-                color: accentColor.withOpacity(0.3),
+                color: accentColor.withAlpha(80),
                 width: 1.5,
               ),
             ),
@@ -202,7 +218,7 @@ class _DriverHomeState extends State<DriverHome>    with TickerProviderStateMixi
         border: Border.all(color: color.withOpacity(0.2)),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withAlpha(50),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

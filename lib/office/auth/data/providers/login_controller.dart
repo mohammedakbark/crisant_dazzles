@@ -121,9 +121,10 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
       if (context.mounted) {
         final ref = ProviderContainer();
         ref.read(resendOtpControllerProvider.notifier).dispose();
-        // context.go(otherUsersRoute);
+        
+        context.go(drNavScreen);
 
-        context.go(driverNavScreen);
+        // context.go(otherUsersRoute);
       }
     } else {
       state = AsyncError("Error null", StackTrace.empty);

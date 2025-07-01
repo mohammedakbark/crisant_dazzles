@@ -311,6 +311,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             controller: _mobileNumberController,
             hintText: "Mobile Number",
             maxLenght: 10,
+            keyBoardType: TextInputType.phone,
             validator: AppValidator.mobileNumberValidator,
           ),
           AppSpacer(hp: .02),

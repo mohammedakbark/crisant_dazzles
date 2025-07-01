@@ -1,23 +1,20 @@
 const initialScreen = '/';
 const loginScreen = '/login';
-//const otpScreen="/otpScreen";
 const route = '/route';
-const otherUsersRoute="/otherUsersRoute";
 const notificationScreen = '/notification';
-const uploadFialedScreen="/uploadFailedScreen";
+const uploadFialedScreen = "/uploadFailedScreen";
 const searchScreen = "/search";
 const recentlyCaptured = "/viewRecentlyCaptured";
-// const imagePreview = '/imagePreview';
-// const copySameImageScreen = "/copySameImage";
+
 const openImage = "/openImage";
 const productsSelectionScreen = "/productsSelectionScreen";
 const viewAndEditProductScreen = "/viewAndEditProductScreen";
 
-//  WEB VIEW
-
-// const webViewScreen="/webView";
-// const decisionScreen="/decisionScreen";
+//OTHER USER UROUTE
+const otherUsersRoute = "/otherUsersRoute";
 
 // DRIVER MODULE
 
-const driverNavScreen="/driverNavScreen";
+const drNavScreen = "/drNavScreen";
+const drQrScannerScreen = "/drQrScannerScreen";
+const drCustomerRegScreen="/drCustomerRegScreen";
