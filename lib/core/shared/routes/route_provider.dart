@@ -1,20 +1,21 @@
 import 'dart:io';
 
-import 'package:dazzles/driver/driver_nav_screen.dart';
-import 'package:dazzles/driver/home/presentation/driver_qr_scanner_screen.dart';
-import 'package:dazzles/driver/check%20in/presentation/driver_user_reg_screen.dart';
-import 'package:dazzles/office/auth/presentation/login_screen.dart';
-import 'package:dazzles/office/camera/presentation/products_selection_screen.dart';
-import 'package:dazzles/office/home/presentation/view_all_recent_captured_screen.dart';
-import 'package:dazzles/office/navigation_screen.dart';
+import 'package:dazzles/module/driver/check%20in/presentation/driver_initial_vedio_screen.dart';
+import 'package:dazzles/module/driver/driver_nav_screen.dart';
+import 'package:dazzles/module/driver/home/presentation/driver_qr_scanner_screen.dart';
+import 'package:dazzles/module/driver/check%20in/presentation/driver_user_reg_screen.dart';
+import 'package:dazzles/module/Auth/presentation/login_screen.dart';
+import 'package:dazzles/module/office/camera/presentation/products_selection_screen.dart';
+import 'package:dazzles/module/office/home/presentation/view_all_recent_captured_screen.dart';
+import 'package:dazzles/module/office/navigation_screen.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/office/notification/presentation/notification_screen.dart';
-import 'package:dazzles/office/upload%20failed/presentation/failed_data_screen.dart';
-import 'package:dazzles/office/product/data/models/product_model.dart';
-import 'package:dazzles/office/product/presentation/view_and_edit_product.dart';
-import 'package:dazzles/office/product/presentation/widgets/product_image_view.dart';
-import 'package:dazzles/other%20roles%20modules/other_users_navigationScreen.dart';
-import 'package:dazzles/office/splash_screen.dart';
+import 'package:dazzles/module/office/notification/presentation/notification_screen.dart';
+import 'package:dazzles/module/office/upload%20failed/presentation/failed_data_screen.dart';
+import 'package:dazzles/module/office/product/data/models/product_model.dart';
+import 'package:dazzles/module/office/product/presentation/view_and_edit_product.dart';
+import 'package:dazzles/module/office/product/presentation/widgets/product_image_view.dart';
+import 'package:dazzles/module/other%20roles%20modules/other_users_navigationScreen.dart';
+import 'package:dazzles/module/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -104,6 +105,13 @@ class RouteProvider {
             return DriverCustomerRegScreen(
               qrId: qrId,
             );
+          }),
+      GoRoute(
+          path: drVideoInitialScreen,
+          builder: (context, state) {
+            // final map = state.extra as Map<String, dynamic>;
+            // final qrId = map["qrId"];
+            return DriverInitialVideoScreen();
           }),
 
       // OTHER ROLE ROUTES

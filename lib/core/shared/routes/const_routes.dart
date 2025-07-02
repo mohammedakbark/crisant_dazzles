@@ -18,3 +18,4 @@ const otherUsersRoute = "/otherUsersRoute";
 const drNavScreen = "/drNavScreen";
 const drQrScannerScreen = "/drQrScannerScreen";
 const drCustomerRegScreen="/drCustomerRegScreen";
+const drVideoInitialScreen="/drVideoInitialScreen";

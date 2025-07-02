@@ -22,11 +22,15 @@ class CustomTextField extends StatelessWidget {
   final int? maxLine;
   final void Function()? onTap;
   final bool? isTextCapital;
+  final bool? isReadOnly;
+ final  void Function(String)? onChanged;
   const CustomTextField({
     super.key,
     // this.hintColor,
     // this.borderColor,
+    this.onChanged,
     this.title,
+    this.isReadOnly,
     this.fillColor,
     this.controller,
     this.hintText,
@@ -56,6 +60,8 @@ class CustomTextField extends StatelessWidget {
               )
             : SizedBox(),
         TextFormField(
+          onChanged: onChanged,
+          readOnly: isReadOnly ?? false,
           onTap: onTap,
           maxLines: maxLine ?? 1,
           textCapitalization: isTextCapital == null
@@ -73,6 +79,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           cursorColor: AppColors.kPrimaryColor,
           style: AppStyle.mediumStyle(
+              color: isReadOnly == true ? AppColors.kTextPrimaryColor : null,
               fontSize: ResponsiveHelper.isTablet()
                   ? ResponsiveHelper.fontExtraSmall
                   : null),
@@ -83,7 +90,7 @@ class CustomTextField extends StatelessWidget {
                     ? ResponsiveHelper.fontExtraSmall
                     : null),
             hintStyle: AppStyle.mediumStyle(
-               fontSize: ResponsiveHelper.isTablet()
+              fontSize: ResponsiveHelper.isTablet()
                   ? ResponsiveHelper.fontExtraSmall
                   : null,
               color:
@@ -100,7 +107,9 @@ class CustomTextField extends StatelessWidget {
             hintText: hintText,
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color:
+                color: isReadOnly == true
+                    ? AppColors.kGrey
+                    :
                     // borderColor ??
                     AppColors.kPrimaryColor,
               ),
@@ -110,10 +119,13 @@ class CustomTextField extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color:
-                    // borderColor ??
-                    AppColors.kPrimaryColor,
-              ),
+                  color: isReadOnly == true
+                      ? AppColors.kGrey
+                      : AppColors.kPrimaryColor
+
+                  // borderColor ??
+
+                  ),
               borderRadius: BorderRadius.circular(
                 ResponsiveHelper.borderRadiusSmall,
               ),
