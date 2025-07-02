@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
       log("User Role -> ${loginRef.role}");
 
       if (mounted) {
-        await FirebasePushNotification().initNotification(context);
+        
 
         LoginController().naviagteToScreen(
             UserRoleModel(
