@@ -13,14 +13,14 @@ class DriverQrCodeScanRepo {
           "Authorization": "Bearer ${userData.token}",
         },
         body: {
-          "qrNumber": qrCode
+          "qrCode": qrCode
         });
 
     if (response.status == 200) {
       final data = response.data as Map;
       return {
         "error": false,
-        "data": DashboardModel.fromJson(data as Map<String, dynamic>),
+        "data": data['qrId'].toString(),
       };
     } else {
       return {"error": true, "data": response.message};

@@ -3,6 +3,7 @@ import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -70,10 +71,10 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
                   CupertinoIcons.arrow_down_circle_fill,
                   Colors.green,
                   () {
-                    // context
-                    //     .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
                     context
-                        .push(drCustomerRegScreen, extra: {"qrId": "6"});
+                        .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
+                    // context
+                    //     .push(drCustomerRegScreen, extra: {"qrId": "6"});
                   },
                 ),
 
@@ -84,9 +85,11 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
                   "Check Out",
                   CupertinoIcons.arrow_up_circle_fill,
                   Colors.red,
-                  () {
-                    context.push(drQrScannerScreen,
-                        extra: {"scanFor": "checkOut"});
+                  () async {
+                    // context.push(drQrScannerScreen,
+                    //     extra: {"scanFor": "checkOut"});
+
+                    await DriverCheckInController().onTakeVideo(context, "");
                   },
                 ),
 

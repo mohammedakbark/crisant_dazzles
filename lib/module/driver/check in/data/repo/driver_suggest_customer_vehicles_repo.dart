@@ -8,7 +8,7 @@ class DriverGetCustomerVehiclesRepo {
       int customerId) async {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.getRequest(
-      endpoint: "${ApiConstants.drGetCustomerVehicles}?customerId=$customerId",
+      endpoint: "${ApiConstants.drSuggestCustomerVehicles}?customerId=$customerId",
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",

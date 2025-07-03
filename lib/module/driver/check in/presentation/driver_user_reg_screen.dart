@@ -74,37 +74,39 @@ class _DriverCustomerRegScreenState
           clipBehavior: Clip.none,
           alignment: Alignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildForms(),
-                AppSpacer(
-                  hp: .02,
-                ),
-                ref.watch(driverControllerProvider).when(
-                      data: (state) {
-                        if (state is DriverCheckInErrorState) {
-                          return Text(
-                            state.errorText,
-                            style: AppStyle.boldStyle(
-                                color: AppColors.kErrorPrimary),
-                          );
-                        } else {
-                          return SizedBox.shrink();
-                        }
-                      },
-                      error: (error, stackTrace) => Text(
-                        error.toString(),
-                        style:
-                            AppStyle.boldStyle(color: AppColors.kErrorPrimary),
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildForms(),
+                  AppSpacer(
+                    hp: .02,
+                  ),
+                  ref.watch(driverControllerProvider).when(
+                        data: (state) {
+                          if (state is DriverCheckInErrorState) {
+                            return Text(
+                              state.errorText,
+                              style: AppStyle.boldStyle(
+                                  color: AppColors.kErrorPrimary),
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                        error: (error, stackTrace) => Text(
+                          error.toString(),
+                          style: AppStyle.boldStyle(
+                              color: AppColors.kErrorPrimary),
+                        ),
+                        loading: () => SizedBox.shrink(),
                       ),
-                      loading: () => SizedBox.shrink(),
-                    ),
-                AppSpacer(
-                  hp: .02,
-                ),
-                _widgetSubmitButton(),
-              ],
+                  AppSpacer(
+                    hp: .02,
+                  ),
+                  _widgetSubmitButton(),
+                ],
+              ),
             ),
             _buildSuggessionUi()
           ],
@@ -218,7 +220,7 @@ class _DriverCustomerRegScreenState
                         int? vehicleId = state?.selectedVehicleId;
                         log("CustomerId is ${customerId}");
                         log("vehicle Id is ${vehicleId}");
-                        final isSuccess = await ref
+                        final valetId = await ref
                             .read(driverControllerProvider.notifier)
                             .onSubmitCustomerRegister(
                                 _mobileNumberController.text.trim(),
@@ -230,13 +232,14 @@ class _DriverCustomerRegScreenState
                                 vehicleId,
                                 customerId);
 
-                        if (isSuccess) {
+                        if (valetId != null) {
                           _customerNameController.clear();
                           _mobileNumberController.clear();
                           _regNumberController.clear();
                           _brandController.clear();
                           _modelController.clear();
-                          context.push(drVideoInitialScreen);
+                          await DriverCheckInController()
+                              .onTakeVideo(context, valetId);
                         }
                       }
 

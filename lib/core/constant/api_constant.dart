@@ -30,9 +30,13 @@ class ApiConstants {
 
   // Driver Module
 
-  static const String drScanQrCode = "valetparking/scan/qrcode";
-  static const String drSearchCustomer = "valet/customernumber";
-  static const String drGetCustomerVehicles="valet/carsuggestion";
-  // static const String drRegisterCustomer = "valetparking/customer";
-  static const receiveVehicle = "valet/check-in";
+  static const String drScanQrCode = "valet/scan/qrcode";
+  static const String drSuggestCustomer = "valet/customernumber";
+  static const String drSuggestCustomerVehicles = "valet/carsuggestion";
+  static const String drSubmitVehicle = "valet/check-in";
+  static const String drUploadInitialVideo = "valet/checkin-video";
+  static const String drUploadLastVideo="";
+
+  static const String drGetAllParkedCarList = "valet/valetlist";
+  static const String drGetMyParkedCarList = "valet/valetlist";
 }

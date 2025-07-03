@@ -33,7 +33,7 @@ class ApiConfig {
         try {
           log("response 401  (No Error) POST");
           log(e.response!.data['message'].toString());
-            _checkTokenExpired(e.response!.data);
+          _checkTokenExpired(e.response!.data);
           return ResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error) POST");
@@ -91,14 +91,14 @@ class ApiConfig {
       // Directly use response.data instead of decoding again
       // log(response.data.toString());
 
-    
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
+          // log(e.response!.data);
           log("response 401  (No Error)");
-            log(e.response!.data['message'].toString());
-            _checkTokenExpired(e.response!.data);
+          log(e.response!.data['message'].toString());
+          _checkTokenExpired(e.response!.data);
           return ResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error)");
@@ -145,10 +145,9 @@ class ApiConfig {
     }
   }
 
-
- static void _checkTokenExpired(data)async{
-     if(data['error']==true && data['message']=="jwt expired"){
-       await  ProfilePage.logout(rootNavigatorKey.currentContext!);
-      }
+  static void _checkTokenExpired(data) async {
+    if (data['error'] == true && data['message'] == "jwt expired") {
+      await ProfilePage.logout(rootNavigatorKey.currentContext!);
+    }
   }
 }

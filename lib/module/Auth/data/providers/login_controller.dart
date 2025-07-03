@@ -117,7 +117,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           role: response['roleName'],
           roleId: roleModel.roleId);
       await LoginRefDataBase().setUseretails(local);
-      // await FirebasePushNotification().initNotification(context);
+      await FirebasePushNotification().initNotification(context);
       state = AsyncData(response);
       if (context.mounted) {
         final ref = ProviderContainer();
@@ -149,9 +149,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
 
   void naviagteToScreen(
       UserRoleModel currentUserRoleModel, BuildContext context) async {
-    if (currentUserRoleModel.roleName != LoginController.mainRole) {
-      await FirebasePushNotification().initNotification(context);
-    }
+    
     switch (currentUserRoleModel.roleName) {
       case "Office":
         {

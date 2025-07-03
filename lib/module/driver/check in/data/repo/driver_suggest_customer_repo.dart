@@ -8,7 +8,7 @@ class DriverSuggestCustomerRepo {
       String mobileNumber) async {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.getRequest(
-      endpoint: "${ApiConstants.drSearchCustomer}?number=$mobileNumber",
+      endpoint: "${ApiConstants.drSuggestCustomer}?number=$mobileNumber",
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",

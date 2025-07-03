@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dazzles/module/driver/check%20in/presentation/driver_initial_vedio_screen.dart';
 import 'package:dazzles/module/driver/driver_nav_screen.dart';
 import 'package:dazzles/module/driver/home/presentation/driver_qr_scanner_screen.dart';
 import 'package:dazzles/module/driver/check%20in/presentation/driver_user_reg_screen.dart';
@@ -106,13 +105,7 @@ class RouteProvider {
               qrId: qrId,
             );
           }),
-      GoRoute(
-          path: drVideoInitialScreen,
-          builder: (context, state) {
-            // final map = state.extra as Map<String, dynamic>;
-            // final qrId = map["qrId"];
-            return DriverInitialVideoScreen();
-          }),
+      
 
       // OTHER ROLE ROUTES
 

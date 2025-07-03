@@ -14,7 +14,7 @@ class DriverReceiveVehicleRepo {
       int? customerId) async {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.postRequest(
-        endpoint: ApiConstants.receiveVehicle,
+        endpoint: ApiConstants.drSubmitVehicle,
         header: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${userData.token}",
