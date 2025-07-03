@@ -32,7 +32,7 @@ class DriverReceiveVehicleRepo {
 
     if (response.status == 200) {
       final data = response.data as Map;
-      return {"error": false, "data": data};
+      return {"error": false, "data": data['valetId'].toString()};
     } else {
       return {"error": true, "data": response.message};
     }

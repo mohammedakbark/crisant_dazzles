@@ -233,6 +233,7 @@ class _DriverCustomerRegScreenState
                                 customerId);
 
                         if (valetId != null) {
+                          log(" ----  Valet Id is $valetId ----- >");
                           _customerNameController.clear();
                           _mobileNumberController.clear();
                           _regNumberController.clear();
