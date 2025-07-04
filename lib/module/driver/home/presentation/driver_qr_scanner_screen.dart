@@ -5,6 +5,7 @@ import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/module/driver/home/data/provider/home%20provider/driver_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -154,7 +155,10 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
 
             if (qrId != null) {
               log(qrId);
-              context.pushReplacement(drCustomerRegScreen, extra: {"qrId": qrId});
+              // showCustomSnackBarAdptive(message)
+              showToastMessage(context, "QrCode Detected.");
+              context
+                  .pushReplacement(drCustomerRegScreen, extra: {"qrId": qrId});
             }
           }
 

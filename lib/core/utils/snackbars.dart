@@ -61,6 +61,7 @@ showCustomSnackBarAdptive(
       showCloseIcon: true,
       elevation: 10,
       closeIconColor: AppColors.kWhite,
+      
       margin: EdgeInsets.only(
         left: ResponsiveHelper.wp*.03,
         right: ResponsiveHelper.wp*.03,
@@ -70,6 +71,7 @@ showCustomSnackBarAdptive(
           : isError == false
               ? AppColors.kGreen.withAlpha(70)
               : AppColors.kFillColor,
+              
       content: Text(
         message,
         style: AppStyle.normalStyle(color: AppColors.kWhite),

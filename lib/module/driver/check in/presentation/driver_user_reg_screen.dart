@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_button.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -11,6 +12,7 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/core/utils/validators.dart';
 import 'package:dazzles/module/driver/check%20in/data/model/driver_customer_car_suggession_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/model/driver_reg_customer_model.dart';
@@ -233,6 +235,9 @@ class _DriverCustomerRegScreenState
                                 customerId);
 
                         if (valetId != null) {
+                          showCustomSnackBarAdptive(
+                              "Next, take the initial video after parking the car.",
+                              isError: false);
                           log(" ----  Valet Id is $valetId ----- >");
                           _customerNameController.clear();
                           _mobileNumberController.clear();
@@ -241,6 +246,9 @@ class _DriverCustomerRegScreenState
                           _modelController.clear();
                           await DriverCheckInController()
                               .onTakeVideo(context, valetId);
+                        } else {
+                          showCustomSnackBarAdptive("Registration Failed",
+                              isError: true);
                         }
                       }
 

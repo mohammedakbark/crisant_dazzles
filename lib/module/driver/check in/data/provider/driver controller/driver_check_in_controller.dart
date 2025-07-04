@@ -132,6 +132,7 @@ class DriverCheckInController
             customerVehicleList: [],
             selectedCustomerId: null,
             selectedVehicleId: null));
+            
         return response['data'].toString();
       } else {
         state = AsyncValue.data(
