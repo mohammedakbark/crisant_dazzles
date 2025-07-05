@@ -22,11 +22,15 @@ class CustomTextField extends StatelessWidget {
   final int? maxLine;
   final void Function()? onTap;
   final bool? isTextCapital;
+  final bool? isReadOnly;
+ final  void Function(String)? onChanged;
   const CustomTextField({
     super.key,
     // this.hintColor,
     // this.borderColor,
+    this.onChanged,
     this.title,
+    this.isReadOnly,
     this.fillColor,
     this.controller,
     this.hintText,
@@ -49,36 +53,46 @@ class CustomTextField extends StatelessWidget {
       children: [
         title != null
             ? Column(
-              children: [
-                Text(title!, style: AppStyle.boldStyle()),
-                AppSpacer(hp: .015),
-              ],
-            )
+                children: [
+                  Text(title!, style: AppStyle.boldStyle()),
+                  AppSpacer(hp: .015),
+                ],
+              )
             : SizedBox(),
         TextFormField(
+          onChanged: onChanged,
+          readOnly: isReadOnly ?? false,
           onTap: onTap,
           maxLines: maxLine ?? 1,
-          textCapitalization:
-              isTextCapital == null
-                  ? TextCapitalization.words
-                  : isTextCapital == true
+          textCapitalization: isTextCapital == null
+              ? TextCapitalization.words
+              : isTextCapital == true
                   ? TextCapitalization.characters
                   : TextCapitalization.none,
-          inputFormatters:
-              maxLenght == null
-                  ? []
-                  : [LengthLimitingTextInputFormatter(maxLenght)],
+          inputFormatters: maxLenght == null
+              ? []
+              : [LengthLimitingTextInputFormatter(maxLenght)],
           validator: validator,
           keyboardType: keyBoardType,
           obscureText: isObsecure ?? false,
           obscuringCharacter: '*',
           controller: controller,
           cursorColor: AppColors.kPrimaryColor,
-          style: AppStyle.mediumStyle(),
+          style: AppStyle.mediumStyle(
+              color: isReadOnly == true ? AppColors.kTextPrimaryColor : null,
+              fontSize: ResponsiveHelper.isTablet()
+                  ? ResponsiveHelper.fontExtraSmall
+                  : null),
           decoration: InputDecoration(
-            
-            errorStyle: AppStyle.mediumStyle(color: AppColors.kErrorPrimary),
+            errorStyle: AppStyle.mediumStyle(
+                color: AppColors.kErrorPrimary,
+                fontSize: ResponsiveHelper.isTablet()
+                    ? ResponsiveHelper.fontExtraSmall
+                    : null),
             hintStyle: AppStyle.mediumStyle(
+              fontSize: ResponsiveHelper.isTablet()
+                  ? ResponsiveHelper.fontExtraSmall
+                  : null,
               color:
                   // hintColor ??
                   AppColors.kTextPrimaryColor,
@@ -91,10 +105,11 @@ class CustomTextField extends StatelessWidget {
             suffixIcon: sufixicon,
             prefixIcon: prefixIcon,
             hintText: hintText,
-
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color:
+                color: isReadOnly == true
+                    ? AppColors.kGrey
+                    :
                     // borderColor ??
                     AppColors.kPrimaryColor,
               ),
@@ -104,10 +119,13 @@ class CustomTextField extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color:
-                    // borderColor ??
-                    AppColors.kPrimaryColor,
-              ),
+                  color: isReadOnly == true
+                      ? AppColors.kGrey
+                      : AppColors.kPrimaryColor
+
+                  // borderColor ??
+
+                  ),
               borderRadius: BorderRadius.circular(
                 ResponsiveHelper.borderRadiusSmall,
               ),

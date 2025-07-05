@@ -4,12 +4,13 @@ class LocalUserRefModel {
   final int ?userId;
   final String? pushToken;
   final String?role;
+  final int ?roleId;
 
   LocalUserRefModel({
      this.userName,
      this.token,
      this.userId,
      this.pushToken
-     ,this.role
+     ,this.role,this.roleId
   });
 }

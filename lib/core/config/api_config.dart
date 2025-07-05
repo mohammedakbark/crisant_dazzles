@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/models/response_model.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
-import 'package:dazzles/office/profile/presentation/profile_page.dart';
+import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
 import 'package:dio/dio.dart';
 
 class ApiConfig {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: ApiConstants.baseUrl,
+      baseUrl: ApiConstants.localHostBaseURL,
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     ),
@@ -26,14 +26,14 @@ class ApiConfig {
         data: body,
         options: Options(headers: header),
       );
-
+      log(response.data.toString());
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
           log("response 401  (No Error) POST");
           log(e.response!.data['message'].toString());
-            _checkTokenExpired(e.response!.data);
+          _checkTokenExpired(e.response!.data);
           return ResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error) POST");
@@ -91,14 +91,14 @@ class ApiConfig {
       // Directly use response.data instead of decoding again
       // log(response.data.toString());
 
-    
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
+          // log(e.response!.data);
           log("response 401  (No Error)");
-            log(e.response!.data['message'].toString());
-            _checkTokenExpired(e.response!.data);
+          log(e.response!.data['message'].toString());
+          _checkTokenExpired(e.response!.data);
           return ResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error)");
@@ -145,10 +145,9 @@ class ApiConfig {
     }
   }
 
-
- static void _checkTokenExpired(data)async{
-     if(data['error']==true && data['message']=="jwt expired"){
-       await  ProfilePage.logout(rootNavigatorKey.currentContext!);
-      }
+  static void _checkTokenExpired(data) async {
+    if (data['error'] == true && data['message'] == "jwt expired") {
+      await ProfilePage.logout(rootNavigatorKey.currentContext!);
+    }
   }
 }

@@ -35,8 +35,6 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Dazzles uses the camera to let you take a photo when updating or adding a product image. Camera access is only used for this purpose.</string>
-	<!-- <key>NSMicrophoneUsageDescription</key>
-	<string>This app needs microphone access.</string> -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app saves edited photos to your library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -58,13 +56,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show your current position.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to show your current position.</string>
 </dict>
 </plist>

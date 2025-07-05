@@ -1,7 +1,8 @@
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-import 'package:dazzles/office/profile/presentation/profile_page.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
 
@@ -18,7 +19,6 @@ class AppErrorView extends StatelessWidget {
     this.errorExp,
     this.onRetry,
   });
-  
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,11 @@ class AppErrorView extends StatelessWidget {
           Text(
             textAlign: TextAlign.center,
             isTokenExpire ? "Session is expired." : error,
-            style: AppStyle.largeStyle(color: AppColors.kTextPrimaryColor),
+            style: AppStyle.largeStyle(
+                fontSize: ResponsiveHelper.isTablet()
+                    ? ResponsiveHelper.fontSmall
+                    : null,
+                color: AppColors.kTextPrimaryColor),
           ),
 
           // Subtite
@@ -54,6 +58,9 @@ class AppErrorView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       "Please login again..",
                       style: AppStyle.smallStyle(
+                        fontSize: ResponsiveHelper.isTablet()
+                            ? ResponsiveHelper.fontSmall
+                            : null,
                         color: AppColors.kTextPrimaryColor,
                       ),
                     ),
@@ -71,6 +78,9 @@ class AppErrorView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       errorExp!,
                       style: AppStyle.smallStyle(
+                        fontSize: ResponsiveHelper.isTablet()
+                            ? ResponsiveHelper.fontSmall
+                            : null,
                         color: AppColors.kTextPrimaryColor,
                       ),
                     ),
@@ -83,16 +93,34 @@ class AppErrorView extends StatelessWidget {
                   children: [
                     AppSpacer(hp: .01),
                     ElevatedButton(
-                      onPressed:
-                          isTokenExpire ? () =>ProfilePage.logout(context) : onRetry,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        textDirection: isTokenExpire?TextDirection.rtl:null,
-                        children: [
-                          Text(isTokenExpire ? "Logout" : "Try again"),
-                          AppSpacer(wp: .01),
-                          Icon( isTokenExpire? SolarIconsOutline.logout: Icons.refresh),
-                        ],
+                      onPressed: isTokenExpire
+                          ? () => ProfilePage.logout(context)
+                          : onRetry,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                            ResponsiveHelper.isTablet() ? 20 : 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          textDirection:
+                              isTokenExpire ? TextDirection.rtl : null,
+                          children: [
+                            Text(
+                              isTokenExpire ? "Logout" : "Try again",
+                              style: AppStyle.boldStyle(
+                                color: AppColors.kPrimaryColor,
+                                fontSize: ResponsiveHelper.isTablet()
+                                    ? ResponsiveHelper.fontSmall
+                                    : null,
+                              ),
+                            ),
+                            AppSpacer(wp: .01),
+                            Icon(
+                                size: ResponsiveHelper.isTablet() ? 40 : null,
+                                isTokenExpire
+                                    ? SolarIconsOutline.logout
+                                    : Icons.refresh),
+                          ],
+                        ),
                       ),
                     ),
                   ],

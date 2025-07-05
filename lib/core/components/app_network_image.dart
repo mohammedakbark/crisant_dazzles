@@ -31,28 +31,37 @@ class AppNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      fit: fit,
-      imageUrl: "${imageFile}?v=$imageVersion" ,
-      placeholder: (context, url) => AppLoading(),
-      errorListener: (value) {},
-      
-      errorWidget: (context, url, error) =>
-          (userName != null && userName!.isNotEmpty)
-              ? Center(
-                  child: Text(
-                    userName![0],
-                    style: AppStyle.boldStyle(
-                      fontSize: nameSize ?? ResponsiveHelper.fontMedium,
-                      fontWeight: FontWeight.bold,
-                      color: userNameColor ?? AppColors.kWhite,
+        fit: fit,
+        imageUrl: "${imageFile}?v=$imageVersion",
+        placeholder: (context, url) => AppLoading(),
+        errorListener: (value) {},
+        errorWidget: (context, url, error) =>
+            (userName != null && userName!.isNotEmpty)
+                ? Center(
+                    child: Text(
+                      userName![0],
+                      style: AppStyle.boldStyle(
+                        fontSize: nameSize ?? ResponsiveHelper.fontMedium,
+                        fontWeight: FontWeight.bold,
+                        color: userNameColor ?? AppColors.kWhite,
+                      ),
                     ),
-                  ),
-                )
-              : errorIcon ?? Icon(
-                  size: iconSize,
-                  Icons.broken_image_rounded,
-                  color: AppColors.kFillColor,
-                ),
-    );
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      errorIcon ??
+                          Icon(
+                            size: ResponsiveHelper.isTablet() ? 60 : iconSize,
+                            Icons.broken_image_rounded,
+                            color: AppColors.kFillColor,
+                          ),
+                      Text(
+                        "Image not found!",
+                        style: AppStyle.boldStyle(
+                            color: AppColors.kFillColor),
+                      )
+                    ],
+                  ));
   }
 }

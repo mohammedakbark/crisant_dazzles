@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 class ResponsiveHelper {
   static late double _screenWidth;
   static late double _screenHight;
+  static late double _shortSide;
+  // static late Orientation _orientation;
 
   static get hp => _screenHight;
   static get wp => _screenWidth;
 
   /// Initialize once using a context (call this in main screen)
   static void init(BuildContext context) {
-   
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHight = MediaQuery.of(context).size.height;
+    _shortSide = MediaQuery.of(context).size.shortestSide;
+    // _orientation = MediaQuery.of(context).orientation;
   }
 
   // Padding values (adjusting based on screen width)
@@ -31,4 +34,8 @@ class ResponsiveHelper {
   static double get borderRadiusSmall => _screenWidth * 0.02; // ~8px
   static double get borderRadiusMedium => _screenWidth * 0.04; // ~16px
   static double get borderRadiusLarge => _screenWidth * 0.06; // ~24px
+
+  static bool isTablet() {
+    return _shortSide >= 600; // standard breakpoint for tablets
+  }
 }

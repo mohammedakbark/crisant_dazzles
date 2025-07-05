@@ -1,4 +1,6 @@
 import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class AppBackButton extends StatelessWidget {
@@ -19,11 +21,23 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed:goBack?? () => Navigator.pop(context),
-      icon: const Icon(
+      onPressed: goBack ?? () => Navigator.pop(context),
+      icon: Icon(
+        size: ResponsiveHelper.isTablet() ? 40 : null,
         Icons.arrow_back_ios_new_rounded,
         color: AppColors.kWhite,
       ),
     );
+  }
+}
+
+class AppBarText extends StatelessWidget {
+  final String title;
+  const AppBarText({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    final isTab=ResponsiveHelper.isTablet();
+    return Text(title, style: AppStyle.boldStyle(fontSize: isTab?ResponsiveHelper.fontSmall:null));
   }
 }

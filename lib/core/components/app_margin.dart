@@ -1,3 +1,4 @@
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class AppMargin extends StatelessWidget {
@@ -7,6 +8,7 @@ class AppMargin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: child);
+    final isTab = ResponsiveHelper.isTablet();
+    return Padding(padding: EdgeInsets.symmetric(horizontal:isTab?20: 15), child: child);
   }
 }
