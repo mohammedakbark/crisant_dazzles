@@ -28,14 +28,19 @@ class ApiConstants {
   static const String setTokenURL = "notification/token";
   static const String getNotificationsURL = "notification";
 
-  // Driver Module
+  // DRIVER MODULE
 
-  static const String drScanQrCode = "valet/scan/qrcode";
+// check in
+  static const String drCheckInScanQrCode = "valet/scan/qrcode";
   static const String drSuggestCustomer = "valet/customernumber";
   static const String drSuggestCustomerVehicles = "valet/carsuggestion";
   static const String drSubmitVehicle = "valet/check-in";
   static const String drUploadInitialVideo = "valet/checkin-video";
-  static const String drUploadLastVideo="";
+
+  // check out
+
+  static const drCheckOutQrScan = "valet/parklocation";
+  static const String drUploadLastVideo = "";
 
   static const String drGetAllParkedCarList = "valet/valetlist";
   static const String drGetMyParkedCarList = "valet/valetlist";

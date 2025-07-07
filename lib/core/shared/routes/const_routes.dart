@@ -17,4 +17,8 @@ const otherUsersRoute = "/otherUsersRoute";
 
 const drNavScreen = "/drNavScreen";
 const drQrScannerScreen = "/drQrScannerScreen";
-const drCustomerRegScreen="/drCustomerRegScreen";
+// checkin
+const drCustomerRegScreen = "/drCustomerRegScreen";
+
+// checkOut
+const drlocationScreen = "/drLocationScreen";

@@ -10,7 +10,9 @@ import 'package:dazzles/core/components/app_textfield.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/app_bottom_sheet.dart';
 import 'package:dazzles/core/utils/debauncer.dart';
+import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/core/utils/validators.dart';
@@ -54,68 +56,70 @@ class _DriverCustomerRegScreenState
     super.initState();
 
     Future.microtask(
-      () {
+      () async {
         ref.invalidate(driverControllerProvider);
-        
+        await AppPermissions.askLocationPermission();
       },
     );
   }
 
+  bool _isLoadingUploadVideo = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          leading: AppBackButton(),
-          title: Text(
-            'Customer Registration',
-            style: AppStyle.boldStyle(),
-          )),
-      body: AppMargin(
-          child: Form(
-        key: _formkey,
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildForms(),
-                  AppSpacer(
-                    hp: .02,
-                  ),
-                  ref.watch(driverControllerProvider).when(
-                        data: (state) {
-                          if (state is DriverCheckInErrorState) {
-                            return Text(
-                              state.errorText,
-                              style: AppStyle.boldStyle(
-                                  color: AppColors.kErrorPrimary),
-                            );
-                          } else {
-                            return SizedBox.shrink();
-                          }
-                        },
-                        error: (error, stackTrace) => Text(
-                          error.toString(),
-                          style: AppStyle.boldStyle(
-                              color: AppColors.kErrorPrimary),
+        appBar: AppBar(
+            leading: AppBackButton(),
+            title: Text(
+              'Customer Registration',
+              style: AppStyle.boldStyle(),
+            )),
+        body: AppMargin(
+            child: Form(
+                key: _formkey,
+                child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildForms(),
+                            AppSpacer(
+                              hp: .02,
+                            ),
+                            ref.watch(driverControllerProvider).when(
+                                  data: (state) {
+                                    if (state is DriverCheckInErrorState) {
+                                      return Text(
+                                        state.errorText,
+                                        style: AppStyle.boldStyle(
+                                            color: AppColors.kErrorPrimary),
+                                      );
+                                    } else {
+                                      return SizedBox.shrink();
+                                    }
+                                  },
+                                  error: (error, stackTrace) => Text(
+                                    error.toString(),
+                                    style: AppStyle.boldStyle(
+                                        color: AppColors.kErrorPrimary),
+                                  ),
+                                  loading: () => SizedBox.shrink(),
+                                ),
+                            AppSpacer(
+                              hp: .02,
+                            ),
+                            _widgetSubmitButton(),
+                          ],
                         ),
-                        loading: () => SizedBox.shrink(),
                       ),
-                  AppSpacer(
-                    hp: .02,
-                  ),
-                  _widgetSubmitButton(),
-                ],
-              ),
-            ),
-            _buildSuggessionUi()
-          ],
-        ),
-      )),
-    );
+                      _buildSuggessionUi(),
+                      _isLoadingUploadVideo
+                          ? Positioned(left: 0, right: 0, child: AppLoading())
+                          : SizedBox.shrink()
+                    ]))));
   }
 
   Widget _buildForms() {
@@ -236,24 +240,37 @@ class _DriverCustomerRegScreenState
                                 customerId);
 
                         if (valetId != null) {
-                          showCustomSnackBarAdptive(
-                              "Next, take the initial video after parking the car.",
-                              isError: false);
                           log(" ----  Valet Id is $valetId ----- >");
                           _customerNameController.clear();
                           _mobileNumberController.clear();
                           _regNumberController.clear();
                           _brandController.clear();
                           _modelController.clear();
-                          await DriverCheckInController()
-                              .onTakeVideo(context, valetId);
+
+                          showCustomBottomSheet(
+                            message:
+                                "Customer information collected successfully!",
+                            buttonText: "UPLOAD INITIAL VIDEO",
+                            subtitle:
+                                "You can now proceed to the next step or you can continue after parking the vehicle.",
+                            onNext: () async {
+                              _isLoadingUploadVideo = true;
+                              setState(() {});
+                              await DriverCheckInController()
+                                  .onTakeVideo(context, valetId);
+                              _isLoadingUploadVideo = false;
+                              setState(() {});
+                            },
+                            skipText: "DO IT LATER",
+                            onSkip: () {
+                              context.go(drNavScreen);
+                            },
+                          );
                         } else {
                           showCustomSnackBarAdptive("Registration Failed",
                               isError: true);
                         }
                       }
-
-                      // context.push(drVehicleInfoFormScreen);
                     },
                     title: "Submit");
               }

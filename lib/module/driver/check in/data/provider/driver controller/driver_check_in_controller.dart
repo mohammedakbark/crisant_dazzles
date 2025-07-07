@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dazzles/core/shared/routes/const_routes.dart';
+import 'package:dazzles/core/utils/app_bottom_sheet.dart';
 import 'package:dazzles/core/utils/permission_hendle.dart';
+import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/module/driver/check%20in/data/model/driver_customer_car_suggession_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/model/driver_reg_customer_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_state.dart';
@@ -132,7 +134,7 @@ class DriverCheckInController
             customerVehicleList: [],
             selectedCustomerId: null,
             selectedVehicleId: null));
-            
+
         return response['data'].toString();
       } else {
         state = AsyncValue.data(
@@ -147,19 +149,24 @@ class DriverCheckInController
 
   // (2) initla video and location.
 
-  Future<void> _submitVideoAndLocation(
-      BuildContext context, String valetId) async {
+  Future<void> _submitVideoAndLocation(BuildContext context, String valetId,
+      {String? sheetButton}) async {
     log("<------- Video and Location ------>");
-    log(_pickedVideoFile!.path);
-    log(lat.toString());
-    log(lon.toString());
     if (_pickedVideoFile != null && lat != null && lon != null) {
       final respons = await DriverUploadInitilaVideoRepo.onUploadIntilaVideo(
           lat!, lon!, _pickedVideoFile!, valetId);
 
       if (respons['error'] == false) {
-        context.go(drNavScreen);
+        showCustomBottomSheet(
+          message: "Parking is Completed!",
+          buttonText:sheetButton?? "GO BACK TO DASHBOARD",
+          subtitle: "Now you can back to store or wait next delivery.",
+          onNext: () async {
+            context.go(drNavScreen);
+          },
+        );
       } else {
+        showCustomSnackBarAdptive(respons['data'], isError: true);
         log(respons['data']);
       }
     }
@@ -169,7 +176,8 @@ class DriverCheckInController
   File? _pickedVideoFile;
   double? lat;
   double? lon;
-  Future<void> onTakeVideo(BuildContext context, String valetId) async {
+  Future<void> onTakeVideo(BuildContext context, String valetId,
+      {String? sheetButton}) async {
     final hasPermission = await AppPermissions.askLocationPermission();
 
     if (!hasPermission) return null;
@@ -185,7 +193,7 @@ class DriverCheckInController
         lat = position.latitude;
         lon = position.longitude;
 
-        await _submitVideoAndLocation(context, valetId);
+        await _submitVideoAndLocation(context, valetId,sheetButton:sheetButton );
       }
     }
   }

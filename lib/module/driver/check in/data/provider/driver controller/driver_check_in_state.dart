@@ -4,13 +4,18 @@ import 'package:dazzles/module/driver/check%20in/data/model/driver_reg_customer_
 class DriverCheckInControllerState {
   final int? selectedCustomerId;
   final int? selectedVehicleId;
+
   DriverCheckInControllerState(
-      {this.selectedCustomerId, this.selectedVehicleId});
+      {this.selectedCustomerId,
+      this.selectedVehicleId,
+      });
 }
 
 class DriverCheckIninitialState extends DriverCheckInControllerState {}
 
 class DriverCheckInLoadingState extends DriverCheckInControllerState {}
+
+class DriverCheckInUploadVideoLoadingState extends DriverCheckInControllerState {}
 
 class DriverCheckInErrorState extends DriverCheckInControllerState {
   final String errorText;
@@ -26,14 +31,17 @@ class DriverCheckInControllerSuccessState extends DriverCheckInControllerState {
       {required this.customerVehicleList,
       super.selectedCustomerId,
       super.selectedVehicleId,
-      required this.suggessionList});
+      required this.suggessionList,
+    });
 
   DriverCheckInControllerSuccessState copyWith(
       {List<DriverCustomerSuggessionModel>? suggessionList,
       List<DriverCustomerCarSuggessionModel>? customerVehicleList,
       int? selectedCustomerId,
-      int? selectedVehicleId}) {
+      int? selectedVehicleId,
+      bool? isLoadingVideoUpload}) {
     return DriverCheckInControllerSuccessState(
+      
         selectedVehicleId: selectedVehicleId ?? this.selectedVehicleId,
         customerVehicleList: customerVehicleList ?? this.customerVehicleList,
         selectedCustomerId: selectedCustomerId ?? this.selectedCustomerId,

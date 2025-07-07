@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 showCustomSnackBar(
   BuildContext context, {
@@ -61,17 +63,18 @@ showCustomSnackBarAdptive(
       showCloseIcon: true,
       elevation: 10,
       closeIconColor: AppColors.kWhite,
-      
       margin: EdgeInsets.only(
-        left: ResponsiveHelper.wp*.03,
-        right: ResponsiveHelper.wp*.03,
-        bottom: Platform.isAndroid?ResponsiveHelper.hp * .07: ResponsiveHelper.hp * .09,),
+        left: ResponsiveHelper.wp * .03,
+        right: ResponsiveHelper.wp * .03,
+        bottom: Platform.isAndroid
+            ? ResponsiveHelper.hp * .07
+            : ResponsiveHelper.hp * .09,
+      ),
       backgroundColor: isError == true
           ? AppColors.kErrorPrimary.withAlpha(70)
           : isError == false
               ? AppColors.kGreen.withAlpha(70)
               : AppColors.kFillColor,
-              
       content: Text(
         message,
         style: AppStyle.normalStyle(color: AppColors.kWhite),
@@ -80,3 +83,75 @@ showCustomSnackBarAdptive(
     ..hideCurrentSnackBar()
     ..showSnackBar(snackbar);
 }
+
+void showCustomDialog({
+  required String message,
+  required String buttonText,
+  VoidCallback? onNext,
+  String? skipText,
+  VoidCallback? onSkip,
+  bool isError = false,
+}) {
+  showDialog(
+    context: rootNavigatorKey.currentContext!,
+    barrierDismissible: false,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isError ? Icons.error_outline : Icons.check_circle_outline,
+                color: isError ? Colors.red : Colors.green,
+                size: 60,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                isError ? "Oops!" : "Success!",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: isError ? Colors.red : Colors.green,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: skipText != null
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.center,
+                children: [
+                  if (skipText != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (onSkip != null) onSkip();
+                      },
+                      child: Text(skipText),
+                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      if (onNext != null) onNext();
+                    },
+                    child: Text(buttonText),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+

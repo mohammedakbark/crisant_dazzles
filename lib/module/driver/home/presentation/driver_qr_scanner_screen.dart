@@ -9,7 +9,6 @@ import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/module/driver/home/data/provider/home%20provider/driver_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -146,26 +145,55 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
             ),
           );
         },
+
         onDetect: (barcodes) async {
-          if (barcodes.barcodes.first.rawValue != null) {
-            log(barcodes.barcodes.first.rawValue.toString());
-            HapticFeedback.heavyImpact();
-            final qrId = await DriverHomeController.onScanQrCode(
-                barcodes.barcodes.first.rawValue!);
-
-            if (qrId != null) {
-              log(qrId);
-              // showCustomSnackBarAdptive(message)
-              showToastMessage(context, "QrCode Detected.");
-              context
-                  .pushReplacement(drCustomerRegScreen, extra: {"qrId": qrId});
-            }
+          if (isCheckIn) {
+            onScanCheckIn(barcodes.barcodes.first.rawValue);
+          } else {
+            onScanCheckOut(barcodes.barcodes.first.rawValue);
           }
-
-          // context.push(drCustomerRegScreen, extra: {"qrId": arcodes.barcodes.first});
-          // log(barcodes.barcodes.first.)
         },
       ),
     );
+  }
+
+  void onScanCheckIn(String? code) async {
+    try {
+      if (code != null) {
+        HapticFeedback.heavyImpact();
+        final qrId = await DriverHomeController.onCheckInScanQrCode(code);
+
+        if (qrId != null) {
+          log(qrId);
+          // showCustomSnackBarAdptive(message)
+          showToastMessage(context, "QrCode Detected.");
+          context.pushReplacement(drCustomerRegScreen, extra: {"qrId": qrId});
+        } else {
+          context.pop();
+        }
+      }
+    } catch (e) {
+      context.pop();
+    }
+  }
+
+  void onScanCheckOut(String? code) async {
+    try {
+      if (code != null) {
+        HapticFeedback.heavyImpact();
+        final modl = await DriverHomeController.onCheckOutScanQrCode(code);
+
+        if (modl != null) {
+          // showCustomSnackBarAdptive(message)
+          showToastMessage(context, "QrCode Detected.");
+          context.pushReplacement(drlocationScreen,
+              extra: {"modelData": modl.toJson()});
+        } else {
+          context.pop();
+        }
+      }
+    } catch (e) {
+      context.pop();
+    }
   }
 }

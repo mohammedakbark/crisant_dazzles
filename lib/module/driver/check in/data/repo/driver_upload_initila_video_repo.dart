@@ -20,12 +20,13 @@ class DriverUploadInitilaVideoRepo {
         contentType: MediaType('video', 'mp4'),
       ),
       'latitude': lat,
-      'longitude': lon
+      'longitude': lon,
+      
     });
     final response = await ApiConfig.postRequest(
         endpoint: "${ApiConstants.drUploadInitialVideo}/$valetId",
         header: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           "Authorization": "Bearer ${userData.token}",
         },
         body: formData);

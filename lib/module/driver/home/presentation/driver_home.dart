@@ -2,7 +2,9 @@ import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/app_bottom_sheet.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,76 +64,74 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
         position: _slideAnimation,
         child: Center(
           child: AppMargin(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                AppSpacer(hp: .03),
-                _buildEnhancedButtonTile(
-                  "Check In",
-                  CupertinoIcons.arrow_down_circle_fill,
-                  Colors.green,
-                  () {
-                    context
-                        .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
-                    // context
-                    //     .push(drCustomerRegScreen, extra: {"qrId": "6"});
-                  },
-                ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  AppSpacer(hp: .03),
+                  _buildEnhancedButtonTile(
+                    "Check In",
+                    CupertinoIcons.arrow_down_circle_fill,
+                    Colors.green,
+                    () {
+                      context.push(drQrScannerScreen,
+                          extra: {"scanFor": "checkIn"});
+                    },
+                  ),
+                  AppSpacer(
+                    hp: .025,
+                  ),
+                  // Check Out Button
+                  _buildEnhancedButtonTile(
+                    "Check Out",
+                    CupertinoIcons.arrow_up_circle_fill,
+                    Colors.red,
+                    () async {
+                      context.push(drQrScannerScreen,
+                          extra: {"scanFor": "checkOut"});
+                    },
+                  ),
 
-                // AppSpacer(hp: .04),
+                  AppSpacer(hp: .03),
 
-                // Check Out Button
-                _buildEnhancedButtonTile(
-                  "Check Out",
-                  CupertinoIcons.arrow_up_circle_fill,
-                  Colors.red,
-                  () async {
-                    // context.push(drQrScannerScreen,
-                    //     extra: {"scanFor": "checkOut"});
+                  Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            "Today Insight",
+                            style: AppStyle.boldStyle(),
+                          )),
+                      AppSpacer(hp: .02),
 
-                    await DriverCheckInController().onTakeVideo(context, "");
-                  },
-                ),
-
-                AppSpacer(hp: .03),
-
-                Column(
-                  children: [
-                    Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          "Today Insight",
-                          style: AppStyle.boldStyle(),
-                        )),
-                    AppSpacer(hp: .02),
-
-                    // Quick Stats Row
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildStatCard(
-                            'Check In',
-                            '12',
-                            SolarIconsOutline.arrowDown,
-                            Colors.blue,
+                      // Quick Stats Row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildStatCard(
+                              'Check In',
+                              '12',
+                              SolarIconsOutline.arrowDown,
+                              Colors.blue,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _buildStatCard(
-                            'Check Out',
-                            '4',
-                            SolarIconsOutline.arrowUp,
-                            Colors.orange,
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildStatCard(
+                              'Check Out',
+                              '4',
+                              SolarIconsOutline.arrowUp,
+                              Colors.orange,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                        ],
+                      ),
+                    ],
+                  ),
 
-                AppSpacer(hp: .03),
-              ],
+                  AppSpacer(hp: .03),
+                ],
+              ),
             ),
           ),
         ),
@@ -146,6 +146,7 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
     VoidCallback onTap,
   ) {
     return AnimatedContainer(
+      height: ResponsiveHelper.hp * .23,
       duration: const Duration(milliseconds: 200),
       child: Material(
         elevation: 4,
@@ -178,6 +179,7 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -215,6 +217,7 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
   Widget _buildStatCard(
       String title, String value, IconData icon, Color color) {
     return Container(
+      height: ResponsiveHelper.hp * .1,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
