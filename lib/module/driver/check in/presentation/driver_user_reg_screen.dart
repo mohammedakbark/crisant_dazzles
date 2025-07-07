@@ -56,6 +56,7 @@ class _DriverCustomerRegScreenState
     Future.microtask(
       () {
         ref.invalidate(driverControllerProvider);
+        
       },
     );
   }
