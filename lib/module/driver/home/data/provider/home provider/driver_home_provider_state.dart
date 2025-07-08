@@ -1,5 +1,7 @@
 class DriverHomeProviderState {
-  final String qrId;
+  final int totalCheckIn;
+  final int totalCheckOut;
 
-  DriverHomeProviderState({required this.qrId});
+  DriverHomeProviderState(
+      {required this.totalCheckOut, required this.totalCheckIn});
 }

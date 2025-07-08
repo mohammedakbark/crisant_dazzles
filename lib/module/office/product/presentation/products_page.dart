@@ -119,7 +119,8 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                 borderRadius: BorderRadius.circular(50),
               ),
               prefixIcon: Padding(
-                padding:   EdgeInsets.only(left: isTab ? 20 : 8,right:isTab? 10:0),
+                padding: EdgeInsets.only(
+                    left: isTab ? 20 : 8, right: isTab ? 10 : 0),
                 child: Icon(
                   size: isTab ? 40 : null,
                   SolarIconsOutline.magnifier,

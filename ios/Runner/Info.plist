@@ -62,5 +62,7 @@
     <string>We need your location to show your current position.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We need your location to show your current position.</string>
+	<key>GOOGLE_MAPS_API_KEY</key>
+	<string>${GOOGLE_MAPS_API_KEY}</string>
 </dict>
 </plist>

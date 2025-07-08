@@ -29,7 +29,7 @@ class ApiConstants {
   static const String getNotificationsURL = "notification";
 
   // DRIVER MODULE
-
+  static const drDashboardData = "valet/dailyvalet";
 // check in
   static const String drCheckInScanQrCode = "valet/scan/qrcode";
   static const String drSuggestCustomer = "valet/customernumber";
@@ -40,8 +40,9 @@ class ApiConstants {
   // check out
 
   static const drCheckOutQrScan = "valet/parklocation";
-  static const String drUploadLastVideo = "";
+  static const String drUploadLastVideo = "valet/checkout-video";
 
   static const String drGetAllParkedCarList = "valet/valetlist";
   static const String drGetMyParkedCarList = "valet/valetlist";
+  static const getAllStoresList="valet/storelist";
 }

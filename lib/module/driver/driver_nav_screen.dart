@@ -6,21 +6,17 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/driver/home/presentation/driver_home.dart';
 import 'package:dazzles/module/driver/parked%20cars/presentation/driver_parked_cars_screen.dart';
-import 'package:dazzles/module/other%20roles%20modules/other_users_navigationScreen.dart';
+import 'package:dazzles/module/driver/profile/presentation/driver_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class DriverNavScreen extends ConsumerWidget {
-  final _pages = [
-    DriverHome(),
-    DriverParkedCarsScreen(),
-    OtherUsersNaviagationScreen()
-  ];
+  final _pages = [DriverHome(), DriverParkedCarsScreen(), DriverProfile()];
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-      appBar: ref.watch(driverNavigationController) == 1
+      appBar: ref.watch(driverNavigationController) != 0
           ? null
           : AppBar(
               elevation: 0,

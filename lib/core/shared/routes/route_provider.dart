@@ -113,8 +113,9 @@ class RouteProvider {
           builder: (context, state) {
             final map = state.extra as Map<String, dynamic>;
             final model = map['modelData'] as Map<String, dynamic>;
-            return DrLocationScreen(
-              valetInfo: DrCheckOutValetInfoModel.fromJson(model),
+            return DrVehicleLocationScreen(
+
+            valetInfo: DrCheckOutValetInfoModel.fromJson(model),
             );
           }),
 

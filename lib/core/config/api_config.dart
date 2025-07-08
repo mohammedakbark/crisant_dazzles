@@ -26,7 +26,7 @@ class ApiConfig {
         data: body,
         options: Options(headers: header),
       );
-      log(response.data.toString());
+      // log(response.data.toString());
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {

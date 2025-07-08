@@ -159,10 +159,12 @@ class DriverCheckInController
       if (respons['error'] == false) {
         showCustomBottomSheet(
           message: "Parking is Completed!",
-          buttonText:sheetButton?? "GO BACK TO DASHBOARD",
+          buttonText: sheetButton ?? "GO BACK TO DASHBOARD",
           subtitle: "Now you can back to store or wait next delivery.",
           onNext: () async {
-            context.go(drNavScreen);
+            if (context.mounted) {
+              context.go(drNavScreen);
+            }
           },
         );
       } else {
@@ -193,7 +195,8 @@ class DriverCheckInController
         lat = position.latitude;
         lon = position.longitude;
 
-        await _submitVideoAndLocation(context, valetId,sheetButton:sheetButton );
+        await _submitVideoAndLocation(context, valetId,
+            sheetButton: sheetButton);
       }
     }
   }

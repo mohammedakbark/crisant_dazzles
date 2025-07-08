@@ -173,7 +173,9 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
         }
       }
     } catch (e) {
-      context.pop();
+      if (mounted) {
+        if (context.canPop()) context.pop();
+      }
     }
   }
 
@@ -189,11 +191,15 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
           context.pushReplacement(drlocationScreen,
               extra: {"modelData": modl.toJson()});
         } else {
-          context.pop();
+          if (mounted) {
+            if (context.canPop()) context.pop();
+          }
         }
       }
     } catch (e) {
-      context.pop();
+      if (mounted) {
+        if (context.canPop()) context.pop();
+      }
     }
   }
 }

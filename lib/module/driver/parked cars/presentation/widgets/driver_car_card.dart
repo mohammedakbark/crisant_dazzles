@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/app_bottom_sheet.dart';
@@ -8,8 +9,13 @@ import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
 import 'package:dazzles/module/driver/parked%20cars/data/model/driver_parked_car_model.dart';
+import 'package:dazzles/module/driver/parked%20cars/data/provider/my%20parked%20cars%20controller/driver_my_parked_car_controller.dart';
+import 'package:dazzles/module/driver/parked%20cars/data/provider/parked%20car%20controller/driver_parked_car_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+final isUploadingInitialVideoProvider = StateProvider<bool>((ref) => false);
 
 class DriverValetParkingCard extends ConsumerStatefulWidget {
   final DriverParkedCarModel valetData;
@@ -34,28 +40,41 @@ class _DriverValetParkingCardState
   ) {
     return InkWell(
       onTap: () {
-        if (widget.valetData.latitude == null ||
-            widget.valetData.longitude == null) {
+        final lat = widget.valetData.latitude;
+        final lon = widget.valetData.longitude;
+        final finalVideo = widget.valetData.finalVideo;
+        if (lat == null || lon == null) {
           showCustomBottomSheet(
             isLoading: isLoading,
             hideIcon: true,
-            message: "Uploading initial video of this vehilce is pending.",
-            subtitle: 'Make sure your location service is enabled',
+            message: "Initial video upload pending for this vehicle.",
+            subtitle: "Please enable your location services to continue.",
             buttonText: "UPLOAD INITIAL VIDEO",
             onNext: () async {
               final hasPermission =
                   await AppPermissions.askLocationPermission();
-
               if (hasPermission) {
-                // isLoading = true;
-                // setState(() {});
-                // await Future.delayed((Duration(seconds: 2)));
+                ref.read(isUploadingInitialVideoProvider.notifier).state = true;
                 await ref.watch(driverControllerProvider.notifier).onTakeVideo(
                     context, widget.valetData.valetId.toString(),
                     sheetButton: "DONE");
-                // setState(() {});
-                // isLoading = false;
+                ref.invalidate(drGetParkedCarListControllerProvider);
+                ref.invalidate(drGetMyParkedCarListControllerProvider);
+                ref.read(isUploadingInitialVideoProvider.notifier).state =
+                    false;
               }
+            },
+          );
+        }
+
+        if ((lat != null && lon != null) && finalVideo == null) {
+          showCustomBottomSheet(
+            hideIcon: true,
+            message: "This vehicle is parked and ready for pickup or delivery.",
+            subtitle: "Scan the customer's QR code to locate and proceed.",
+            buttonText: "SCAN QR CODE",
+            onNext: () async {
+              context.push(drQrScannerScreen, extra: {"scanFor": "checkOut"});
             },
           );
         }
@@ -78,6 +97,10 @@ class _DriverValetParkingCardState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Text(
+            //   widget.valetData.qrNumber.toString(),
+            //   style: AppStyle.boldStyle(color: AppColors.kBgColor),
+            // ),
             Row(
               // mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

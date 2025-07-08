@@ -1,24 +1,26 @@
+import 'package:dazzles/core/components/app_error_componet.dart';
+import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-import 'package:dazzles/core/utils/app_bottom_sheet.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/core/utils/snackbars.dart';
-import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
+import 'package:dazzles/module/driver/home/data/provider/home%20provider/driver_home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class DriverHome extends StatefulWidget {
+class DriverHome extends ConsumerStatefulWidget {
   const DriverHome({super.key});
 
   @override
-  State<DriverHome> createState() => _DriverHomeState();
+  ConsumerState<DriverHome> createState() => _DriverHomeState();
 }
 
-class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
+class _DriverHomeState extends ConsumerState<DriverHome>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -26,6 +28,11 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    Future.microtask(
+      () {
+        ref.invalidate(qrCodeRedControllerProvider);
+      },
+    );
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -94,40 +101,48 @@ class _DriverHomeState extends State<DriverHome> with TickerProviderStateMixin {
 
                   AppSpacer(hp: .03),
 
-                  Column(
-                    children: [
-                      Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            "Today Insight",
-                            style: AppStyle.boldStyle(),
-                          )),
-                      AppSpacer(hp: .02),
+                  ref.watch(qrCodeRedControllerProvider).when(
+                        loading: () => AppLoading(),
+                        error: (error, stackTrace) =>
+                            AppErrorView(error: error.toString()),
+                        data: (data) {
+                          if (data == null) return SizedBox.shrink();
+                          return Column(
+                            children: [
+                              Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text(
+                                    "Today Insight",
+                                    style: AppStyle.boldStyle(),
+                                  )),
+                              AppSpacer(hp: .02),
 
-                      // Quick Stats Row
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildStatCard(
-                              'Check In',
-                              '12',
-                              SolarIconsOutline.arrowDown,
-                              Colors.blue,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: _buildStatCard(
-                              'Check Out',
-                              '4',
-                              SolarIconsOutline.arrowUp,
-                              Colors.orange,
-                            ),
-                          ),
-                        ],
+                              // Quick Stats Row
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildStatCard(
+                                      'Check In',
+                                      data.totalCheckIn.toString(),
+                                      SolarIconsOutline.arrowDown,
+                                      Colors.blue,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: _buildStatCard(
+                                      'Check Out',
+                                      data.totalCheckOut.toString(),
+                                      SolarIconsOutline.arrowUp,
+                                      Colors.orange,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                    ],
-                  ),
 
                   AppSpacer(hp: .03),
                 ],

@@ -16,7 +16,13 @@ val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
-
+// FOR GOOGLE MAP HIDING
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val googleMapsApiKey: String = localProperties.getProperty("GOOGLE_MAPS_API_KEY") ?: ""
 android {
     namespace = "com.example.dazzles"
     compileSdk = flutter.compileSdkVersion
@@ -42,6 +48,12 @@ android {
         
         // Add this for multidex support (might be needed with desugaring)
         multiDexEnabled = true
+        // added GOOGLE MAP KEY
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = googleMapsApiKey
+
+
+
+
     }
 
     signingConfigs {

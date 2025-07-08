@@ -71,6 +71,11 @@ xmlns:tools="http://schemas.android.com/tools">
            android:exported="true">
         </receiver>
 
+  <!-- G O O G L E M A P -->
+        <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="${GOOGLE_MAPS_API_KEY}"/>
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
