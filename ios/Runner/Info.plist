@@ -39,7 +39,7 @@
 	<string>This app saves edited photos to your library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to your photo library to select images.</string>
-	<key>NSUserNotificationUsageDescription</key>
+	<key>NSPushNotificationsUsageDescription</key>
 	<string>This app uses notifications to send important alerts.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>

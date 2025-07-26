@@ -5,20 +5,23 @@ class AllParkedCarState {
   final List<DriverParkedCarModel> parkedCarList;
   final bool isLoadingMore;
   final List<DriverStoreModel> storeList;
+  final DriverStoreModel? selectedStore;
 
   AllParkedCarState(
       {required this.parkedCarList,
       this.isLoadingMore = false,
-      required this.storeList});
+      required this.storeList,
+      this.selectedStore});
 
   AllParkedCarState copyWith(
       {List<DriverParkedCarModel>? parkedCarList,
       bool? isLoadingMore,
-      List<DriverStoreModel>? storeList}) {
+      List<DriverStoreModel>? storeList,
+      DriverStoreModel? selectedStore}) {
     return AllParkedCarState(
-      storeList: storeList ?? this.storeList,
-      parkedCarList: parkedCarList ?? this.parkedCarList,
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-    );
+        storeList: storeList ?? this.storeList,
+        parkedCarList: parkedCarList ?? this.parkedCarList,
+        isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+        selectedStore: selectedStore ?? this.selectedStore);
   }
 }

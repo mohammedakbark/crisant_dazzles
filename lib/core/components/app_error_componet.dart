@@ -31,11 +31,12 @@ class AppErrorView extends StatelessWidget {
             children: [
               icon ??
                   Icon(
-                    Icons.smart_toy_outlined,
-                    color: AppColors.kTextPrimaryColor,
-                    size: 70,
-                  ),
-              AppSpacer(hp: .01),
+                      error == "No Internet Connection!"
+                          ? Icons.wifi_off
+                          : Icons.error_outline_outlined,
+                      size: 70,
+                      color: AppColors.kTextPrimaryColor),
+              AppSpacer(hp: .03),
             ],
           ),
 

@@ -538,6 +538,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.start,
                 ref.watch(loginControllerProvider.notifier).message ?? '',
                 style: AppStyle.boldStyle(

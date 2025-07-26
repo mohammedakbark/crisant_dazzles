@@ -118,7 +118,10 @@ class _DriverCustomerRegScreenState
                       _buildSuggessionUi(),
                       _isLoadingUploadVideo
                           ? Positioned(left: 0, right: 0, child: AppLoading())
-                          : SizedBox.shrink()
+                          : SizedBox.shrink(),
+                      AppSpacer(
+                        hp: .02,
+                      )
                     ]))));
   }
 
@@ -139,6 +142,7 @@ class _DriverCustomerRegScreenState
           hp: .01,
         ),
         CustomTextField(
+          isTextCapital: true,
           onChanged: (p0) {
             ref.watch(driverControllerProvider.notifier).clearSelectedCar();
           },

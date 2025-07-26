@@ -43,14 +43,21 @@ class _DriverParkedCarsScreenState extends ConsumerState<DriverParkedCarsScreen>
           children: [
             Column(
               children: [
-                TabBar(controller: _tabController, dividerHeight: .5, tabs: [
-                  Tab(
-                    text: "My Parkings",
-                  ),
-                  Tab(
-                    text: "All Parkings",
-                  )
-                ]),
+                TabBar(
+                    labelStyle: AppStyle.boldStyle(),
+                    unselectedLabelStyle: AppStyle.normalStyle(),
+                    indicatorColor: AppColors.kWhite,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    controller: _tabController,
+                    dividerHeight: .5,
+                    tabs: [
+                      Tab(
+                        text: "My Parkings",
+                      ),
+                      Tab(
+                        text: "All Parkings",
+                      )
+                    ]),
                 Expanded(
                     child: TabBarView(
                         controller: _tabController,

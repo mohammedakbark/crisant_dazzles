@@ -71,9 +71,9 @@ showCustomSnackBarAdptive(
             : ResponsiveHelper.hp * .09,
       ),
       backgroundColor: isError == true
-          ? AppColors.kErrorPrimary.withAlpha(70)
+          ? AppColors.kErrorPrimary
           : isError == false
-              ? AppColors.kGreen.withAlpha(70)
+              ? AppColors.kGreen
               : AppColors.kFillColor,
       content: Text(
         message,

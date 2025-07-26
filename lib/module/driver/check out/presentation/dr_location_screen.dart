@@ -36,7 +36,7 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
   String _locationStatus = "Getting your location...";
 
   // Distance threshold in meters to consider "reached" (default: 50 meters)
-  static const double REACHED_THRESHOLD = 100.0;
+  static const double REACHED_THRESHOLD = 2.0;
 
   @override
   void initState() {

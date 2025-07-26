@@ -12,7 +12,9 @@ class UploadImageRepo {
   ) async {
     try {
       final userData = await LoginRefDataBase().getUserData;
-      final formData = FormData();
+      final formData = FormData(
+        
+      );
       formData.files.add(
         MapEntry(
           'image',
@@ -21,6 +23,7 @@ class UploadImageRepo {
             filename: basename(filepath),
             contentType: MediaType('image', 'jpg'),
           ),
+        
         ),
       );
       for (var id in productIds) {

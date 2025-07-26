@@ -7,7 +7,7 @@ import 'package:dazzles/module/driver/parked%20cars/data/model/driver_parked_car
 
 class GetAllListOfParkedCarsRepo {
   static Future<Map<String, dynamic>> onGetAllParkedCars(int pageNumber,
-      {String? storeId}) async {
+      {int? storeId}) async {
     try {
       String params;
       if (storeId != null) {

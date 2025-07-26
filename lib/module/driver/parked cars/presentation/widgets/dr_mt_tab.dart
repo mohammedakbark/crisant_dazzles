@@ -1,5 +1,6 @@
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
+import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/module/driver/parked%20cars/data/provider/my%20parked%20cars%20controller/driver_my_parked_car_controller.dart';
 import 'package:dazzles/module/driver/parked%20cars/data/provider/my%20parked%20cars%20controller/my_parked_car_state.dart';
 import 'package:dazzles/module/driver/parked%20cars/presentation/widgets/driver_car_card.dart';
@@ -43,14 +44,21 @@ class _DrMtTabState extends ConsumerState<DrMtTab> {
       errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
       successWidget: (state) {
         final data = state as MyParkedCarState;
-        return ListView.builder(
-            physics: AlwaysScrollableScrollPhysics(),
-            controller: _myListScrollController,
-            itemBuilder: (context, index) {
-              return DriverValetParkingCard(
-                  valetData: data.parkedCarList[index]);
-            },
-            itemCount: data.parkedCarList.length);
+        return data.parkedCarList.isEmpty
+            ? AppErrorView(
+                icon: Icon(
+                  Icons.car_crash_outlined,
+                  color: AppColors.kTextPrimaryColor,
+                ),
+                error: "Cars not found!")
+            : ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                controller: _myListScrollController,
+                itemBuilder: (context, index) {
+                  return DriverValetParkingCard(
+                      valetData: data.parkedCarList[index]);
+                },
+                itemCount: data.parkedCarList.length);
       },
     );
   }
