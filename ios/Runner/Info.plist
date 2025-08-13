@@ -34,7 +34,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Dazzles uses the camera to let you take a photo when updating or adding a product image. Camera access is only used for this purpose.</string>
+    <string>Dazzles uses the camera to take product images and record vehicle videos for documentation and delivery tracking.</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Dazzles needs microphone access to record audio with video while capturing vehicle condition.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app saves edited photos to your library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -62,7 +64,9 @@
     <string>We need your location to show your current position.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We need your location to show your current position.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs your location to provide continuous tracking.</string>
 	<key>GOOGLE_MAPS_API_KEY</key>
-	<string>${GOOGLE_MAPS_API_KEY}</string>
+	<string>AIzaSyBW8UbeKu73pQ3fCj5rh3PXe_mXPorgCHA</string>
 </dict>
 </plist>
