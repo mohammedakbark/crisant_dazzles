@@ -34,9 +34,9 @@ class MainConfig {
     ]);
   }
 
-  static Future<void> loadEnv() async {
-    try {
-      await dotenv.load(); // Load env file
-    } catch (e) {}
-  }
+  // static Future<void> loadEnv() async {
+  //   try {
+  //     await dotenv.load(); // Load env file
+  //   } catch (e) {}
+  // }
 }

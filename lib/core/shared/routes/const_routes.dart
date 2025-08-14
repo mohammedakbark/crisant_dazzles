@@ -22,3 +22,6 @@ const drCustomerRegScreen = "/drCustomerRegScreen";
 
 // checkOut
 const drlocationScreen = "/drLocationScreen";
+
+// PO
+const poProductsScreen = "/poProductsScreen";

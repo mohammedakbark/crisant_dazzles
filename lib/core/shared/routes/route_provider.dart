@@ -14,6 +14,7 @@ import 'package:dazzles/module/office/notification/presentation/notification_scr
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/module/office/product/presentation/widgets/product_image_view.dart';
+import 'package:dazzles/module/office/purchase%20orders/presentation/po_product_screen.dart';
 import 'package:dazzles/module/office/upload%20failed/presentation/failed_data_screen.dart';
 import 'package:dazzles/module/other%20roles%20modules/other_users_navigationScreen.dart';
 import 'package:dazzles/module/splash_screen.dart';
@@ -84,6 +85,22 @@ class RouteProvider {
           );
         },
       ),
+
+        GoRoute(
+        path: poProductsScreen,
+        builder: (context, state) {
+          final map = state.extra as Map<String, dynamic>;
+          final id = map['id'] as String;
+          final supplier = map['supplier'] as String;
+          return PoProductScreen(
+            id: id,
+            supplier: supplier,
+          );
+        },
+      ),
+
+
+
       // DRIVER ROLE ROUTES
 
       GoRoute(

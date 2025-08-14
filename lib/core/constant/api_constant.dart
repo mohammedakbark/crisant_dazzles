@@ -1,10 +1,11 @@
 class ApiConstants {
   static const String baseUrl = "https://bill.dazzles.in/Api/api/mobile/";
-  static const localHostBaseURL = "http://192.168.31.79:5173/api/mobile/";
+  static const localHostBaseURL = "http://192.168.1.29:5173/api/mobile/";
 
   //  "https://api.dazzles.in/api/mobile/";
   //  "https://test.dazzles.in/";
   static const String imageBaseUrl = "https://bill.dazzles.in/";
+
   static const String login = "login";
   static const String profile = "profile";
   static const String dashboard = "dashboard";
@@ -17,6 +18,11 @@ class ApiConstants {
   static const String updateImage = "product";
 
   static const String searchProductById = "upload/";
+
+//PO
+
+  static const String allPurchases = "purchase";
+  static const String getPurshaseOrderProducts = "purchase/order";
 
   // Other Module
 
@@ -44,5 +50,5 @@ class ApiConstants {
 
   static const String drGetAllParkedCarList = "valet/valetlist";
   static const String drGetMyParkedCarList = "valet/valetlist";
-  static const getAllStoresList="valet/storelist";
+  static const getAllStoresList = "valet/storelist";
 }

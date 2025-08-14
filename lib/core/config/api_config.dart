@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 class ApiConfig {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: ApiConstants.baseUrl,
+      baseUrl: ApiConstants.localHostBaseURL,
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     ),

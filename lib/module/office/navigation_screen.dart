@@ -10,6 +10,8 @@ import 'package:dazzles/module/office/camera/presentation/camera_screen.dart';
 import 'package:dazzles/module/office/custom_app_bar.dart';
 import 'package:dazzles/module/office/home/presentation/home_page.dart';
 import 'package:dazzles/module/office/home/data/providers/dashboard_controller.dart';
+import 'package:dazzles/module/office/purchase%20orders/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
+import 'package:dazzles/module/office/purchase%20orders/presentation/po_page.dart';
 import 'package:dazzles/module/office/product/presentation/products_page.dart';
 import 'package:dazzles/module/office/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
@@ -32,7 +34,7 @@ class NavigationScreen extends ConsumerStatefulWidget {
 class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   final List<Widget> _pages = [
     HomePage(),
-    PendingImagePage(),
+    POPage(),
     CameraScreen(),
     ProductsPage(),
     ProfilePage(),
@@ -44,7 +46,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
     Future.microtask(() {
       ref.invalidate(dashboardControllerProvider);
       ref.invalidate(profileControllerProvider);
-      ref.invalidate(getAllPendingProductControllerProvider);
+      // ref.invalidate(getAllPendingProductControllerProvider);
+      ref.invalidate(getAllProductOrdersControllerProvider);
       ref.invalidate(allProductControllerProvider);
     });
   }
@@ -95,8 +98,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildIconSet(SolarIconsBold.home, "Home", 0),
-                    _buildIconSet(
-                        CupertinoIcons.square_list_fill, "Pending", 1),
+                    _buildIconSet(CupertinoIcons.square_list_fill, "P-O", 1),
                     SizedBox(
                       width: ResponsiveHelper.wp * .1,
                     ),
@@ -140,7 +142,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                         border: Border.all(
                             width: 4,
                             color: ref
-                                        .watch(officeNavigationController.notifier)
+                                        .watch(
+                                            officeNavigationController.notifier)
                                         .state ==
                                     2
                                 ? AppColors.kPrimaryColor
@@ -158,19 +161,23 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                             //     ? AppColors.kWhite
                             //     : AppColors.kSecondaryColor
                           ),
-                          color:
-                              ref.watch(officeNavigationController.notifier).state ==
-                                      2
-                                  ? AppColors.kPrimaryColor
-                                  : AppColors.kWhite,
+                          color: ref
+                                      .watch(
+                                          officeNavigationController.notifier)
+                                      .state ==
+                                  2
+                              ? AppColors.kPrimaryColor
+                              : AppColors.kWhite,
                           shape: BoxShape.circle),
                       child: Icon(
                         size: isTab ? 40 : null,
                         CupertinoIcons.camera_fill,
-                        color:
-                            ref.watch(officeNavigationController.notifier).state == 2
-                                ? AppColors.kWhite
-                                : AppColors.kBgColor,
+                        color: ref
+                                    .watch(officeNavigationController.notifier)
+                                    .state ==
+                                2
+                            ? AppColors.kWhite
+                            : AppColors.kBgColor,
                       ),
                     ),
                   ),
@@ -183,7 +190,8 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
 
   Widget _buildIconSet(IconData icon, String label, int index) {
     final isTab = ResponsiveHelper.isTablet();
-    bool isSelected = ref.read(officeNavigationController.notifier).state == index;
+    bool isSelected =
+        ref.read(officeNavigationController.notifier).state == index;
     return IconButton(
         onPressed: () {
           ref.read(officeNavigationController.notifier).state = index;

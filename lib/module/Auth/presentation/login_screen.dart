@@ -294,6 +294,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           },
                         ),
                       ),
+                      AppSpacer(
+                        hp: .03,
+                      ),
                     ],
                   )
                 ],
@@ -395,104 +398,107 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         ],
                       ),
-                      child: SlideInUp(
-                        duration: Duration(milliseconds: 800),
-                        child: Form(
-                          key: _otpFormKey,
-                          child: Column(
-                            // crossAxisAlignment: C,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Text("OTP Verification",
-                              //     style: AppStyle.boldStyle(
-                              //         fontSize: ResponsiveHelper.fontLarge)),
-                              AppSpacer(
-                                hp: .01,
-                              ),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    style: AppStyle.normalStyle(
-                                        fontSize: isTab ? 28 : null),
-                                    text: "Enter the OTP sent to \n",
-                                    children: [
-                                      TextSpan(
-                                          style: AppStyle.largeStyle(
-                                              fontSize: isTab ? 28 : null),
-                                          text:
-                                              "+91 ${_mobileNumberController.text}")
-                                    ]),
-                              ),
-                              AppSpacer(hp: .02),
-                              Pinput(
-                                errorTextStyle: AppStyle.mediumStyle(
-                                    fontSize: isTab ? 30 : null,
-                                    color: AppColors.kErrorPrimary),
-                                validator: (value) =>
-                                    AppValidator.requiredValidator(value),
-                                keyboardType: TextInputType.number,
-                                length: 6,
-                                controller: _pinputController,
-                                defaultPinTheme: _pinTheme,
-                                focusedPinTheme: _pinTheme,
-                                errorPinTheme: _errorPinThem,
-                              ),
-                              AppSpacer(hp: .02),
-                              _errorWidgetBuilder(newRef),
-                              Consumer(builder: (context, reff, child) {
-                                final isEnabled = reff
-                                    .watch(resendOtpControllerProvider)
-                                    .value?["isButtonEnables"];
-                                final timer = reff
-                                    .watch(resendOtpControllerProvider)
-                                    .value!["start"]
-                                    .toString();
-
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                      child: Form(
+                        key: _otpFormKey,
+                        child: Column(
+                          // crossAxisAlignment: C,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Text("OTP Verification",
+                            //     style: AppStyle.boldStyle(
+                            //         fontSize: ResponsiveHelper.fontLarge)),
+                            AppSpacer(
+                              hp: .01,
+                            ),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                  style: AppStyle.normalStyle(
+                                      fontSize: isTab ? 28 : null),
+                                  text: "Enter the OTP sent to \n",
                                   children: [
-                                    Text(
-                                      "Dont't receive the OTP ?",
-                                      style: AppStyle.mediumStyle(
-                                          fontSize: isTab ? 25 : null,
-                                          color: AppColors.kTextPrimaryColor),
-                                    ),
-                                    AppSpacer(
-                                      wp: .05,
-                                    ),
-                                    isEnabled
-                                        ? InkWell(
-                                            onTap: () => _resendOTP(),
-                                            child: Text(
-                                              "RESEND OTP",
-                                              style: AppStyle.boldStyle(
-                                                  fontSize: isTab ? 25 : null,
-                                                  color:
-                                                      AppColors.kPrimaryColor),
-                                            ))
-                                        : Text(
-                                            "00:${timer}",
+                                    TextSpan(
+                                        style: AppStyle.largeStyle(
+                                            fontSize: isTab ? 28 : null),
+                                        text:
+                                            "+91 ${_mobileNumberController.text}")
+                                  ]),
+                            ),
+                            AppSpacer(hp: .02),
+                            Pinput(
+                              onCompleted: (value) {
+                                _onVerifyOTP(
+                                  context,
+                                  newRef,
+                                  id,
+                                );
+                              },
+                              errorTextStyle: AppStyle.mediumStyle(
+                                  fontSize: isTab ? 30 : null,
+                                  color: AppColors.kErrorPrimary),
+                              validator: (value) =>
+                                  AppValidator.requiredValidator(value),
+                              keyboardType: TextInputType.number,
+                              length: 6,
+                              controller: _pinputController,
+                              defaultPinTheme: _pinTheme,
+                              focusedPinTheme: _pinTheme,
+                              errorPinTheme: _errorPinThem,
+                            ),
+                            AppSpacer(hp: .02),
+                            _errorWidgetBuilder(newRef),
+                            Consumer(builder: (context, reff, child) {
+                              final isEnabled = reff
+                                  .watch(resendOtpControllerProvider)
+                                  .value?["isButtonEnables"];
+                              final timer = reff
+                                  .watch(resendOtpControllerProvider)
+                                  .value!["start"]
+                                  .toString();
+
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Dont't receive the OTP ?",
+                                    style: AppStyle.mediumStyle(
+                                        fontSize: isTab ? 25 : null,
+                                        color: AppColors.kTextPrimaryColor),
+                                  ),
+                                  AppSpacer(
+                                    wp: .05,
+                                  ),
+                                  isEnabled
+                                      ? InkWell(
+                                          onTap: () => _resendOTP(),
+                                          child: Text(
+                                            "RESEND OTP",
                                             style: AppStyle.boldStyle(
                                                 fontSize: isTab ? 25 : null,
                                                 color: AppColors.kPrimaryColor),
-                                          ),
-                                  ],
-                                );
-                              }),
-                              AppSpacer(hp: .02),
-                              BuildStateManageComponent(
-                                stateController:
-                                    newRef.watch(loginControllerProvider),
-                                successWidget: (data) => AppButton(
-                                    title: 'Verify OTP',
-                                    onPressed: () => _onVerifyOTP(
-                                          context,
-                                          newRef,
-                                          id,
-                                        )),
-                              ),
-                            ],
-                          ),
+                                          ))
+                                      : Text(
+                                          "00:${timer}",
+                                          style: AppStyle.boldStyle(
+                                              fontSize: isTab ? 25 : null,
+                                              color: AppColors.kPrimaryColor),
+                                        ),
+                                ],
+                              );
+                            }),
+                            AppSpacer(hp: .02),
+                            BuildStateManageComponent(
+                              stateController:
+                                  newRef.watch(loginControllerProvider),
+                              successWidget: (data) => AppButton(
+                                  title: 'Verify OTP',
+                                  onPressed: () => _onVerifyOTP(
+                                        context,
+                                        newRef,
+                                        id,
+                                      )),
+                            ),
+                          ],
                         ),
                       ),
                     )),

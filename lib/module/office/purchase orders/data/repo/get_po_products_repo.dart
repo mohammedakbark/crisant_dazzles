@@ -1,0 +1,30 @@
+import 'package:dazzles/core/config/api_config.dart';
+import 'package:dazzles/core/constant/api_constant.dart';
+import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
+import 'package:dazzles/module/office/product/data/models/product_model.dart';
+import 'package:dazzles/module/office/purchase%20orders/data/model/po_product_model.dart';
+
+class GetPoProductsRepo {
+  static Future<Map<String, dynamic>> onGetPoProducts(
+      int page, String id) async {
+    final userData = await LoginRefDataBase().getUserData;
+    final response = await ApiConfig.getRequest(
+      endpoint: "${ApiConstants.getPurshaseOrderProducts}/$id",
+      header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${userData.token}",
+      },
+    );
+
+    if (response.status == 200) {
+      final data = response.data as List;
+      return {
+        "error": false,
+        "data": data.map((e) => PoProductModel.fromJson(e)).toList(),
+        "pagination": response.pagination,
+      };
+    } else {
+      return {"error": true, "data": response.message};
+    }
+  }
+}
