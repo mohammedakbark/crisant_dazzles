@@ -54,163 +54,160 @@ void showCustomBottomSheet(
             left: customPadding?.left ?? 16,
             right: customPadding?.right ?? 16,
           ),
-          child: SlideInUp(
-            duration: animationDuration,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: effectiveBackgroundColor,
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(
-                  width: 1.5,
-                  color: effectivePrimaryColor.withOpacity(0.2),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, -5),
-                    spreadRadius: 0,
-                  ),
-                  BoxShadow(
-                    color: effectivePrimaryColor.withOpacity(0.1),
-                    blurRadius: 40,
-                    offset: const Offset(0, -10),
-                    spreadRadius: 0,
-                  ),
-                ],
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: effectiveBackgroundColor,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                width: 1.5,
+                color: effectivePrimaryColor.withOpacity(0.2),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Top handle indicator
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    height: 4,
-                    width: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, -5),
+                  spreadRadius: 0,
+                ),
+                BoxShadow(
+                  color: effectivePrimaryColor.withOpacity(0.1),
+                  blurRadius: 40,
+                  offset: const Offset(0, -10),
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Top handle indicator
+                Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  height: 4,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Header with close button
-                        if (showCloseButton)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () => Navigator.pop(context),
-                                icon: const Icon(Icons.close, size: 24),
-                                style: IconButton.styleFrom(
-                                  backgroundColor: Colors.grey.withOpacity(0.1),
-                                  foregroundColor: Colors.grey[600],
+                ),
+          
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header with close button
+                      if (showCloseButton)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(Icons.close, size: 24),
+                              style: IconButton.styleFrom(
+                                backgroundColor: Colors.grey.withOpacity(0.1),
+                                foregroundColor: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+          
+                      if (hideIcon == false) // Animated Icon
+                        BounceInDown(
+                          duration: Duration(
+                              milliseconds:
+                                  animationDuration.inMilliseconds + 100),
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: effectivePrimaryColor.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: customIcon ??
+                                Icon(
+                                  isError
+                                      ? Icons.error_outline_rounded
+                                      : Icons.check_circle_outline_rounded,
+                                  size: 48,
+                                  color: effectivePrimaryColor,
                                 ),
-                              ),
-                            ],
                           ),
-
-                        if (hideIcon == false) // Animated Icon
-                          BounceInDown(
-                            duration: Duration(
-                                milliseconds:
-                                    animationDuration.inMilliseconds + 100),
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: effectivePrimaryColor.withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: customIcon ??
-                                  Icon(
-                                    isError
-                                        ? Icons.error_outline_rounded
-                                        : Icons.check_circle_outline_rounded,
-                                    size: 48,
-                                    color: effectivePrimaryColor,
-                                  ),
-                            ),
-                          ),
-                        if (hideIcon == false) const SizedBox(height: 20),
-                        if (hideIcon == false)
-                          // Title with enhanced animation
-                          FadeInUp(
-                            duration: Duration(
-                                milliseconds:
-                                    animationDuration.inMilliseconds + 200),
-                            child: Text(
-                              isError ? "Oops!" : "Success!",
-                              style: AppStyle.boldStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                color: effectivePrimaryColor,
-                              ),
-                            ),
-                          ),
-                        if (hideIcon == false) const SizedBox(height: 12),
-
-                        // Message
+                        ),
+                      if (hideIcon == false) const SizedBox(height: 20),
+                      if (hideIcon == false)
+                        // Title with enhanced animation
                         FadeInUp(
                           duration: Duration(
                               milliseconds:
-                                  animationDuration.inMilliseconds + 300),
+                                  animationDuration.inMilliseconds + 200),
                           child: Text(
-                            message,
-                            textAlign: TextAlign.center,
-                            style: AppStyle.mediumStyle(
-                              fontSize: 16,
-                              color: AppColors.kBgColor,
-                              height: 1.4,
+                            isError ? "Oops!" : "Success!",
+                            style: AppStyle.boldStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              color: effectivePrimaryColor,
                             ),
                           ),
                         ),
-
-                        // Subtitle if provided
-                        if (subtitle != null) ...[
-                          const SizedBox(height: 8),
-                          FadeInUp(
-                            duration: Duration(
-                                milliseconds:
-                                    animationDuration.inMilliseconds + 400),
-                            child: Text(
-                              subtitle,
-                              textAlign: TextAlign.center,
-                              style: AppStyle.mediumStyle(
-                                fontSize: 14,
-                                color: AppColors.kBgColor.withOpacity(0.7),
-                              ),
-                            ),
+                      if (hideIcon == false) const SizedBox(height: 12),
+          
+                      // Message
+                      FadeInUp(
+                        duration: Duration(
+                            milliseconds:
+                                animationDuration.inMilliseconds + 300),
+                        child: Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          style: AppStyle.mediumStyle(
+                            fontSize: 16,
+                            color: AppColors.kBgColor,
+                            height: 1.4,
                           ),
-                        ],
-
-                        const SizedBox(height: 32),
-
-                        // Enhanced Button Section
+                        ),
+                      ),
+          
+                      // Subtitle if provided
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 8),
                         FadeInUp(
                           duration: Duration(
                               milliseconds:
-                                  animationDuration.inMilliseconds + 500),
-                          child: _buildButtonSection(
-                            isLoading: isLoading,
-                            context: context,
-                            buttonText: buttonText,
-                            skipText: skipText,
-                            onNext: onNext,
-                            onSkip: onSkip,
-                            primaryColor: effectivePrimaryColor,
-                            enableHapticFeedback: enableHapticFeedback,
+                                  animationDuration.inMilliseconds + 400),
+                          child: Text(
+                            subtitle,
+                            textAlign: TextAlign.center,
+                            style: AppStyle.mediumStyle(
+                              fontSize: 14,
+                              color: AppColors.kBgColor.withOpacity(0.7),
+                            ),
                           ),
                         ),
                       ],
-                    ),
+          
+                      const SizedBox(height: 32),
+          
+                      // Enhanced Button Section
+                      FadeInUp(
+                        duration: Duration(
+                            milliseconds:
+                                animationDuration.inMilliseconds + 500),
+                        child: _buildButtonSection(
+                          isLoading: isLoading,
+                          context: context,
+                          buttonText: buttonText,
+                          skipText: skipText,
+                          onNext: onNext,
+                          onSkip: onSkip,
+                          primaryColor: effectivePrimaryColor,
+                          enableHapticFeedback: enableHapticFeedback,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

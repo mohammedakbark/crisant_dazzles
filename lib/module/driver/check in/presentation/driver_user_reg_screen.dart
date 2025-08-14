@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_button.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -112,6 +111,9 @@ class _DriverCustomerRegScreenState
                               hp: .02,
                             ),
                             _widgetSubmitButton(),
+                            AppSpacer(
+                              hp: .02,
+                            ),
                           ],
                         ),
                       ),

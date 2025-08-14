@@ -45,9 +45,8 @@ class _AppLoadingState extends State<AppLoading> {
               ),
             )
           : CircularProgressIndicator.adaptive(
-            
-              strokeWidth: 1,
-              
+              strokeWidth: 3,
+              constraints: BoxConstraints(minHeight: 20, minWidth: 20),
               backgroundColor: Platform.isAndroid ? AppColors.kFillColor : null,
             ),
     );

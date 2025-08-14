@@ -33,6 +33,8 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
     }
   }
 
+  bool _isProcessing = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,17 +149,25 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
         },
 
         onDetect: (barcodes) async {
+          if (_isProcessing) return; // 👈 prevent duplicate triggers
+          _isProcessing = true;
+
+          final code = barcodes.barcodes.first.rawValue;
           if (isCheckIn) {
-            onScanCheckIn(barcodes.barcodes.first.rawValue);
+            await onScanCheckIn(code);
           } else {
-            onScanCheckOut(barcodes.barcodes.first.rawValue);
+            await onScanCheckOut(code);
           }
+
+          // Optional: delay before allowing another scan
+          await Future.delayed(const Duration(seconds: 2));
+          _isProcessing = false;
         },
       ),
     );
   }
 
-  void onScanCheckIn(String? code) async {
+  Future<void> onScanCheckIn(String? code) async {
     try {
       if (code != null) {
         HapticFeedback.heavyImpact();
@@ -179,7 +189,7 @@ class _DriverQRScannerPageState extends State<DriverQRScannerPage> {
     }
   }
 
-  void onScanCheckOut(String? code) async {
+  Future<void> onScanCheckOut(String? code) async {
     try {
       if (code != null) {
         HapticFeedback.heavyImpact();

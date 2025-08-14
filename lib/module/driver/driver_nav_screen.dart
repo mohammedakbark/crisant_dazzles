@@ -16,62 +16,50 @@ class DriverNavScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-      appBar: ref.watch(driverNavigationController) != 0
-          ? null
-          : AppBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              title: Consumer(builder: (context, ref, _) {
-                switch (ref.watch(driverNavigationController)) {
-                  case 0:
-                    {
-                      return FadeIn(
-                        key: GlobalObjectKey(
-                            ref.watch(driverNavigationController)),
-                        child: Text(
-                          'Dashboard',
-                          style: AppStyle.boldStyle(
-                            fontSize: 24,
-                            color: AppColors.kWhite,
-                          ),
-                        ),
-                      );
-                    }
-                  // case 1:
-                  //   {
-                  //     return FadeIn(
-                  //       key: GlobalObjectKey(ref.watch(driverNavigationController)),
-                  //       child: Text(
-                  //         'Parked',
-                  //         style: AppStyle.boldStyle(
-                  //           fontSize: 24,
-                  //           color: AppColors.kWhite,
-                  //         ),
-                  //       ),
-                  //     );
-                  //   }
-                  case 2:
-                    {
-                      return FadeIn(
-                        key: GlobalObjectKey(
-                            ref.watch(driverNavigationController)),
-                        child: Text(
-                          'Profile',
-                          style: AppStyle.boldStyle(
-                            fontSize: 24,
-                            color: AppColors.kWhite,
-                          ),
-                        ),
-                      );
-                    }
-                  default:
-                    {
-                      return SizedBox.shrink();
-                    }
-                }
-              }),
-              // centerTitle: true,
-            ),
+      // appBar: ref.watch(driverNavigationController) != 0
+      //     ? null
+      //     : AppBar(
+      //         elevation: 0,
+      //         backgroundColor: Colors.transparent,
+      //         title: Consumer(builder: (context, ref, _) {
+      //           switch (ref.watch(driverNavigationController)) {
+      //             case 0:
+      //               {
+      //                 return FadeIn(
+      //                   key: GlobalObjectKey(
+      //                       ref.watch(driverNavigationController)),
+      //                   child: Text(
+      //                     'Dashboard',
+      //                     style: AppStyle.boldStyle(
+      //                       fontSize: 24,
+      //                       color: AppColors.kWhite,
+      //                     ),
+      //                   ),
+      //                 );
+      //               }
+
+      //             case 2:
+      //               {
+      //                 return FadeIn(
+      //                   key: GlobalObjectKey(
+      //                       ref.watch(driverNavigationController)),
+      //                   child: Text(
+      //                     'Profile',
+      //                     style: AppStyle.boldStyle(
+      //                       fontSize: 24,
+      //                       color: AppColors.kWhite,
+      //                     ),
+      //                   ),
+      //                 );
+      //               }
+      //             default:
+      //               {
+      //                 return SizedBox.shrink();
+      //               }
+      //           }
+      //         }),
+      //         // centerTitle: true,
+      //       ),
       body: Consumer(builder: (context, ref, _) {
         return _pages[ref.watch(driverNavigationController)];
       }),

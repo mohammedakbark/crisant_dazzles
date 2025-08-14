@@ -31,12 +31,12 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
   Set<Polyline> _polylines = {};
   StreamSubscription<Position>? _positionStream;
   double _distanceToVehicle = 0.0;
-  bool _isNearVehicle = false;
+  // bool _isNearVehicle = false;
   bool _isLoading = true;
   String _locationStatus = "Getting your location...";
 
   // Distance threshold in meters to consider "reached" (default: 50 meters)
-  static const double REACHED_THRESHOLD = 2.0;
+  // static const double REACHED_THRESHOLD = 2.0;
 
   @override
   void initState() {
@@ -125,7 +125,7 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
 //       'assets/images/driver.png',
 //     );
 //     setState(() {
-      
+
 //     });
 //   }
   void _updateMarkers() {
@@ -181,7 +181,7 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
 
     setState(() {
       _distanceToVehicle = distance;
-      _isNearVehicle = distance <= REACHED_THRESHOLD;
+      // _isNearVehicle = distance <= REACHED_THRESHOLD;
     });
   }
 
@@ -323,7 +323,8 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
                         //     : Colors.blue.shade50,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: _isNearVehicle ? Colors.green : Colors.blue,
+                          color: Colors.green,
+                          // color: _isNearVehicle ? Colors.green : Colors.blue,
                           width: .5,
                         ),
                       ),
@@ -352,33 +353,34 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
                                 ],
                               ),
                               Icon(
-                                _isNearVehicle
-                                    ? Icons.check_circle
-                                    : Icons.navigation,
-                                size: 32,
-                                color: _isNearVehicle
-                                    ? Colors.green.withAlpha(200)
-                                    : Colors.blue.withAlpha(200),
-                              ),
+                                  // _isNearVehicle
+                                  //     ? Icons.check_circle
+                                  //     : Icons.navigation,
+                                  Icons.check_circle,
+                                  size: 32,
+                                  // color: _isNearVehicle
+                                  //     ? Colors.green.withAlpha(200)
+                                  //     : Colors.blue.withAlpha(200),
+                                  color: Colors.green.withAlpha(200)),
                             ],
                           ),
-                          if (_isNearVehicle)
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: Colors.green.withAlpha(200),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                'You have reached your vehicle!',
-                                style: AppStyle.boldStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                          // if (_isNearVehicle)
+                          //   Container(
+                          //     margin: const EdgeInsets.only(top: 5),
+                          //     padding: const EdgeInsets.symmetric(
+                          //         horizontal: 12, vertical: 6),
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.green.withAlpha(200),
+                          //       borderRadius: BorderRadius.circular(12),
+                          //     ),
+                          //     child: Text(
+                          //       'You have reached your vehicle!',
+                          //       style: AppStyle.boldStyle(
+                          //         color: Colors.white,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     ),
+                          //   ),
                         ],
                       ),
                     ),
@@ -417,41 +419,53 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
                                     .isLoading
                                 ? AppLoading()
                                 : InkWell(
-                                    onTap: _isNearVehicle
-                                        ? () async {
-                                            await ref
-                                                .read(
-                                                    driverCheckOutControllerProvider
-                                                        .notifier)
-                                                .onTakeVideo(
-                                                    context,
-                                                    widget.valetInfo.valetId
-                                                        .toString());
-                                          }
-                                        : null,
+                                    // onTap: _isNearVehicle
+                                    //     ? () async {
+                                    //         await ref
+                                    //             .read(
+                                    //                 driverCheckOutControllerProvider
+                                    //                     .notifier)
+                                    //             .onTakeVideo(
+                                    //                 context,
+                                    //                 widget.valetInfo.valetId
+                                    //                     .toString());
+                                    //       }
+                                    //     : null,
+                                    onTap: () async {
+                                      await ref
+                                          .read(driverCheckOutControllerProvider
+                                              .notifier)
+                                          .onTakeVideo(
+                                              context,
+                                              widget.valetInfo.valetId
+                                                  .toString());
+                                    },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 15),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: _isNearVehicle
-                                            ? Colors.green
-                                            : Colors.grey,
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          // color: _isNearVehicle
+                                          //     ? Colors.green
+                                          //     : Colors.grey,
+                                          color: Colors.green),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Icon(_isNearVehicle
-                                              ? Icons.check_circle
-                                              : Icons.location_disabled),
+                                          // Icon(_isNearVehicle
+                                          //     ? Icons.check_circle
+                                          //     : Icons.location_disabled),
+                                          Icon(Icons.check_circle),
                                           AppSpacer(
                                             wp: .01,
                                           ),
                                           Text(
-                                            _isNearVehicle
-                                                ? 'Take video and Complete delivery'
-                                                : 'Get Closer to Enable',
+                                            // _isNearVehicle
+                                            //     ? 'Take video and Complete delivery'
+                                            //     : 'Get Closer to Enable',
+                                            'Take video and Complete delivery',
                                             style: AppStyle.boldStyle(),
                                           )
                                         ],
@@ -466,5 +480,3 @@ class _VehicleLocationScreenState extends State<DrVehicleLocationScreen> {
     );
   }
 }
-
-
