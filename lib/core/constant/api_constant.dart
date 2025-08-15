@@ -4,7 +4,9 @@ class ApiConstants {
 
   //  "https://api.dazzles.in/api/mobile/";
   //  "https://test.dazzles.in/";
-  static const String imageBaseUrl = "https://bill.dazzles.in/";
+  // static const String imageBaseUrl = "https://bill.dazzles.in/";
+
+  static const String imageBaseUrl = "http://192.168.1.29:5173/uploads/";
 
   static const String login = "login";
   static const String profile = "profile";
@@ -16,6 +18,7 @@ class ApiConstants {
   static const String pendingProduct = "product/pending";
   static const String searchProduct = "dashboard/search";
   static const String updateImage = "product";
+  static const String updateImageFromPo = "purchase/similar/image";
 
   static const String searchProductById = "upload/";
 

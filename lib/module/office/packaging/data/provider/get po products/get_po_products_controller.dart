@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:dazzles/core/shared/models/pagination_model.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/model/po_product_model.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/provider/get%20po%20products/po_products_state.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/repo/get_po_products_repo.dart';
+import 'package:dazzles/module/office/packaging/data/model/po_product_model.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/po_products_state.dart';
+import 'package:dazzles/module/office/packaging/data/repo/get_po_products_repo.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Provider with `.family` to allow passing `id` when fetching data
@@ -125,7 +126,57 @@ class GetPoProductsController
     await _fetchPOProducts(id, resetPage: true);
   }
 
-  void OnSelectProducts(int id) {
-    final currentProducts = state.value?.poProducts ?? [];
+  void onSelectProducts(int id) {
+    HapticFeedback.selectionClick();
+    List<int> selectedIds = List<int>.from(state.value?.selectedIds ?? []);
+    bool isSelectionEnabled = state.value?.isSelectionEnabled ?? false;
+
+    if (isSelectionEnabled) {
+      if (selectedIds.contains(id)) {
+        selectedIds.remove(id);
+      } else {
+        selectedIds.add(id);
+      }
+
+      if (selectedIds.isEmpty) {
+        isSelectionEnabled = false;
+      }
+
+      state = AsyncValue.data(
+        state.value?.copyWith(
+                selectedIds: selectedIds,
+                isSelectionEnabled: isSelectionEnabled) ??
+            PoProductsSuccessState(
+              isSelectionEnabled: isSelectionEnabled,
+              poProducts: [],
+              selectedIds: selectedIds, // ensure passing updated list
+            ),
+      );
+    }
+  }
+
+  void onEnableSelection({int? id}) {
+    HapticFeedback.heavyImpact();
+    List<int> selectedIds = List<int>.from(state.value?.selectedIds ?? []);
+
+    bool isSelectionEnabled = state.value?.isSelectionEnabled ?? false;
+    isSelectionEnabled = !isSelectionEnabled;
+    if (isSelectionEnabled && id != null) {
+      selectedIds.add(id);
+    }
+    if (!isSelectionEnabled) {
+      selectedIds.clear();
+    }
+    state = AsyncValue.data(
+      state.value?.copyWith(
+              isSelectionEnabled: isSelectionEnabled,
+              selectedIds: selectedIds) ??
+          PoProductsSuccessState(
+            selectedIds: selectedIds,
+            isSelectionEnabled: isSelectionEnabled,
+            poProducts: [],
+            isLoadingMore: false,
+          ),
+    );
   }
 }

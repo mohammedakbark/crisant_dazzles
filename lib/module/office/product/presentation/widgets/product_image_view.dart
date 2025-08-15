@@ -7,8 +7,10 @@ import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/data/providers/camera%20controller/camera_controller.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/pending/presentation/pending_image_page.dart';
+import 'package:dazzles/module/office/packaging/presentation/po_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
@@ -97,7 +99,8 @@ class _ImageViewScreenState extends ConsumerState<ImageViewScreen> {
   Widget _buildEditButton() {
     return widget.enableEditButton
         ? InkWell(
-            onTap: () => showGallerySheet(context, widget.productModel!, ref),
+            onTap: () => showGallerySheet(context, ref,
+                productModel: widget.productModel!),
             child: Container(
               margin: EdgeInsets.all(50),
               alignment: Alignment.center,

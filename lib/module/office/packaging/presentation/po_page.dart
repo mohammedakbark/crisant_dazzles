@@ -9,22 +9,22 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/intl_c.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/model/po_model.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/provider/get%20purchase%20orders/po_state.dart';
+import 'package:dazzles/module/office/packaging/data/model/po_model.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/po_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class POPage extends ConsumerStatefulWidget {
-  const POPage({super.key});
+class PackagePage extends ConsumerStatefulWidget {
+  const PackagePage({super.key});
 
   @override
-  ConsumerState<POPage> createState() => _POPageState();
+  ConsumerState<PackagePage> createState() => _POPageState();
 }
 
-class _POPageState extends ConsumerState<POPage> {
+class _POPageState extends ConsumerState<PackagePage> {
   final _scrollController = ScrollController();
 
   @override

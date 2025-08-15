@@ -7,14 +7,14 @@ import 'package:dazzles/module/driver/check%20out/presentation/dr_location_scree
 import 'package:dazzles/module/driver/driver_nav_screen.dart';
 import 'package:dazzles/module/driver/home/data/model/dr_check_out_valet_info_model.dart';
 import 'package:dazzles/module/driver/home/presentation/driver_qr_scanner_screen.dart';
-import 'package:dazzles/module/office/camera/presentation/products_selection_screen.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/presentation/products_selection_screen.dart';
 import 'package:dazzles/module/office/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/module/office/navigation_screen.dart';
 import 'package:dazzles/module/office/notification/presentation/notification_screen.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/module/office/product/presentation/widgets/product_image_view.dart';
-import 'package:dazzles/module/office/purchase%20orders/presentation/po_product_screen.dart';
+import 'package:dazzles/module/office/packaging/presentation/po_product_screen.dart';
 import 'package:dazzles/module/office/upload%20failed/presentation/failed_data_screen.dart';
 import 'package:dazzles/module/other%20roles%20modules/other_users_navigationScreen.dart';
 import 'package:dazzles/module/splash_screen.dart';

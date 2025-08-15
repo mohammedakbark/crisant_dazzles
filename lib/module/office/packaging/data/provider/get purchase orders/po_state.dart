@@ -1,4 +1,4 @@
-import 'package:dazzles/module/office/purchase%20orders/data/model/po_model.dart';
+import 'package:dazzles/module/office/packaging/data/model/po_model.dart';
 
 class POSuccessState {
   final List<PoModel> purchaseOrderList;

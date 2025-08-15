@@ -1,6 +1,6 @@
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
-import 'package:dazzles/module/office/pending/data/repo/search_product_by_id_repo.dart';
-import 'package:dazzles/module/office/pending/data/providers/select%20&%20search%20product/product_selection_state.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/data/repo/search_product_by_id_repo.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/data/providers/select%20&%20search%20product/product_selection_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

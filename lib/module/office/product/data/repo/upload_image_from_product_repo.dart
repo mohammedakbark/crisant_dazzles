@@ -5,7 +5,7 @@ import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dio/dio.dart';
 
-class UploadImageRepo {
+class UploadImageFromProductRepo {
   static Future<Map<String, dynamic>> onUploadImage(
     List<int> productIds,
     String filepath,

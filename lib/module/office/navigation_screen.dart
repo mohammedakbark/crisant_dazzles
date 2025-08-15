@@ -5,13 +5,13 @@ import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/module/office/camera/data/providers/camera_controller.dart';
-import 'package:dazzles/module/office/camera/presentation/camera_screen.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/data/providers/camera%20controller/camera_controller.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/presentation/camera_screen.dart';
 import 'package:dazzles/module/office/custom_app_bar.dart';
 import 'package:dazzles/module/office/home/presentation/home_page.dart';
 import 'package:dazzles/module/office/home/data/providers/dashboard_controller.dart';
-import 'package:dazzles/module/office/purchase%20orders/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
-import 'package:dazzles/module/office/purchase%20orders/presentation/po_page.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
+import 'package:dazzles/module/office/packaging/presentation/po_page.dart';
 import 'package:dazzles/module/office/product/presentation/products_page.dart';
 import 'package:dazzles/module/office/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
@@ -34,7 +34,7 @@ class NavigationScreen extends ConsumerStatefulWidget {
 class _NavigationScreenState extends ConsumerState<NavigationScreen> {
   final List<Widget> _pages = [
     HomePage(),
-    POPage(),
+    PackagePage(),
     CameraScreen(),
     ProductsPage(),
     ProfilePage(),
@@ -98,11 +98,12 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildIconSet(SolarIconsBold.home, "Home", 0),
-                    _buildIconSet(CupertinoIcons.square_list_fill, "P-O", 1),
+                    _buildIconSet(CupertinoIcons.cube_box_fill, "Packaging", 1),
                     SizedBox(
                       width: ResponsiveHelper.wp * .1,
                     ),
-                    _buildIconSet(CupertinoIcons.cube_box_fill, "Products", 3),
+                    _buildIconSet(
+                        CupertinoIcons.square_list_fill, "Products", 3),
                     _buildIconSet(CupertinoIcons.profile_circled, "Profile", 4)
                   ],
                 ),
