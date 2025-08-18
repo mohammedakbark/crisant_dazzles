@@ -1,4 +1,4 @@
-class PoModel {
+class SupplierModel {
     int id;
     String invoiceNumber;
     int storeId;
@@ -6,9 +6,9 @@ class PoModel {
     DateTime invoiceDate;
     String transportName;
     DateTime? receivedDate;
-    String supplier;
+    String supplierId;
 
-    PoModel({
+    SupplierModel({
         required this.id,
         required this.invoiceNumber,
         required this.storeId,
@@ -16,10 +16,10 @@ class PoModel {
         required this.invoiceDate,
         required this.transportName,
         required this.receivedDate,
-        required this.supplier,
+        required this.supplierId,
     });
 
-    factory PoModel.fromJson(Map<String, dynamic> json) => PoModel(
+    factory SupplierModel.fromJson(Map<String, dynamic> json) => SupplierModel(
         id: json["id"],
         invoiceNumber: json["invoiceNumber"],
         storeId: json["storeId"],
@@ -27,7 +27,7 @@ class PoModel {
         invoiceDate: DateTime.parse(json["invoiceDate"]),
         transportName: json["transportName"],
         receivedDate: json["receivedDate"],
-        supplier: json["supplier"],
+        supplierId: json["supplierId"].toString(),
     );
 
     Map<String, dynamic> toJson() => {
@@ -38,6 +38,6 @@ class PoModel {
         "invoiceDate": "${invoiceDate.year.toString().padLeft(4, '0')}-${invoiceDate.month.toString().padLeft(2, '0')}-${invoiceDate.day.toString().padLeft(2, '0')}",
         "transportName": transportName,
         "receivedDate": receivedDate,
-        "supplier": supplier,
+        "supplier": supplierId,
     };
 }

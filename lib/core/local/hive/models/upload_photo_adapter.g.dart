@@ -23,6 +23,7 @@ class UploadPhotoModelAdapter extends TypeAdapter<UploadPhotoModel> {
       imagePath: fields[1] as String,
       isUploadSuccess: fields[3] as bool,
       failedReason: fields[5] as String,
+      logoColor: fields[7] as String,
       dateTime: fields[4] as DateTime?,
     );
   }
@@ -30,7 +31,7 @@ class UploadPhotoModelAdapter extends TypeAdapter<UploadPhotoModel> {
   @override
   void write(BinaryWriter writer, UploadPhotoModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class UploadPhotoModelAdapter extends TypeAdapter<UploadPhotoModel> {
       ..writeByte(5)
       ..write(obj.failedReason)
       ..writeByte(6)
-      ..write(obj.isUploading);
+      ..write(obj.isUploading)
+      ..writeByte(7)
+      ..write(obj.logoColor);
   }
 
   @override

@@ -25,6 +25,9 @@ class UploadPhotoModel {
   @HiveField(6)
   bool? isUploading = false;
 
+  @HiveField(7)
+  String logoColor;
+
   UploadPhotoModel(
       {required this.ids,
       this.id,
@@ -32,5 +35,6 @@ class UploadPhotoModel {
       required this.imagePath,
       required this.isUploadSuccess,
       required this.failedReason,
+      required this.logoColor,
       this.dateTime});
 }

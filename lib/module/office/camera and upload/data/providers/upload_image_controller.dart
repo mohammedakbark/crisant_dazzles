@@ -52,14 +52,19 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
 // ---------------------  UPLOAD IMAGE From PRODUCT PAGE
 
-  Future<void> _uploadImage(List<int> ids, String path,
-      UploadManager uploadManagerController, bool isFromProducts) async {
+  Future<void> _uploadImage(
+      List<int> ids,
+      String path,
+      UploadManager uploadManagerController,
+      bool isFromProducts,
+      String logo) async {
     showCustomSnackBarAdptive("Uploading...");
     Map<String, dynamic> response = {};
     if (isFromProducts) {
-      response = await UploadImageFromProductRepo.onUploadImage(ids, path);
+      response =
+          await UploadImageFromProductRepo.onUploadImage(ids, path, logo);
     } else {
-      response = await UploadImageFromPORepo.onUploadImage(ids, path);
+      response = await UploadImageFromPORepo.onUploadImage(ids, path, logo);
     }
 
     log(response['data']);
@@ -69,6 +74,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
       showCustomSnackBarAdptive("Uploading failed!", isError: true);
       // state = AsyncError(response['data'].toString(), StackTrace.empty);
       uploadManagerController.addToUplods(UploadPhotoModel(
+        logoColor: logo,
         failedReason: response['data'].toString(),
         ids: ids,
         imagePath: path,
@@ -78,8 +84,12 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
   }
 
 // IMAGE PICKER WITH SINGLE IMAGE UPLOAD FUNCTION  (NO USING NOW)
-  Future<void> pickImageAndUploadForProducts(BuildContext context,
-      ImageSource source, ProductModel productModel, WidgetRef ref) async {
+  Future<void> pickImageAndUploadForProducts(
+      BuildContext context,
+      ImageSource source,
+      ProductModel productModel,
+      WidgetRef ref,
+      String logoColor) async {
     final uploadManagerController = ref.read(uploadManagerProvider.notifier);
 
     try {
@@ -95,7 +105,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
         );
         if (_croppedFile != null) {
           _uploadImage([productModel.id], _croppedFile.path,
-              uploadManagerController, true);
+              uploadManagerController, true, logoColor);
           ref.invalidate(dashboardControllerProvider);
           ref.read(officeNavigationController.notifier).state = 0;
           context.go(route);
@@ -108,7 +118,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
 //  uploading  multiple ids
   Future<void> uploadMultipleIdsForProducts(
-      BuildContext context, WidgetRef ref, File image) async {
+      BuildContext context, WidgetRef ref, File image, String logoColor) async {
     state = AsyncLoading();
     final idsState = ref.read(selectAndSearchProductControllerProvider);
     final uploadManagerController = ref.read(uploadManagerProvider.notifier);
@@ -116,7 +126,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
     for (var i in idsState.selectedIds) {
       ids.add(i.id);
     }
-    _uploadImage(ids, image.path, uploadManagerController, true);
+    _uploadImage(ids, image.path, uploadManagerController, true, logoColor);
     ref.invalidate(dashboardControllerProvider);
     ref.read(officeNavigationController.notifier).state = 0;
     context.go(route);
@@ -124,8 +134,13 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
   // -------------------  UPLOAD IMAGE FROM PURCHASE ORDER
 
-  Future<void> pickImageAndUploadForPO(BuildContext context, ImageSource source,
-      WidgetRef ref, List<int> ids, String suppliedId) async {
+  Future<void> pickImageAndUploadForSupplier(
+      BuildContext context,
+      ImageSource source,
+      WidgetRef ref,
+      List<int> ids,
+      String suppliedId,
+      String logoColor) async {
     final uploadManagerController = ref.read(uploadManagerProvider.notifier);
 
     try {
@@ -140,10 +155,11 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
           pickedFile.path,
         );
         if (_croppedFile != null) {
-          _uploadImage(ids, _croppedFile.path, uploadManagerController, false);
+          _uploadImage(ids, _croppedFile.path, uploadManagerController, false,
+              logoColor);
           ref.invalidate(dashboardControllerProvider);
-
           ref.read(officeNavigationController.notifier).state = 0;
+
           context.go(route);
         }
       }
@@ -160,10 +176,11 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
       String path = arg['path'];
       int dbId = arg['id'];
       WidgetRef ref = arg['ref'];
+      String logoColor = arg['logoColor'];
       ref.read(uploadManagerProvider.notifier).changeToLoadingTrue(dbId);
 
       final response =
-          await UploadImageFromProductRepo.onUploadImage(ids, path);
+          await UploadImageFromProductRepo.onUploadImage(ids, path, logoColor);
       if (response['error'] == false) {
         state = AsyncData(response);
         log(response['data'].toString());
@@ -173,6 +190,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
         log(response['data'].toString());
         ref.read(uploadManagerProvider.notifier).updateFullModel(
             UploadPhotoModel(
+                logoColor: logoColor,
                 failedReason: response['data'].toString(),
                 ids: ids,
                 id: dbId,
@@ -195,3 +213,7 @@ final uploadImageControllerProvider =
     AsyncNotifierProvider<UploadImageNotifier, Map<String, dynamic>>(() {
   return UploadImageNotifier();
 });
+
+final logoColorSelctionControllerProvider = StateProvider<String>(
+  (ref) => 'default',
+);

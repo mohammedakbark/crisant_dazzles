@@ -8,6 +8,8 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/upload_image_controller.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/presentation/widget/image_source_sheet.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/presentation/widget/logo_color_selection_tile.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/get_po_products_controller.dart';
 import 'package:flutter/material.dart';
@@ -61,8 +63,7 @@ final cameraControllerProvider =
 );
 
 void showGallerySheet(BuildContext context, WidgetRef ref,
-    {ProductModel? productModel, // For update from products
-    String? supplierId}) {
+    {ProductModel? productModel, String? supplierId}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -102,7 +103,7 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 20),
+                LogoColorSelectionTile(),
                 Row(
                   children: [
                     Expanded(
@@ -120,28 +121,36 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            final logoColor =
+                                ref.read(logoColorSelctionControllerProvider);
                             if (supplierId != null) {
                               // For Updating PO Images
 
                               final controller = ref
                                   .read(getAllPoProductsControllerProvider(
-                                      supplierId))
+                                      supplierId!))
                                   .value;
                               if (controller != null) {
-                                UploadImageNotifier().pickImageAndUploadForPO(
-                                    context,
-                                    ImageSource.gallery,
-                                    ref,
-                                    controller.selectedIds,
-                                    supplierId);
+                                UploadImageNotifier()
+                                    .pickImageAndUploadForSupplier(
+                                        context,
+                                        ImageSource.gallery,
+                                        ref,
+                                        controller.selectedIds,
+                                        supplierId!,
+                                        logoColor);
                               }
                             }
                             if (productModel != null) {
                               // For Updating  Product Images
                               UploadImageNotifier()
-                                  .pickImageAndUploadForProducts(context,
-                                      ImageSource.gallery, productModel, ref);
+                                  .pickImageAndUploadForProducts(
+                                      context,
+                                      ImageSource.gallery,
+                                      productModel!,
+                                      ref,
+                                      logoColor);
                             }
                           },
                           icon: Icon(
@@ -173,25 +182,34 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            final logoColor =
+                                ref.read(logoColorSelctionControllerProvider);
                             if (supplierId != null) {
                               // For Updating PO Images
-                              UploadImageNotifier().pickImageAndUploadForPO(
-                                  context,
-                                  ImageSource.camera,
-                                  ref,
-                                  ref
-                                      .read(getAllPoProductsControllerProvider(
-                                          supplierId))
-                                      .value!
-                                      .selectedIds,
-                                  supplierId);
+                              UploadImageNotifier()
+                                  .pickImageAndUploadForSupplier(
+                                      context,
+                                      ImageSource.camera,
+                                      ref,
+                                      ref
+                                          .read(
+                                              getAllPoProductsControllerProvider(
+                                                  supplierId!))
+                                          .value!
+                                          .selectedIds,
+                                      supplierId!,
+                                      logoColor);
                             }
                             if (productModel != null) {
                               // For Updating  Product Images
                               UploadImageNotifier()
-                                  .pickImageAndUploadForProducts(context,
-                                      ImageSource.camera, productModel, ref);
+                                  .pickImageAndUploadForProducts(
+                                      context,
+                                      ImageSource.camera,
+                                      productModel!,
+                                      ref,
+                                      logoColor);
                             }
                           },
                           icon: Icon(

@@ -149,7 +149,6 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
 
   void naviagteToScreen(
       UserRoleModel currentUserRoleModel, BuildContext context) async {
-    
     switch (currentUserRoleModel.roleName) {
       case "Office":
         {
@@ -157,7 +156,8 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
         }
       case "Driver":
         {
-          context.go(drNavScreen);
+          // context.go(drNavScreen);
+          context.go(drCustomerRegScreen, extra: {"qrId":"234566"});
         }
       default:
         {

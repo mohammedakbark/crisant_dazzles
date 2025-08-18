@@ -10,8 +10,8 @@ import 'package:dazzles/module/office/camera%20and%20upload/presentation/camera_
 import 'package:dazzles/module/office/custom_app_bar.dart';
 import 'package:dazzles/module/office/home/presentation/home_page.dart';
 import 'package:dazzles/module/office/home/data/providers/dashboard_controller.dart';
-import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
-import 'package:dazzles/module/office/packaging/presentation/po_page.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20suppliers/get_suppliers_controller.dart';
+import 'package:dazzles/module/office/packaging/presentation/package_page.dart';
 import 'package:dazzles/module/office/product/presentation/products_page.dart';
 import 'package:dazzles/module/office/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
@@ -47,7 +47,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
       ref.invalidate(dashboardControllerProvider);
       ref.invalidate(profileControllerProvider);
       // ref.invalidate(getAllPendingProductControllerProvider);
-      ref.invalidate(getAllProductOrdersControllerProvider);
+      ref.invalidate(getAllSuppliersControllerProvider);
       ref.invalidate(allProductControllerProvider);
     });
   }

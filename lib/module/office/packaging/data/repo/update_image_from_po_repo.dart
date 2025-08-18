@@ -7,14 +7,10 @@ import 'package:dio/dio.dart';
 
 class UploadImageFromPORepo {
   static Future<Map<String, dynamic>> onUploadImage(
-    List<int> productIds,
-    String filepath,
-  ) async {
+      List<int> productIds, String filepath, String logoColor) async {
     try {
       final userData = await LoginRefDataBase().getUserData;
-      final formData = FormData(
-        
-      );
+      final formData = FormData();
       formData.files.add(
         MapEntry(
           'image',
@@ -23,9 +19,9 @@ class UploadImageFromPORepo {
             filename: basename(filepath),
             contentType: MediaType('image', 'jpg'),
           ),
-        
         ),
       );
+      formData.fields.add(MapEntry('logo', logoColor));
       for (var id in productIds) {
         formData.fields.add(MapEntry('productIds[]', id.toString()));
       }

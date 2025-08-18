@@ -2,16 +2,16 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:dazzles/core/shared/models/pagination_model.dart';
-import 'package:dazzles/module/office/packaging/data/model/po_model.dart';
-import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/po_state.dart';
+import 'package:dazzles/module/office/packaging/data/model/supplier_model.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20suppliers/suppliers_state.dart';
 import 'package:dazzles/module/office/packaging/data/repo/get_po_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final getAllProductOrdersControllerProvider =
-    AsyncNotifierProvider<GetPurchaseOrdersController, POSuccessState>(
-        GetPurchaseOrdersController.new);
+final getAllSuppliersControllerProvider =
+    AsyncNotifierProvider<GetSuppliersController, SuppliersSuccessState>(
+        GetSuppliersController.new);
 
-class GetPurchaseOrdersController extends AsyncNotifier<POSuccessState> {
+class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
   int _page = 1;
   bool _hasMore = false;
   bool get hasMore => _hasMore;
@@ -19,7 +19,7 @@ class GetPurchaseOrdersController extends AsyncNotifier<POSuccessState> {
   bool get isLoadingMore => _isLoadingMore;
 
   @override
-  FutureOr<POSuccessState> build() async {
+  FutureOr<SuppliersSuccessState> build() async {
     try {
       state = AsyncValue.loading();
       return await _fetchPurchaseOrders();
@@ -28,7 +28,7 @@ class GetPurchaseOrdersController extends AsyncNotifier<POSuccessState> {
     }
   }
 
-  Future<POSuccessState> _fetchPurchaseOrders() async {
+  Future<SuppliersSuccessState> _fetchPurchaseOrders() async {
     try {
       _page = 1;
       _isLoadingMore = false;
@@ -37,30 +37,30 @@ class GetPurchaseOrdersController extends AsyncNotifier<POSuccessState> {
         _page,
       );
       if (result['error'] == false) {
-        final fetchedPos = result['data'] as List<PoModel>;
+        final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;
 
         _page++;
         _hasMore = paginationData.hasMore;
 
         state = AsyncValue.data(
-          POSuccessState(purchaseOrderList: fetchedPos),
+          SuppliersSuccessState(purchaseOrderList: fetchedPos),
         );
-        return POSuccessState(purchaseOrderList: fetchedPos);
+        return SuppliersSuccessState(purchaseOrderList: fetchedPos);
       } else {
         throw result['data'];
       }
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
-      return state.value ?? POSuccessState(purchaseOrderList: []);
+      return state.value ?? SuppliersSuccessState(purchaseOrderList: []);
     } finally {
       _isLoadingMore = false;
     }
   }
 
-  Future<POSuccessState> _loadMore() async {
+  Future<SuppliersSuccessState> _loadMore() async {
     if (_isLoadingMore) {
-      return state.value ?? POSuccessState(purchaseOrderList: []);
+      return state.value ?? SuppliersSuccessState(purchaseOrderList: []);
     }
 
     try {
@@ -69,7 +69,7 @@ class GetPurchaseOrdersController extends AsyncNotifier<POSuccessState> {
       final currentPos = state.value?.purchaseOrderList ?? [];
       state = AsyncValue.data(
         state.value?.copyWith(isLoadingMore: true) ??
-            POSuccessState(
+            SuppliersSuccessState(
               purchaseOrderList: currentPos,
               isLoadingMore: true,
             ),
@@ -78,23 +78,23 @@ class GetPurchaseOrdersController extends AsyncNotifier<POSuccessState> {
         _page,
       );
       if (result['error'] == false) {
-        final fetchedPos = result['data'] as List<PoModel>;
+        final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;
-        List<PoModel> oldPos = currentPos;
+        List<SupplierModel> oldPos = currentPos;
         _page++;
         _hasMore = paginationData.hasMore;
         final newPos = [...oldPos, ...fetchedPos];
         log(newPos.length.toString());
         state = AsyncValue.data(
-          POSuccessState(purchaseOrderList: newPos),
+          SuppliersSuccessState(purchaseOrderList: newPos),
         );
-        return POSuccessState(purchaseOrderList: newPos);
+        return SuppliersSuccessState(purchaseOrderList: newPos);
       } else {
         throw result['data'];
       }
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
-      return state.value ?? POSuccessState(purchaseOrderList: []);
+      return state.value ?? SuppliersSuccessState(purchaseOrderList: []);
     } finally {
       _isLoadingMore = false;
     }

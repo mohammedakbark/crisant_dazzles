@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -8,20 +7,16 @@ import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/components/custom_componets.dart';
-import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/camera%20controller/camera_controller.dart';
-import 'package:dazzles/module/office/camera%20and%20upload/data/providers/upload_image_controller.dart';
-import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/packaging/data/model/po_product_model.dart';
 import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/get_po_products_controller.dart';
 import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/po_products_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 class PoProductScreen extends ConsumerStatefulWidget {
   final String id;
@@ -39,6 +34,11 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(
+      () {
+        ref.invalidate(getAllPoProductsControllerProvider);
+      },
+    );
     try {
       _scrollController.addListener(() {
         if (_scrollController.position.pixels >=
@@ -51,11 +51,6 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
               .loadMore(widget.id);
         }
       });
-      Future.microtask(
-        () {
-          ref.invalidate(getAllPoProductsControllerProvider);
-        },
-      );
     } catch (e) {
       log("Products screen initialization Error : $e");
     }
@@ -87,7 +82,7 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                   poProductsController.value!.isSelectionEnabled
                       ? "Cancel"
                       : "Select",
-                  style: AppStyle.smallStyle(color: AppColors.kTeal),
+                  style: AppStyle.smallStyle(color: Colors.blue),
                 ))
         ],
       ),
@@ -170,22 +165,19 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                   clipBehavior: Clip.antiAlias,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(
-                        0xFF2A2A2A), // Lighter than scaffold for contrast
+                    color: const Color(0xFF2A2A2A),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color:
-                          AppColors.kFillColor.withAlpha(77), // 0.3 * 255 = 77
-                      width: 1,
+                      color: AppColors.kFillColor.withAlpha(77),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.white.withAlpha(13), // 0.05 * 255 = 13
+                        color: Colors.white.withAlpha(13),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
                       BoxShadow(
-                        color: Colors.black.withAlpha(77), // 0.3 * 255 = 77
+                        color: Colors.black.withAlpha(77),
                         blurRadius: 4,
                         offset: const Offset(0, 1),
                       ),
@@ -194,65 +186,9 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header with product name and ID badge
-
-                      // Main content area
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Left side - Product details
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  poProduct.productName,
-                                  style: AppStyle.largeStyle(
-                                    fontSize: ResponsiveHelper.isTablet()
-                                        ? ResponsiveHelper.fontSmall
-                                        : 22,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                AppSpacer(
-                                  hp: .01,
-                                ),
-                                // Primary details
-                                Wrap(
-                                  runSpacing: 8,
-                                  spacing: 8,
-                                  children: [
-                                    _buildFeatureBubble(
-                                        "Category", poProduct.category,
-                                        isPrimary: true),
-                                    _buildFeatureBubble(
-                                        "Color", poProduct.color,
-                                        isPrimary: true),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 12),
-
-                                // Secondary details
-                                Wrap(
-                                  runSpacing: 8,
-                                  spacing: 8,
-                                  children: [
-                                    _buildFeatureBubble(
-                                        "Qty", poProduct.quantity.toString()),
-                                    _buildFeatureBubble("Size", poProduct.size),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 16),
-
                           // Right side - Product image and actions
                           Expanded(
                             flex: 2,
@@ -283,7 +219,7 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                                   ),
                                 ),
 
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 8),
 
                                 // Update image button
                                 // SizedBox(
@@ -316,6 +252,57 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                                 //     ),
                                 //   ),
                                 // ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 20),
+
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  poProduct.productName,
+                                  style: AppStyle.largeStyle(
+                                    fontSize: ResponsiveHelper.isTablet()
+                                        ? ResponsiveHelper.fontSmall
+                                        : 22,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                AppSpacer(
+                                  hp: .01,
+                                ),
+                                Wrap(
+                                  runSpacing: 8,
+                                  spacing: 8,
+                                  children: [
+                                    _buildFeatureBubble(
+                                        "Category", poProduct.category,
+                                        isPrimary: true),
+                                    _buildFeatureBubble(
+                                        "Color", poProduct.color,
+                                        isPrimary: true),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 5),
+
+                                // Secondary details
+                                Wrap(
+                                  runSpacing: 8,
+                                  spacing: 8,
+                                  children: [
+                                    _buildFeatureBubble(
+                                        "Qty", poProduct.quantity.toString()),
+                                    _buildFeatureBubble("Size", poProduct.size),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -353,16 +340,20 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
               ],
             ),
           ),
-          Container(
-            height: ResponsiveHelper.hp * .2,
-            width: ResponsiveHelper.wp,
-            color: isSelected ? AppColors.kWhite.withAlpha(50) : null,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            child: Container(
+              color: isSelected ? AppColors.kWhite.withAlpha(30) : null,
+            ),
           ),
           if (poProductsController.value!.isSelectionEnabled)
             Positioned(
-                top: 10,
-                left: 20,
-                child: Checkbox(
+                bottom: 5,
+                right: 10,
+                child: Checkbox.adaptive(
                     checkColor: Colors.white,
                     fillColor: WidgetStatePropertyAll(AppColors.kTeal),
                     value: isSelected,
@@ -429,7 +420,7 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
               alignment: Alignment.center,
               height: ResponsiveHelper.hp * .1,
               decoration: BoxDecoration(
-                color: AppColors.kDeepPurple,
+                color: AppColors.kFillColor,
               ),
               child: Text(
                 "Update Image",

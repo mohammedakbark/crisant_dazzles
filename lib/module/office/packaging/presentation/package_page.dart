@@ -9,9 +9,9 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/intl_c.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/module/office/packaging/data/model/po_model.dart';
-import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/get_purchase_orders_controller.dart';
-import 'package:dazzles/module/office/packaging/data/provider/get%20purchase%20orders/po_state.dart';
+import 'package:dazzles/module/office/packaging/data/model/supplier_model.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20suppliers/get_suppliers_controller.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20suppliers/suppliers_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,13 +34,13 @@ class _POPageState extends ConsumerState<PackagePage> {
       _scrollController.addListener(() {
         if (_scrollController.position.pixels >=
                 _scrollController.position.maxScrollExtent - 200 &&
-            ref.read(getAllProductOrdersControllerProvider.notifier).hasMore) {
-          ref.read(getAllProductOrdersControllerProvider.notifier).loadMore();
+            ref.read(getAllSuppliersControllerProvider.notifier).hasMore) {
+          ref.read(getAllSuppliersControllerProvider.notifier).loadMore();
         }
       });
       Future.microtask(
         () {
-          ref.invalidate(getAllProductOrdersControllerProvider);
+          ref.invalidate(getAllSuppliersControllerProvider);
         },
       );
     } catch (e) {
@@ -51,27 +51,27 @@ class _POPageState extends ConsumerState<PackagePage> {
   @override
   Widget build(BuildContext context) {
     final poController = ref.watch(
-      getAllProductOrdersControllerProvider,
+      getAllSuppliersControllerProvider,
     );
     return RefreshIndicator.adaptive(
       onRefresh: () async {
-        return ref.refresh(getAllProductOrdersControllerProvider);
+        return ref.refresh(getAllSuppliersControllerProvider);
       },
       child: BuildStateManageComponent(
         stateController: poController,
         errorWidget: (p0, p1) => AppErrorView(
           error: p0.toString(),
           onRetry: () {
-            return ref.refresh(getAllProductOrdersControllerProvider);
+            return ref.refresh(getAllSuppliersControllerProvider);
           },
         ),
         successWidget: (data) {
-          final state = data as POSuccessState;
+          final state = data as SuppliersSuccessState;
           final purchaseOrders = state.purchaseOrderList;
           return Column(
             children: [
               ref
-                      .read(getAllProductOrdersControllerProvider.notifier)
+                      .read(getAllSuppliersControllerProvider.notifier)
                       .isLoadingMore
                   ? AppLoading(isTextLoading: true)
                   : SizedBox(),
@@ -106,12 +106,12 @@ class _POPageState extends ConsumerState<PackagePage> {
     );
   }
 
-  Widget _buildProductCard(PoModel po) {
+  Widget _buildProductCard(SupplierModel po) {
     return InkWell(
       onTap: () {
         context.push(
           poProductsScreen,
-          extra: {"id": po.id.toString(), "supplier": po.supplier},
+          extra: {"id": po.id.toString(), "supplier": po.supplierId},
         );
       },
       child: Container(
@@ -120,12 +120,14 @@ class _POPageState extends ConsumerState<PackagePage> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             border: Border.all(color: AppColors.kFillColor)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                Icon(CupertinoIcons.person),
+                Icon(
+                  Icons.inventory_2_outlined,
+                ),
                 AppSpacer(
                   wp: .02,
                 ),
@@ -133,7 +135,7 @@ class _POPageState extends ConsumerState<PackagePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      po.supplier,
+                      po.supplierId,
                       style: AppStyle.boldStyle(
                         fontSize: 14,
                         color: Colors.white, // Bright for visibility
@@ -147,76 +149,16 @@ class _POPageState extends ConsumerState<PackagePage> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-
-            const SizedBox(height: 10),
-
-            // Invoice Date
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              color: AppColors.kGrey.withAlpha(40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.calendar_month,
-                          color: AppColors.kTextPrimaryColor),
-                      AppSpacer(
-                        wp: .015,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Ordered Date",
-                            style: AppStyle.mediumStyle(
-                                color: AppColors.kTextPrimaryColor),
-                          ),
-                          Text(
-                            IntlC.monthDayYear(po.invoiceDate),
-                            style: AppStyle.smallStyle(
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  // Received Date (optional)
-                  if (po.receivedDate != null) ...[
-                    Row(
-                      children: [
-                        Icon(Icons.calendar_month,
-                            color: AppColors.kTextPrimaryColor),
-                        AppSpacer(
-                          wp: .015,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Received Date",
-                              style: AppStyle.mediumStyle(
-                                  color: AppColors.kTextPrimaryColor),
-                            ),
-                            Text(
-                              IntlC.monthDayYear(
-                                po.receivedDate!,
-                              ),
-                              style: AppStyle.smallStyle(
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ]
-                ],
-              ),
-            )
+            AppSpacer(
+              wp: .02,
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.kGrey,
+            ),
           ],
         ),
       ),

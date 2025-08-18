@@ -13,6 +13,7 @@ import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
+import 'package:dazzles/module/office/camera%20and%20upload/presentation/widget/logo_color_selection_tile.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/upload_image_controller.dart';
@@ -480,79 +481,36 @@ class _CopyMoreProdutcsScreenState
     final productSelectionState = ref.watch(
       selectAndSearchProductControllerProvider,
     );
-    return BuildStateManageComponent(
-      stateController: uploadImageState,
-      successWidget: (data) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ZoomIn(
-              duration: Duration(milliseconds: 700),
-              child: ElevatedButton.icon(
-                onPressed: () => context.go(route),
-                icon: Icon(
-                  size: isTab ? 40 : null,
-                  Icons.delete_outline,
-                  color: AppColors.kWhite,
-                ),
-                label: Text(
-                  "Discard",
-                  style: AppStyle.mediumStyle(
-                      fontSize: isTab ? ResponsiveHelper.fontSmall : null,
-                      color: AppColors.kWhite),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.kErrorPrimary,
-                  foregroundColor: AppColors.kWhite,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 14,
-                  ),
-                  textStyle: const TextStyle(fontSize: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-              ),
-            ),
-            AppSpacer(wp: .03),
-            Expanded(
-              child: ZoomIn(
-                duration: Duration(milliseconds: 700),
-                child: SizedBox(
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          LogoColorSelectionTile(
+          
+          ),
+          BuildStateManageComponent(
+            stateController: uploadImageState,
+            successWidget: (data) => Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ZoomIn(
+                  duration: Duration(milliseconds: 700),
                   child: ElevatedButton.icon(
-                    onPressed: productSelectionState.selectedIds.isNotEmpty
-                        ? () {
-                            final container = ProviderContainer();
-                            container
-                                .read(uploadImageControllerProvider.notifier)
-                                .uploadMultipleIdsForProducts(
-                                  context,
-                                  ref,
-                                  widget.fileImage,
-                                );
-                          }
-                        : null,
+                    onPressed: () => context.go(route),
                     icon: Icon(
                       size: isTab ? 40 : null,
-                      Icons.cloud_upload_outlined,
-                      color: productSelectionState.selectedIds.isNotEmpty
-                          ? AppColors.kWhite
-                          : AppColors.kTextPrimaryColor,
+                      Icons.delete_outline,
+                      color: AppColors.kWhite,
                     ),
                     label: Text(
-                      "Upload",
+                      "Discard",
                       style: AppStyle.mediumStyle(
-                        fontSize: isTab ? ResponsiveHelper.fontSmall : null,
-                        color: productSelectionState.selectedIds.isNotEmpty
-                            ? AppColors.kWhite
-                            : AppColors.kTextPrimaryColor,
-                      ),
+                          fontSize: isTab ? ResponsiveHelper.fontSmall : null,
+                          color: AppColors.kWhite),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.kGreen,
+                      backgroundColor: AppColors.kErrorPrimary,
                       foregroundColor: AppColors.kWhite,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
@@ -565,10 +523,62 @@ class _CopyMoreProdutcsScreenState
                     ),
                   ),
                 ),
-              ),
+                AppSpacer(wp: .03),
+                Expanded(
+                  child: ZoomIn(
+                    duration: Duration(milliseconds: 700),
+                    child: SizedBox(
+                      child: ElevatedButton.icon(
+                        onPressed: productSelectionState.selectedIds.isNotEmpty
+                            ? () {
+                                final container = ProviderContainer();
+                                container
+                                    .read(
+                                        uploadImageControllerProvider.notifier)
+                                    .uploadMultipleIdsForProducts(
+                                        context,
+                                        ref,
+                                        widget.fileImage,
+                                        ref.read(
+                                            logoColorSelctionControllerProvider));
+                              }
+                            : null,
+                        icon: Icon(
+                          size: isTab ? 40 : null,
+                          Icons.cloud_upload_outlined,
+                          color: productSelectionState.selectedIds.isNotEmpty
+                              ? AppColors.kWhite
+                              : AppColors.kTextPrimaryColor,
+                        ),
+                        label: Text(
+                          "Upload",
+                          style: AppStyle.mediumStyle(
+                            fontSize: isTab ? ResponsiveHelper.fontSmall : null,
+                            color: productSelectionState.selectedIds.isNotEmpty
+                                ? AppColors.kWhite
+                                : AppColors.kTextPrimaryColor,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.kGreen,
+                          foregroundColor: AppColors.kWhite,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
+                          ),
+                          textStyle: const TextStyle(fontSize: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -749,6 +759,15 @@ class _CopyMoreProdutcsScreenState
           ),
         );
       },
+    );
+  }
+
+  Widget _logoColor() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Logo Color"),
+      ],
     );
   }
 
