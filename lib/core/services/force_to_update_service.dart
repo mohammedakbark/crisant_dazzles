@@ -33,10 +33,11 @@ class ForceUpdateService {
       String currentVersion = packageInfo.version;
 
       Map<String, dynamic> remoteConfig = await getRemoteConfig();
-      String latestversion = remoteConfig['data'];
-
-      if (_isVersionLower(currentVersion, latestversion)) {
-        return true;
+      if (remoteConfig['error'] == false) {
+        String latestversion = remoteConfig['data'];
+        if (_isVersionLower(currentVersion, latestversion)) {
+          return true;
+        }
       }
 
       return false;
