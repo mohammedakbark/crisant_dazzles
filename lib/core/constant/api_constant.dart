@@ -54,4 +54,8 @@ class ApiConstants {
   static const String drGetAllParkedCarList = "valet/valetlist";
   static const String drGetMyParkedCarList = "valet/valetlist";
   static const getAllStoresList = "valet/storelist";
+
+  // UPDATE APP
+
+  static const remoteConfigURL = "appversion";
 }

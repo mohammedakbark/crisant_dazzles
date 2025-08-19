@@ -63,7 +63,7 @@ class _DriverCustomerRegScreenState
   }
 
   bool _isLoadingUploadVideo = false;
-
+  bool _genarateRandomeNumber = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,7 +236,9 @@ class _DriverCustomerRegScreenState
                         final valetId = await ref
                             .read(driverControllerProvider.notifier)
                             .onSubmitCustomerRegister(
-                                _mobileNumberController.text.trim(),
+                                _genarateRandomeNumber
+                                    ? null
+                                    : _mobileNumberController.text.trim(),
                                 _customerNameController.text.trim(),
                                 widget.qrId,
                                 _regNumberController.text.trim(),
@@ -290,11 +292,35 @@ class _DriverCustomerRegScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Mobile Number", style: AppStyle.boldStyle()),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Genarate random 10 digit",
+              style:
+                  AppStyle.normalStyle(color: AppColors.kWhite.withAlpha(200)),
+            ),
+            Switch(
+              activeColor: AppColors.kTeal,
+              value: _genarateRandomeNumber,
+              onChanged: (value) {
+                setState(
+                  () => _genarateRandomeNumber = value,
+                );
+              },
+            )
+          ],
+        ),
+        Text("Mobile Number",
+            style: AppStyle.boldStyle(
+                color: _genarateRandomeNumber
+                    ? AppColors.kTextPrimaryColor
+                    : null)),
         AppSpacer(
           hp: .01,
         ),
         TextFormField(
+          enabled: !_genarateRandomeNumber,
           onChanged: (value) {
             if (value.length >= 4) {
               _debouncer.run(() {
@@ -309,7 +335,9 @@ class _DriverCustomerRegScreenState
             }
           },
           inputFormatters: [LengthLimitingTextInputFormatter(10)],
-          validator: AppValidator.mobileNumberValidator,
+          validator: _genarateRandomeNumber
+              ? null
+              : AppValidator.mobileNumberValidator,
           keyboardType: TextInputType.number,
           controller: _mobileNumberController,
           cursorColor: AppColors.kPrimaryColor,
@@ -341,6 +369,7 @@ class _DriverCustomerRegScreenState
                   ? AppLoading()
                   : SizedBox.shrink(),
               hintText: "Enter customer mobile number",
+              disabledBorder: _border(),
               focusedBorder: _border(),
               enabledBorder: _border(),
               errorBorder: _border(error: true),
@@ -353,9 +382,11 @@ class _DriverCustomerRegScreenState
   _border({bool? error}) {
     return OutlineInputBorder(
       borderSide: BorderSide(
-          color: error == true
-              ? AppColors.kErrorPrimary
-              : AppColors.kPrimaryColor),
+          color: _genarateRandomeNumber
+              ? AppColors.kTextPrimaryColor
+              : error == true
+                  ? AppColors.kErrorPrimary
+                  : AppColors.kPrimaryColor),
       borderRadius: BorderRadius.circular(
         ResponsiveHelper.borderRadiusSmall,
       ),

@@ -115,7 +115,7 @@ class DriverCheckInController
 
 // ----vehicle and customer details. (1)
   Future<String?> onSubmitCustomerRegister(
-      String mobileNumber,
+      String? mobileNumber,
       String name,
       String qrId,
       String regNumber,

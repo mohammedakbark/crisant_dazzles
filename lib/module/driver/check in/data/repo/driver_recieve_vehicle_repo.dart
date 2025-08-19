@@ -4,7 +4,7 @@ import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 
 class DriverReceiveVehicleRepo {
   static Future<Map<String, dynamic>> onReceiveNewVehilce(
-      String mobileNumber,
+      String? mobileNumber,
       String name,
       String qrId,
       String regNumber,

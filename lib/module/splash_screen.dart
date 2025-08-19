@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
+import 'package:dazzles/core/services/force_to_update_service.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -25,6 +26,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    _checkForUpdate();
+
     init();
     super.initState();
   }
@@ -34,30 +37,39 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void goNext() async {
-    final loginRef = await LoginRefDataBase().getUserData;
-    if (loginRef.token != null && loginRef.token!.isNotEmpty) {
-      log("User Role -> ${loginRef.role}");
+    if (!isUpdateRequired) {
+      final loginRef = await LoginRefDataBase().getUserData;
+      if (loginRef.token != null && loginRef.token!.isNotEmpty) {
+        log("User Role -> ${loginRef.role}");
 
-      if (mounted) {
-        if (loginRef.role != LoginController.mainRole) {
-          await FirebasePushNotification().initNotification(context);
+        if (mounted) {
+          if (loginRef.role != LoginController.mainRole) {
+            await FirebasePushNotification().initNotification(context);
+          }
+
+          LoginController().naviagteToScreen(
+              UserRoleModel(
+                  roleId: loginRef.roleId ?? 0,
+                  roleName: loginRef.role ?? "Office"),
+              context);
         }
-
-        LoginController().naviagteToScreen(
-            UserRoleModel(
-                roleId: loginRef.roleId ?? 0,
-                roleName: loginRef.role ?? "Office"),
-            context);
-        // if (loginRef.role == LoginController.mainRole) {
-        //   context.go(route);
-        // } else {
-        //   context.go(drNavScreen);
-        //   // context.go(otherUsersRoute);
-        // }
+      } else {
+        if (mounted) {
+          context.go(loginScreen);
+        }
       }
-    } else {
-      if (mounted) {
-        context.go(loginScreen);
+    }
+  }
+
+  bool isUpdateRequired = false;
+  void _checkForUpdate() async {
+    await Future.delayed(Duration(seconds: 1)); // Small delay for UI to load;
+
+    if (mounted) {
+      isUpdateRequired = await ForceUpdateService.isUpdateRequired();
+
+      if (isUpdateRequired) {
+        UpdateDialog.showUpdateBottomSheet(context);
       }
     }
   }
