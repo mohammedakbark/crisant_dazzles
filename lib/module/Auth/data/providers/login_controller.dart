@@ -156,8 +156,8 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
         }
       case "Driver":
         {
-          context.go(drNavScreen);
-          // context.go(drCustomerRegScreen, extra: {"qrId":"234566"});
+          // context.go(drNavScreen);
+          context.go(drCustomerRegScreen, extra: {"qrId":"234566"});
         }
       default:
         {

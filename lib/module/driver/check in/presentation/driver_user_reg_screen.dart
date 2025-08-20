@@ -15,6 +15,8 @@ import 'package:dazzles/core/utils/permission_hendle.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/core/utils/validators.dart';
+import 'package:dazzles/module/driver/check%20in/data/model/car_brand_model.dart';
+import 'package:dazzles/module/driver/check%20in/data/model/car_model_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/model/driver_customer_car_suggession_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/model/driver_reg_customer_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
@@ -187,27 +189,7 @@ class _DriverCustomerRegScreenState
         AppSpacer(
           hp: .01,
         ),
-        CustomTextField(
-          isReadOnly:
-              ref.watch(driverControllerProvider).value?.selectedVehicleId !=
-                  null,
-          hintText: "Enter vehicle brand name",
-          title: 'Brand',
-          controller: _brandController,
-          validator: AppValidator.requiredValidator,
-        ),
-        AppSpacer(
-          hp: .01,
-        ),
-        CustomTextField(
-          isReadOnly:
-              ref.watch(driverControllerProvider).value?.selectedVehicleId !=
-                  null,
-          hintText: "Enter vehicle model name",
-          title: 'Model',
-          controller: _modelController,
-          validator: AppValidator.requiredValidator,
-        ),
+        _buildCarBrandAndModelDropDown()
       ],
     );
   }
@@ -504,6 +486,110 @@ class _DriverCustomerRegScreenState
             error: (error, stackTrace) => SizedBox.shrink(),
             loading: () => SizedBox(),
           ),
+    );
+  }
+
+  Widget _buildCarBrandAndModelDropDown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CustomTextField(
+          isReadOnly:
+              ref.watch(driverControllerProvider).value?.selectedVehicleId !=
+                  null,
+          hintText: "Enter vehicle brand name",
+          title: 'Brand',
+          controller: _brandController,
+          validator: AppValidator.requiredValidator,
+          sufixicon: PopupMenuButton<CarBrandModel>(
+            enabled:
+                ref.watch(driverControllerProvider).value?.selectedVehicleId ==
+                    null,
+            icon: Icon(
+              SolarIconsBold.altArrowDown,
+              color: ref
+                          .watch(driverControllerProvider)
+                          .value
+                          ?.selectedVehicleId !=
+                      null
+                  ? AppColors.kFillColor
+                  : null,
+            ),
+            onSelected: (brand) async {
+              _modelController.clear();
+              int brandId = brand.makeId;
+              _brandController.text = brand.makeName;
+
+              ref
+                  .read(driverControllerProvider.notifier)
+                  .onSelectCarBrand(brandId);
+            },
+            itemBuilder: (context) => ref.watch(driverControllerProvider).when(
+                  data: (state) {
+                    if (state is DriverCheckInControllerSuccessState) {
+                      return state.carBrands
+                          .map(
+                            (brand) => PopupMenuItem(
+                                value: brand, child: Text(brand.makeName)),
+                          )
+                          .toList();
+                    } else {
+                      return [];
+                    }
+                  },
+                  error: (error, stackTrace) => [],
+                  loading: () => [],
+                ),
+          ),
+        ),
+        AppSpacer(
+          hp: .01,
+        ),
+        CustomTextField(
+          isReadOnly:
+              ref.watch(driverControllerProvider).value?.selectedVehicleId !=
+                  null,
+          hintText: "Enter vehicle model name",
+          title: 'Model',
+          controller: _modelController,
+          validator: AppValidator.requiredValidator,
+          sufixicon: PopupMenuButton<CarModelModel>(
+            enabled:
+                ref.watch(driverControllerProvider).value?.selectedVehicleId ==
+                    null,
+            icon: Icon(
+              SolarIconsBold.altArrowDown,
+              color: ref
+                          .watch(driverControllerProvider)
+                          .value
+                          ?.selectedVehicleId !=
+                      null
+                  ? AppColors.kFillColor
+                  : null,
+            ),
+            onSelected: (model) async {
+              int modelId = model.modelId;
+              _modelController.text = model.modelName;
+            },
+            itemBuilder: (context) => ref.watch(driverControllerProvider).when(
+                  data: (state) {
+                    if (state is DriverCheckInControllerSuccessState) {
+                      return state.carModels
+                          .map(
+                            (model) => PopupMenuItem(
+                                value: model, child: Text(model.modelName)),
+                          )
+                          .toList();
+                    } else {
+                      return [];
+                    }
+                  },
+                  error: (error, stackTrace) => [],
+                  loading: () => [],
+                ),
+          ),
+        ),
+      ],
     );
   }
 }

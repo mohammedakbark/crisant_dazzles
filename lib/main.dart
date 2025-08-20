@@ -1,3 +1,4 @@
+
 import 'package:dazzles/core/config/main_config.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
 import 'package:dazzles/core/shared/theme/app_theme.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await MainConfig.loadEnv();
   await MainConfig.lockOrientation();
   await MainConfig.initFirebase();
   await MainConfig.initHive();
@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
     ResponsiveHelper.init(context);
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

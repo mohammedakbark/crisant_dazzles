@@ -20,6 +20,7 @@ import 'package:dazzles/module/other%20roles%20modules/other_users_navigationScr
 import 'package:dazzles/module/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:upgrader/upgrader.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -28,7 +29,13 @@ class RouteProvider {
     navigatorKey: rootNavigatorKey,
     initialLocation: initialScreen,
     routes: [
-      GoRoute(path: initialScreen, builder: (context, state) => SplashScreen()),
+      GoRoute(
+          path: initialScreen,
+          builder: (context, state) => UpgradeAlert(
+              dialogStyle: Platform.isAndroid
+                  ? UpgradeDialogStyle.material
+                  : UpgradeDialogStyle.cupertino,
+              child: SplashScreen())),
       GoRoute(path: loginScreen, builder: (context, state) => LoginScreen()),
       // GoRoute(path: otpScreen, builder: (context, state) {
       //   final mapData=state.extra as Map;
@@ -86,7 +93,7 @@ class RouteProvider {
         },
       ),
 
-        GoRoute(
+      GoRoute(
         path: poProductsScreen,
         builder: (context, state) {
           final map = state.extra as Map<String, dynamic>;
@@ -98,8 +105,6 @@ class RouteProvider {
           );
         },
       ),
-
-
 
       // DRIVER ROLE ROUTES
 
@@ -131,8 +136,7 @@ class RouteProvider {
             final map = state.extra as Map<String, dynamic>;
             final model = map['modelData'] as Map<String, dynamic>;
             return DrVehicleLocationScreen(
-
-            valetInfo: DrCheckOutValetInfoModel.fromJson(model),
+              valetInfo: DrCheckOutValetInfoModel.fromJson(model),
             );
           }),
 

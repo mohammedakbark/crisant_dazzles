@@ -1,6 +1,6 @@
 class ApiConstants {
   static const String baseUrl = "https://bill.dazzles.in/Api/api/mobile/";
-  static const localHostBaseURL = "http://192.168.1.47:5173/api/mobile/";
+  static const localHostBaseURL = "http://192.168.1.29:5173/api/mobile/";
 
   //  "https://api.dazzles.in/api/mobile/";
   //  "https://test.dazzles.in/";
@@ -45,6 +45,9 @@ class ApiConstants {
   static const String drSuggestCustomerVehicles = "valet/carsuggestion";
   static const String drSubmitVehicle = "valet/check-in";
   static const String drUploadInitialVideo = "valet/checkin-video";
+
+  static const String getBrand = 'valet/carmakes';
+  static const String getModel = "valet/carmodels";
 
   // check out
 
