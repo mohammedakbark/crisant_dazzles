@@ -38,7 +38,7 @@ class PoProductModel {
         unitPrice: json["unitPrice"],
         totalPrice: json["totalPrice"],
         productHash: json["productHash"],
-        productId: json["productId"],
+        productId: json["productId"]??'',
         productPicture: json["productPicture"]??'',
     );
 

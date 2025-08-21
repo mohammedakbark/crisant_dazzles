@@ -28,6 +28,8 @@ class LogoColorSelectionTile extends ConsumerWidget {
               child: Row(
                 children: [
                   Checkbox.adaptive(
+                    checkColor: Colors.white,
+                    fillColor: WidgetStatePropertyAll(AppColors.kTeal),
                     value: ref.watch(logoColorSelctionControllerProvider) ==
                         "default",
                     onChanged: (value) {
@@ -47,6 +49,8 @@ class LogoColorSelectionTile extends ConsumerWidget {
               child: Row(
                 children: [
                   Checkbox.adaptive(
+                    checkColor: Colors.white,
+                    fillColor: WidgetStatePropertyAll(AppColors.kTeal),
                     value: ref.watch(logoColorSelctionControllerProvider) ==
                         "white",
                     onChanged: (value) {
@@ -66,6 +70,8 @@ class LogoColorSelectionTile extends ConsumerWidget {
               child: Row(
                 children: [
                   Checkbox.adaptive(
+                    checkColor: Colors.white,
+                    fillColor: WidgetStatePropertyAll(AppColors.kTeal),
                     value: ref.watch(logoColorSelctionControllerProvider) ==
                         "black",
                     onChanged: (value) {

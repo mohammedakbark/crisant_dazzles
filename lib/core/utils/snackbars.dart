@@ -58,6 +58,7 @@ showCustomSnackBarAdptive(
   bool? isError,
   Color? color,
 }) {
+  
   final snackbar = SnackBar(
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,

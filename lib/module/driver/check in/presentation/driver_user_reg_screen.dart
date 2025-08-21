@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_button.dart';
 import 'package:dazzles/core/components/app_loading.dart';
@@ -21,6 +20,7 @@ import 'package:dazzles/module/driver/check%20in/data/model/driver_customer_car_
 import 'package:dazzles/module/driver/check%20in/data/model/driver_reg_customer_model.dart';
 import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
 import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -130,68 +130,80 @@ class _DriverCustomerRegScreenState
   }
 
   Widget _buildForms() {
-    return Column(
-      children: [
-        suggessionTextField(),
-        AppSpacer(
-          hp: .01,
-        ),
-        CustomTextField(
-          hintText: "Enter customer name",
-          title: 'Customer Name',
-          controller: _customerNameController,
-          validator: AppValidator.requiredValidator,
-        ),
-        AppSpacer(
-          hp: .01,
-        ),
-        CustomTextField(
-          isTextCapital: true,
-          onChanged: (p0) {
-            ref.watch(driverControllerProvider.notifier).clearSelectedCar();
-          },
-          controller: _regNumberController,
-          hintText: "Enter customer vehicle number",
-          title: 'Vehicle Number',
-          sufixicon: PopupMenuButton<DriverCustomerCarSuggessionModel>(
-            icon: Icon(SolarIconsBold.altArrowDown),
-            onSelected: (vehcile) async {
-              int vehicleId = vehcile.id;
-              _modelController.text = vehcile.model;
-              _brandController.text = vehcile.brand;
-              _regNumberController.text = vehcile.vehicleNumber;
-
-              // ---
-              await ref
-                  .read(driverControllerProvider.notifier)
-                  .onSelectVehicleFromList(vehicleId);
-            },
-            itemBuilder: (context) => ref.watch(driverControllerProvider).when(
-                  data: (state) {
-                    if (state is DriverCheckInControllerSuccessState) {
-                      return state.customerVehicleList
-                          .map(
-                            (vehicleInfo) => PopupMenuItem(
-                                value: vehicleInfo,
-                                child: Text(vehicleInfo.vehicleNumber)),
-                          )
-                          .toList();
-                    } else {
-                      return [];
-                    }
-                  },
-                  error: (error, stackTrace) => [],
-                  loading: () => [],
-                ),
+    if (ref.watch(driverControllerProvider).value
+        is DriverCheckInControllerSuccessState) {
+      final value = ref.watch(driverControllerProvider).value
+          as DriverCheckInControllerSuccessState;
+      return Column(
+        children: [
+          suggessionTextField(),
+          AppSpacer(
+            hp: .01,
           ),
-          validator: AppValidator.vehicleNumberValidator,
-        ),
-        AppSpacer(
-          hp: .01,
-        ),
-        _buildCarBrandAndModelDropDown()
-      ],
-    );
+          CustomTextField(
+            hintText: "Enter customer name",
+            title: 'Customer Name',
+            controller: _customerNameController,
+            validator: AppValidator.requiredValidator,
+          ),
+          AppSpacer(
+            hp: .01,
+          ),
+          CustomTextField(
+            isTextCapital: true,
+            onChanged: (p0) {
+              ref.watch(driverControllerProvider.notifier).clearSelectedCar();
+            },
+            controller: _regNumberController,
+            hintText: "Enter customer vehicle number",
+            title: 'Vehicle Number',
+            sufixicon: PopupMenuButton<DriverCustomerCarSuggessionModel>(
+              icon: Icon(
+                SolarIconsBold.altArrowDown,
+                color: value.customerVehicleList.isEmpty
+                    ? AppColors.kFillColor
+                    : null,
+              ),
+              onSelected: (vehcile) async {
+                int vehicleId = vehcile.id;
+                _modelController.text = vehcile.model;
+                _brandController.text = vehcile.brand;
+                _regNumberController.text = vehcile.vehicleNumber;
+
+                // ---
+                await ref
+                    .read(driverControllerProvider.notifier)
+                    .onSelectVehicleFromList(vehicleId);
+              },
+              itemBuilder: (context) =>
+                  ref.watch(driverControllerProvider).when(
+                        data: (state) {
+                          if (state is DriverCheckInControllerSuccessState) {
+                            return state.customerVehicleList
+                                .map(
+                                  (vehicleInfo) => PopupMenuItem(
+                                      value: vehicleInfo,
+                                      child: Text(vehicleInfo.vehicleNumber)),
+                                )
+                                .toList();
+                          } else {
+                            return [];
+                          }
+                        },
+                        error: (error, stackTrace) => [],
+                        loading: () => [],
+                      ),
+            ),
+            validator: AppValidator.vehicleNumberValidator,
+          ),
+          AppSpacer(
+            hp: .01,
+          ),
+          _buildCarBrandAndModelDropDown()
+        ],
+      );
+    }
+    return SizedBox.shrink();
   }
 
   Widget _widgetSubmitButton() {
@@ -282,10 +294,13 @@ class _DriverCustomerRegScreenState
               style:
                   AppStyle.normalStyle(color: AppColors.kWhite.withAlpha(200)),
             ),
-            Switch(
-              activeColor: AppColors.kTeal,
+            CupertinoSwitch(
+              // activeColor: AppColors.kTeal,
               value: _genarateRandomeNumber,
               onChanged: (value) {
+                if(value){
+                  _mobileNumberController.clear();
+                }
                 setState(
                   () => _genarateRandomeNumber = value,
                 );
@@ -490,30 +505,26 @@ class _DriverCustomerRegScreenState
   }
 
   Widget _buildCarBrandAndModelDropDown() {
+    final value = ref.watch(driverControllerProvider).value
+        as DriverCheckInControllerSuccessState;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomTextField(
-          isReadOnly:
-              ref.watch(driverControllerProvider).value?.selectedVehicleId !=
-                  null,
+          isReadOnly: value.selectedVehicleId != null,
           hintText: "Enter vehicle brand name",
           title: 'Brand',
           controller: _brandController,
           validator: AppValidator.requiredValidator,
+          onChanged: (p0) {
+            ref.read(driverControllerProvider.notifier).clearExistingModels();
+          },
           sufixicon: PopupMenuButton<CarBrandModel>(
-            enabled:
-                ref.watch(driverControllerProvider).value?.selectedVehicleId ==
-                    null,
+            enabled: value.selectedVehicleId == null,
             icon: Icon(
               SolarIconsBold.altArrowDown,
-              color: ref
-                          .watch(driverControllerProvider)
-                          .value
-                          ?.selectedVehicleId !=
-                      null
-                  ? AppColors.kFillColor
-                  : null,
+              color:
+                  value.selectedVehicleId != null ? AppColors.kFillColor : null,
             ),
             onSelected: (brand) async {
               _modelController.clear();
@@ -546,26 +557,19 @@ class _DriverCustomerRegScreenState
           hp: .01,
         ),
         CustomTextField(
-          isReadOnly:
-              ref.watch(driverControllerProvider).value?.selectedVehicleId !=
-                  null,
+          isReadOnly: value.selectedVehicleId != null,
           hintText: "Enter vehicle model name",
           title: 'Model',
           controller: _modelController,
           validator: AppValidator.requiredValidator,
           sufixicon: PopupMenuButton<CarModelModel>(
-            enabled:
-                ref.watch(driverControllerProvider).value?.selectedVehicleId ==
-                    null,
+            enabled: value.selectedVehicleId == null,
             icon: Icon(
               SolarIconsBold.altArrowDown,
-              color: ref
-                          .watch(driverControllerProvider)
-                          .value
-                          ?.selectedVehicleId !=
-                      null
-                  ? AppColors.kFillColor
-                  : null,
+              color:
+                  (value.selectedVehicleId != null || value.carModels.isEmpty)
+                      ? AppColors.kFillColor
+                      : null,
             ),
             onSelected: (model) async {
               int modelId = model.modelId;

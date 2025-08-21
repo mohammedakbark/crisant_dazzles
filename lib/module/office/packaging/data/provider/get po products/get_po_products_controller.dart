@@ -41,7 +41,7 @@ class GetPoProductsController
 
       final result = await GetPoProductsRepo.onGetPoProducts(
         _page,
-        id,
+        int.parse(id),
       );
 
       if (result['error'] == false) {
@@ -60,6 +60,7 @@ class GetPoProductsController
       }
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
+      log(e.toString());
       return state.value ?? PoProductsSuccessState(poProducts: []);
     } finally {
       _isLoadingMore = false;
@@ -86,7 +87,7 @@ class GetPoProductsController
 
       final result = await GetPoProductsRepo.onGetPoProducts(
         _page,
-        id,
+        int.parse(id),
       );
 
       if (result['error'] == false) {

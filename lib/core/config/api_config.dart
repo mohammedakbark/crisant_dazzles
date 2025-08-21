@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 class ApiConfig {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: ApiConstants.localHostBaseURL,
+      baseUrl: ApiConstants.baseUrl,
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     ),
@@ -41,7 +41,7 @@ class ApiConfig {
           return ResponseModel(
             data: null,
             error: true,
-            message: "Failed to parse error response",
+            message: "Server error !",
             status: e.response?.statusCode ?? 500,
           );
         }
@@ -106,7 +106,7 @@ class ApiConfig {
           return ResponseModel(
             data: null,
             error: true,
-            message: "Failed to parse error response",
+            message: "Server error !",
             status: e.response?.statusCode ?? 500,
           );
         }

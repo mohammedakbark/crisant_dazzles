@@ -7,7 +7,6 @@ import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
-import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -59,7 +58,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return ref.refresh(dashboardControllerProvider);
       },
       child: SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(), // <-- important!
+        physics: AlwaysScrollableScrollPhysics(), // <-- important!
         child: AppMargin(
           child: Column(
             children: [
@@ -67,7 +66,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Search
               InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () => ref.read(officeNavigationController.notifier).state = 3,
+                onTap: () =>
+                    ref.read(officeNavigationController.notifier).state = 3,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     vertical: ResponsiveHelper.paddingSmall,
@@ -102,22 +102,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               AppSpacer(hp: .02),
               _buildSuccessState()
-              // Grid
-              // BuildStateManageComponent(
-              //   stateController: dashboardController,
-              //   errorWidget: (p0, p1) => AppErrorView(
-              //     error: p0.toString(),
-              //     onRetry: () {
-              //       return ref.refresh(dashboardControllerProvider);
-              //     },
-              //   ),
-              //   successWidget: (data) => _buildSuccessState(
-              //     context,
-              //     data as DashboardModel,
-              //     ref,
-              //   ),
-              //   loadingWidget: () => AppLoading(),
-              // ),
             ],
           ),
         ),
@@ -272,7 +256,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     color: AppColors.kBorderColor.withAlpha(10)),
                 child: model.recentCaptured.isEmpty
                     ? AppErrorView(
-
                         error:
                             "No new data found. Try refreshing or uploading.",
                         onRetry: () => ref.refresh(dashboardControllerProvider),
@@ -284,7 +267,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 20,
-                          crossAxisCount:  2,
+                          crossAxisCount: 2,
                         ),
                         itemCount: model.recentCaptured.length,
                         itemBuilder: (context, index) => InkWell(

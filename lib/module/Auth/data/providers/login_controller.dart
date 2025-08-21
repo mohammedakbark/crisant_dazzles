@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/module/Auth/data/models/user_role_mode.dart';
-import 'package:dazzles/module/Auth/data/providers/get_user_role_controller.dart';
 import 'package:dazzles/module/Auth/data/providers/resed_otp_controller.dart';
-import 'package:dazzles/module/Auth/data/repo/get_roles_repo.dart';
 import 'package:dazzles/module/Auth/data/repo/login_repo.dart';
 import 'package:dazzles/module/Auth/data/repo/login_with_mobilenumber_repo.dart';
 import 'package:dazzles/module/Auth/data/repo/verify_OTP_repo.dart';
@@ -16,14 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-// final loginProvider =
-//     FutureProvider.family<Map<String, dynamic>?, Map<String, dynamic>>((
-//       ref,
-//       arg,
-//     ) async {
-//       final authService = LoginRepo();
-//       return authService.onLogin(arg['username'], arg['password']);
-//     });
 
 class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   @override
@@ -156,8 +144,8 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
         }
       case "Driver":
         {
-          // context.go(drNavScreen);
-          context.go(drCustomerRegScreen, extra: {"qrId":"234566"});
+          context.go(drNavScreen);
+          // context.go(drCustomerRegScreen, extra: {"qrId":"234566"});
         }
       default:
         {

@@ -39,6 +39,8 @@ class AppNetworkImage extends StatelessWidget {
             (userName != null && userName!.isNotEmpty)
                 ? Center(
                     child: Text(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       userName![0],
                       style: AppStyle.boldStyle(
                         fontSize: nameSize ?? ResponsiveHelper.fontMedium,
@@ -47,7 +49,7 @@ class AppNetworkImage extends StatelessWidget {
                       ),
                     ),
                   )
-                : Column(
+                : Column( 
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       errorIcon ??
@@ -57,9 +59,10 @@ class AppNetworkImage extends StatelessWidget {
                             color: AppColors.kFillColor,
                           ),
                       Text(
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         "Image not found!",
-                        style: AppStyle.boldStyle(
-                            color: AppColors.kFillColor),
+                        style: AppStyle.boldStyle(color: AppColors.kFillColor),
                       )
                     ],
                   ));

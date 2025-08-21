@@ -22,6 +22,10 @@ class AppErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isDark = theme.brightness == Brightness.dark;
+
     bool isTokenExpire = error == "jwt expired" ? true : false;
     return Align(
       child: Column(
@@ -29,13 +33,20 @@ class AppErrorView extends StatelessWidget {
         children: [
           Column(
             children: [
-              icon ??
-                  Icon(
-                      error == "No Internet Connection!"
-                          ? Icons.wifi_off
-                          : Icons.error_outline_outlined,
-                      size: 70,
-                      color: AppColors.kTextPrimaryColor),
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: isDark ? Colors.grey[800] : Colors.grey[100],
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: icon ??
+                    Icon(
+                        error == "No Internet Connection!"
+                            ? Icons.wifi_off
+                            : Icons.error_outline_outlined,
+                        size: 50,
+                        color: AppColors.kTextPrimaryColor),
+              ),
               AppSpacer(hp: .03),
             ],
           ),
@@ -43,11 +54,13 @@ class AppErrorView extends StatelessWidget {
           Text(
             textAlign: TextAlign.center,
             isTokenExpire ? "Session is expired." : error,
-            style: AppStyle.largeStyle(
-                fontSize: ResponsiveHelper.isTablet()
-                    ? ResponsiveHelper.fontSmall
-                    : null,
-                color: AppColors.kTextPrimaryColor),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              // fontSize: ResponsiveHelper.isTablet()
+              //     ? ResponsiveHelper.fontSmall
+              //     : null,
+              color: isDark ? Colors.grey[300] : Colors.grey[700],
+            ),
           ),
 
           // Subtite
@@ -58,11 +71,12 @@ class AppErrorView extends StatelessWidget {
                     Text(
                       textAlign: TextAlign.center,
                       "Please login again..",
-                      style: AppStyle.smallStyle(
-                        fontSize: ResponsiveHelper.isTablet()
-                            ? ResponsiveHelper.fontSmall
-                            : null,
-                        color: AppColors.kTextPrimaryColor,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        // fontSize: ResponsiveHelper.isTablet()
+                        //     ? ResponsiveHelper.fontSmall
+                        //     : null,
+                        color: isDark ? Colors.grey[300] : Colors.grey[700],
                       ),
                     ),
                   ],
@@ -78,11 +92,12 @@ class AppErrorView extends StatelessWidget {
                     Text(
                       textAlign: TextAlign.center,
                       errorExp!,
-                      style: AppStyle.smallStyle(
-                        fontSize: ResponsiveHelper.isTablet()
-                            ? ResponsiveHelper.fontSmall
-                            : null,
-                        color: AppColors.kTextPrimaryColor,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        // fontSize: ResponsiveHelper.isTablet()
+                        //     ? ResponsiveHelper.fontSmall
+                        //     : null,
+                        color: isDark ? Colors.grey[300] : Colors.grey[700],
                       ),
                     ),
                   ],
@@ -92,9 +107,9 @@ class AppErrorView extends StatelessWidget {
           onRetry != null
               ? Column(
                   children: [
-                    AppSpacer(hp: .01),
-                    ElevatedButton(
-                      onPressed: isTokenExpire
+                    AppSpacer(hp: .03),
+                    InkWell(
+                      onTap: isTokenExpire
                           ? () => ProfilePage.logout(context)
                           : onRetry,
                       child: Padding(
@@ -105,25 +120,27 @@ class AppErrorView extends StatelessWidget {
                           textDirection:
                               isTokenExpire ? TextDirection.rtl : null,
                           children: [
+                            Icon(
+                                size: ResponsiveHelper.isTablet() ? 40 : 18,
+                                color: AppColors.kDeepPurple,
+                                isTokenExpire
+                                    ? SolarIconsOutline.logout
+                                    : Icons.refresh),
+                            AppSpacer(wp: .01),
                             Text(
-                              isTokenExpire ? "Logout" : "Try again",
+                              isTokenExpire ? "Logout" : "Refresh",
                               style: AppStyle.boldStyle(
-                                color: AppColors.kPrimaryColor,
+                                color: AppColors.kDeepPurple,
                                 fontSize: ResponsiveHelper.isTablet()
                                     ? ResponsiveHelper.fontSmall
                                     : null,
                               ),
                             ),
-                            AppSpacer(wp: .01),
-                            Icon(
-                                size: ResponsiveHelper.isTablet() ? 40 : null,
-                                isTokenExpire
-                                    ? SolarIconsOutline.logout
-                                    : Icons.refresh),
                           ],
                         ),
                       ),
                     ),
+                    AppSpacer(hp: .03),
                   ],
                 )
               : SizedBox(),
@@ -132,3 +149,23 @@ class AppErrorView extends StatelessWidget {
     );
   }
 }
+// Container(
+//             padding: const EdgeInsets.all(24),
+//             decoration: BoxDecoration(
+//               color: isDark ? Colors.grey[800] : Colors.grey[100],
+//               borderRadius: BorderRadius.circular(50),
+//             ),
+//             child: Icon(
+//               Icons.notifications_none_rounded,
+//               size: 48,
+//               color: isDark ? Colors.grey[400] : Colors.grey[500],
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//           Text(
+//             "No notifications yet",
+//             style: theme.textTheme.titleMedium?.copyWith(
+//               fontWeight: FontWeight.w600,
+//               color: isDark ? Colors.grey[300] : Colors.grey[700],
+//             ),
+//           ),

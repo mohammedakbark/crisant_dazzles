@@ -59,7 +59,7 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
   @override
   Widget build(BuildContext context) {
     final poProductsController = ref.watch(
-      getAllPoProductsControllerProvider(widget.id),
+      getAllPoProductsControllerProvider(widget.id.toString()),
     );
 
     return Scaffold(

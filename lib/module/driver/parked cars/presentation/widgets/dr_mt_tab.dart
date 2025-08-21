@@ -41,12 +41,18 @@ class _DrMtTabState extends ConsumerState<DrMtTab> {
   Widget build(BuildContext context) {
     return BuildStateManageComponent(
       stateController: ref.watch(drGetMyParkedCarListControllerProvider),
-      errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
+      errorWidget: (p0, p1) => AppErrorView(
+          icon: Icon(
+            Icons.car_crash_outlined,
+            color: AppColors.kTextPrimaryColor,
+            size: 30,
+          ),
+          error: p0.toString()),
       successWidget: (state) {
         final data = state as MyParkedCarState;
         return data.parkedCarList.isEmpty
             ? AppErrorView(
-                icon: Icon(
+                icon: Icon( size: 30,
                   Icons.car_crash_outlined,
                   color: AppColors.kTextPrimaryColor,
                 ),

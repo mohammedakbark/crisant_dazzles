@@ -159,6 +159,13 @@ class DriverCheckInController
     }
   }
 
+  void clearExistingModels() {
+    final currentState = state.value;
+    if (currentState is DriverCheckInControllerSuccessState) {
+      state = AsyncValue.data(currentState.copyWith(carModels: []));
+    }
+  }
+
   //--------SELECTION---------
 
   Future<void> onSelectVehicleFromList(int vehicleId) async {
