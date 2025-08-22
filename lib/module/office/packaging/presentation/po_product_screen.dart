@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
+import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
@@ -10,13 +11,16 @@ import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/debauncer.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/camera%20controller/camera_controller.dart';
 import 'package:dazzles/module/office/packaging/data/model/po_product_model.dart';
 import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/get_po_products_controller.dart';
 import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/po_products_state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class PoProductScreen extends ConsumerStatefulWidget {
   final String id;
@@ -30,10 +34,12 @@ class PoProductScreen extends ConsumerStatefulWidget {
 class _PendingImagePageState extends ConsumerState<PoProductScreen> {
   final _scrollController = ScrollController();
   String imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
+  late Debouncer _debauncer;
 
   @override
   void initState() {
     super.initState();
+    _debauncer = Debouncer(milliseconds: 200);
     Future.microtask(
       () {
         ref.invalidate(getAllPoProductsControllerProvider);
@@ -56,14 +62,17 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
     }
   }
 
+  final _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final poProductsController = ref.watch(
       getAllPoProductsControllerProvider(widget.id.toString()),
     );
+    final isTab = ResponsiveHelper.isTablet();
 
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         // automaticallyImplyLeading: false,
         title: AppBarText(title: widget.supplier),
         backgroundColor: Colors.transparent,
@@ -82,61 +91,140 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                   poProductsController.value!.isSelectionEnabled
                       ? "Cancel"
                       : "Select",
-                  style: AppStyle.smallStyle(color: Colors.blue),
+                  style: AppStyle.boldStyle(color: Colors.blue),
                 ))
         ],
       ),
-      body: RefreshIndicator.adaptive(
-        onRefresh: () async {
-          imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
-          return ref.refresh(getAllPoProductsControllerProvider(widget.id));
-        },
-        child: BuildStateManageComponent(
-          stateController: poProductsController,
-          errorWidget: (p0, p1) => AppErrorView(
-            error: p0.toString(),
-            onRetry: () {
-              return ref.refresh(getAllPoProductsControllerProvider(widget.id));
+      body: Column(
+        children: [
+          AppMargin(
+              child: TextFormField(
+            controller: _searchController,
+            onChanged: (vaue) {
+              _debauncer.run(
+                () {
+                  ref
+                      .read(getAllPoProductsControllerProvider(widget.id)
+                          .notifier)
+                      .onSearchProduct(widget.id, vaue);
+                },
+              );
             },
-          ),
-          successWidget: (data) {
-            final state = data as PoProductsSuccessState;
-            final poProducts = state.poProducts;
-            return Column(
-              children: [
-                Expanded(
-                  child: poProducts.isEmpty
-                      ? AppErrorView(
-                          error: "No products found!",
-                          errorExp: 'products not found in this P/O',
-                        )
-                      : ListView.separated(
-                          separatorBuilder: (context, index) =>
-                              AppSpacer(hp: .005),
-                          controller: _scrollController,
-                          itemCount: poProducts.length,
-                          itemBuilder: (context, index) {
-                            final product = poProducts[index];
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: index == poProducts.length - 1
-                                      ? ResponsiveHelper.hp * .05
-                                      : 0),
-                              child: _buildProductCard(product),
-                            );
-                          },
-                        ),
+            style: AppStyle.normalStyle(
+                color: AppColors.kPrimaryColor,
+                fontSize: isTab ? ResponsiveHelper.fontSmall : null),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20, vertical: isTab ? 20 : 0),
+              hintText: "Search Product",
+              hintStyle: AppStyle.normalStyle(
+                color: AppColors.kPrimaryColor,
+                fontSize: isTab ? ResponsiveHelper.fontSmall : null,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.kBgColor),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.kBgColor),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              fillColor: AppColors.kFillColor.withAlpha(70),
+              filled: true,
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.kBgColor),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(
+                    left: isTab ? 20 : 8, right: isTab ? 10 : 0),
+                child: Icon(
+                  size: isTab ? 40 : null,
+                  SolarIconsOutline.magnifier,
+                  color: AppColors.kPrimaryColor,
                 ),
-                ref
-                        .read(getAllPoProductsControllerProvider(widget.id)
-                            .notifier)
-                        .isLoadingMore
-                    ? AppLoading(isTextLoading: true)
-                    : SizedBox(),
-              ],
-            );
-          },
-        ),
+              ),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      onPressed: () {
+                        _searchController.clear();
+                        return ref.refresh(
+                            getAllPoProductsControllerProvider(widget.id));
+                      },
+                      icon: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: isTab ? 20 : 8),
+                        child: Icon(
+                          Icons.clear,
+                          size: isTab ? 40 : null,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+          )),
+          AppSpacer(
+            hp: .01,
+          ),
+          Expanded(
+            child: Container(
+              color: AppColors.kBgColor,
+              child: RefreshIndicator.adaptive(
+                onRefresh: () async {
+                  _searchController.clear();
+                  imageVersion =
+                      DateTime.now().microsecondsSinceEpoch.toString();
+                  return ref
+                      .refresh(getAllPoProductsControllerProvider(widget.id));
+                },
+                child: BuildStateManageComponent(
+                  stateController: poProductsController,
+                  errorWidget: (p0, p1) => AppErrorView(
+                    error: p0.toString(),
+                  ),
+                  successWidget: (data) {
+                    final state = data as PoProductsSuccessState;
+                    final poProducts = state.poProducts;
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: poProducts.isEmpty
+                              ? AppErrorView(
+                                  error: "No products found!",
+                                  errorExp: 'products not found in this P/O',
+                                )
+                              : ListView.separated(
+                                  separatorBuilder: (context, index) =>
+                                      AppSpacer(hp: .005),
+                                  controller: _scrollController,
+                                  itemCount: poProducts.length,
+                                  itemBuilder: (context, index) {
+                                    final product = poProducts[index];
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: index == poProducts.length - 1
+                                              ? ResponsiveHelper.hp * .05
+                                              : 0),
+                                      child: _buildProductCard(product),
+                                    );
+                                  },
+                                ),
+                        ),
+                        ref
+                                .read(getAllPoProductsControllerProvider(
+                                        widget.id)
+                                    .notifier)
+                                .isLoadingMore
+                            ? AppLoading(isTextLoading: true)
+                            : SizedBox(),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: _buildBottomBar(),
     );

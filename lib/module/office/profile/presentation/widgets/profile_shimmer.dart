@@ -1,3 +1,4 @@
+import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
@@ -46,122 +47,70 @@ class _AnimatedProfileShimmerState extends State<AnimatedProfileShimmer>
         return Column(
           children: [
             // Avatar with pulsing animation
-            Stack(
-              children: [
-                Container(
-                  width: ResponsiveHelper.wp * .7,
-                  height: ResponsiveHelper.hp * .2,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withOpacity(_animation.value * 0.4),
-                        Colors.white.withOpacity(_animation.value * 0.2),
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                ),
+            // Stack(
+            //   children: [
+            //     Container(
+            //       width: ResponsiveHelper.wp * .7,
+            //       height: ResponsiveHelper.hp * .2,
+            //       decoration: BoxDecoration(
+            //         shape: BoxShape.circle,
+            //         gradient: LinearGradient(
+            //           begin: Alignment.topLeft,
+            //           end: Alignment.bottomRight,
+            //           colors: [
+            //             Colors.white.withOpacity(_animation.value * 0.4),
+            //             Colors.white.withOpacity(_animation.value * 0.2),
+            //           ],
+            //         ),
+            //         boxShadow: [
+            //           BoxShadow(
+            //             color: Colors.black.withOpacity(0.1),
+            //             blurRadius: 20,
+            //             offset: const Offset(0, 8),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
 
-                // Animated status indicator
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(_animation.value * 0.6),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 3),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            //     // Animated status indicator
+            //     Positioned(
+            //       bottom: 8,
+            //       right: 8,
+            //       child: Container(
+            //         width: 20,
+            //         height: 20,
+            //         decoration: BoxDecoration(
+            //           color: Colors.white.withOpacity(_animation.value * 0.6),
+            //           shape: BoxShape.circle,
+            //           border: Border.all(color: Colors.white, width: 3),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
 
-            AppSpacer(hp: .03),
+            AppSpacer(hp: .1),
 
             // Animated username bar
-            Container(
-              height: 28,
-              width: ResponsiveHelper.wp * 0.4,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Colors.white.withOpacity(_animation.value * 0.3),
-                    Colors.white.withOpacity(_animation.value * 0.5),
-                    Colors.white.withOpacity(_animation.value * 0.3),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-            AppSpacer(hp: .015),
 
             // Animated role badge
-            Container(
-              height: 28,
-              width: ResponsiveHelper.wp * 0.25,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.kPrimaryColor.withOpacity(_animation.value * 0.3),
-                    AppColors.kPrimaryColor.withOpacity(_animation.value * 0.1),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.kPrimaryColor
-                      .withOpacity(_animation.value * 0.2),
-                ),
-              ),
-            ),
 
             AppSpacer(hp: .03),
 
             // Animated store info
-            Container(
-              height: 44,
-              width: ResponsiveHelper.wp * 0.35,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(_animation.value * 0.15),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Colors.white.withOpacity(_animation.value * 0.1),
+            AppMargin(
+              child: Container(
+                height: 200,
+                padding: EdgeInsets.all(10),
+                width: ResponsiveHelper.wp,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(_animation.value * 0.15),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(_animation.value * 0.1),
+                  ),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 18,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(_animation.value * 0.4),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    height: 16,
-                    width: ResponsiveHelper.wp * 0.2,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(_animation.value * 0.4),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ],
+                
               ),
             ),
           ],

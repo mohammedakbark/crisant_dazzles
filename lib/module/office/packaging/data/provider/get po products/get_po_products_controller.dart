@@ -21,6 +21,7 @@ class GetPoProductsController
   bool get hasMore => _hasMore;
   bool _isLoadingMore = false;
   bool get isLoadingMore => _isLoadingMore;
+  String? _query;
 
   @override
   FutureOr<PoProductsSuccessState> build(String id) async {
@@ -37,12 +38,11 @@ class GetPoProductsController
       if (resetPage) {
         _page = 1;
         _isLoadingMore = false;
+        _query = null;
       }
 
-      final result = await GetPoProductsRepo.onGetPoProducts(
-        _page,
-        int.parse(id),
-      );
+      final result =
+          await GetPoProductsRepo.onGetPoProducts(_page, int.parse(id), _query);
 
       if (result['error'] == false) {
         final fetchedProducts = result['data'] as List<PoProductModel>;
@@ -85,10 +85,8 @@ class GetPoProductsController
             ),
       );
 
-      final result = await GetPoProductsRepo.onGetPoProducts(
-        _page,
-        int.parse(id),
-      );
+      final result =
+          await GetPoProductsRepo.onGetPoProducts(_page, int.parse(id), _query);
 
       if (result['error'] == false) {
         final fetchedProducts = result['data'] as List<PoProductModel>;
@@ -179,5 +177,40 @@ class GetPoProductsController
             isLoadingMore: false,
           ),
     );
+  }
+
+  // Search
+
+  Future<PoProductsSuccessState> onSearchProduct(
+      String id, String query) async {
+    try {
+      _query = query;
+      _page = 1;
+      _isLoadingMore = false;
+
+      final result =
+          await GetPoProductsRepo.onGetPoProducts(_page, int.parse(id), _query);
+
+      if (result['error'] == false) {
+        final fetchedProducts = result['data'] as List<PoProductModel>;
+        final paginationData = result['pagination'] as PaginationModel;
+        log(fetchedProducts.length.toString());
+        _page++;
+        _hasMore = paginationData.hasMore;
+
+        state = AsyncValue.data(
+          PoProductsSuccessState(poProducts: fetchedProducts),
+        );
+        return PoProductsSuccessState(poProducts: fetchedProducts);
+      } else {
+        throw result['data'];
+      }
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      log(e.toString());
+      return state.value ?? PoProductsSuccessState(poProducts: []);
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 }

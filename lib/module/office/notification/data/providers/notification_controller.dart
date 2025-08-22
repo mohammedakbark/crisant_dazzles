@@ -131,6 +131,7 @@ class FirebasePushNotification {
   void _showNotificationFromMessage(RemoteMessage message) {
     final notification = message.notification;
     if (notification != null) {
+      log("Forgrroudjj----------");
       _showNotification(
         id: notification.hashCode,
         title: notification.title,

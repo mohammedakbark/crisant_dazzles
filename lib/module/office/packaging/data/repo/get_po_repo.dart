@@ -4,13 +4,11 @@ import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/module/office/packaging/data/model/supplier_model.dart';
 
 class GetPoRepo {
-  static Future<Map<String, dynamic>> onGetAllPos
-  (
-    int pageNumber,
-  ) async {
+  static Future<Map<String, dynamic>> onGetAllPos(
+      int pageNumber, String? query) async {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.getRequest(
-      endpoint: "${ApiConstants.allPurchases}?page=$pageNumber",
+      endpoint: "${ApiConstants.allPurchases}?page=$pageNumber&search=${query??''}",
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",

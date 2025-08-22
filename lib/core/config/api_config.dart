@@ -147,7 +147,7 @@ class ApiConfig {
 
   static void _checkTokenExpired(data) async {
     if (data['error'] == true && data['message'] == "jwt expired") {
-      await ProfilePage.logout(rootNavigatorKey.currentContext!);
+      await ProfilePageNew.logout(rootNavigatorKey.currentContext!);
     }
   }
 }

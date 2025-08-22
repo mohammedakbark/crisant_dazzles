@@ -17,6 +17,7 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
   bool get hasMore => _hasMore;
   bool _isLoadingMore = false;
   bool get isLoadingMore => _isLoadingMore;
+  String? _query;
 
   @override
   FutureOr<SuppliersSuccessState> build() async {
@@ -31,11 +32,10 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
   Future<SuppliersSuccessState> _fetchPurchaseOrders() async {
     try {
       _page = 1;
+      _query = null;
       _isLoadingMore = false;
 
-      final result = await GetPoRepo.onGetAllPos(
-        _page,
-      );
+      final result = await GetPoRepo.onGetAllPos(_page, _query);
       if (result['error'] == false) {
         final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;
@@ -74,9 +74,7 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
               isLoadingMore: true,
             ),
       );
-      final result = await GetPoRepo.onGetAllPos(
-        _page,
-      );
+      final result = await GetPoRepo.onGetAllPos(_page, _query);
       if (result['error'] == false) {
         final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;
@@ -103,6 +101,37 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
   Future<void> loadMore() async {
     if (_hasMore) {
       await _loadMore();
+    }
+  }
+
+  // Search
+
+  Future<SuppliersSuccessState> onSearch(String query) async {
+    try {
+      _query = query;
+      _page = 1;
+      _isLoadingMore = false;
+
+      final result = await GetPoRepo.onGetAllPos(_page, _query);
+      if (result['error'] == false) {
+        final fetchedPos = result['data'] as List<SupplierModel>;
+        final paginationData = result['pagination'] as PaginationModel;
+
+        _page++;
+        _hasMore = paginationData.hasMore;
+        log(fetchedPos.length.toString());
+        state = AsyncValue.data(
+          SuppliersSuccessState(purchaseOrderList: fetchedPos),
+        );
+        return SuppliersSuccessState(purchaseOrderList: fetchedPos);
+      } else {
+        throw result['data'];
+      }
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      return state.value ?? SuppliersSuccessState(purchaseOrderList: []);
+    } finally {
+      _isLoadingMore = false;
     }
   }
 }

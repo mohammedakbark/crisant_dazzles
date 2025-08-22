@@ -110,7 +110,7 @@ class AppErrorView extends StatelessWidget {
                     AppSpacer(hp: .03),
                     InkWell(
                       onTap: isTokenExpire
-                          ? () => ProfilePage.logout(context)
+                          ? () => ProfilePageNew.logout(context)
                           : onRetry,
                       child: Padding(
                         padding: EdgeInsets.all(

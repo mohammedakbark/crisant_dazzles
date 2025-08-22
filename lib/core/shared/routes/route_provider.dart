@@ -32,6 +32,9 @@ class RouteProvider {
       GoRoute(
           path: initialScreen,
           builder: (context, state) => UpgradeAlert(
+              barrierDismissible: false, // user can’t close dialog
+              showLater: false,
+              showIgnore: false,
               dialogStyle: Platform.isAndroid
                   ? UpgradeDialogStyle.material
                   : UpgradeDialogStyle.cupertino,

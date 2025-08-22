@@ -48,6 +48,7 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
   Widget build(BuildContext context) {
     final uploadManagerState = ref.watch(uploadManagerProvider);
     return AppBar(
+      surfaceTintColor: Colors.transparent,
       toolbarHeight: widget.preferredSize.height,
       // toolbarHeight:
 

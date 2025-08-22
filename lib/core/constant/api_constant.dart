@@ -6,7 +6,7 @@ class ApiConstants {
   //  "https://test.dazzles.in/";
   static const String imageBaseUrl = "https://bill.dazzles.in/";
 
-  // static const String imageBaseUrl = "http://192.168.1.47:5173/uploads/";
+  // static const String imageBaseUrl = "http://192.168.1.29:5173/uploads/";
 
   static const String login = "login";
   static const String profile = "profile";

@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'package:animate_do/animate_do.dart';
 import 'package:dazzles/core/services/driver_nav_controller.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
-import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/driver/home/presentation/driver_home.dart';
 import 'package:dazzles/module/driver/parked%20cars/presentation/driver_parked_cars_screen.dart';

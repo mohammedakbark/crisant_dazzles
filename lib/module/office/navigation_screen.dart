@@ -16,8 +16,6 @@ import 'package:dazzles/module/office/product/presentation/products_page.dart';
 import 'package:dazzles/module/office/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
 import 'package:dazzles/module/office/profile/data/providers/get_profile_controller.dart';
-import 'package:dazzles/module/office/pending/presentation/pending_image_page.dart';
-import 'package:dazzles/module/office/pending/data/providers/get%20pending%20products/get_pending_products_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +35,7 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
     PackagePage(),
     CameraScreen(),
     ProductsPage(),
-    ProfilePage(),
+    ProfilePageNew(),
   ];
 
   @override

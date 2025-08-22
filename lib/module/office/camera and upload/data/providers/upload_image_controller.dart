@@ -7,8 +7,11 @@ import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/module/office/home/data/providers/dashboard_controller.dart';
+import 'package:dazzles/module/office/packaging/data/provider/get%20po%20products/get_po_products_controller.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/select%20&%20search%20product/product_id_selection_controller.dart';
+import 'package:dazzles/module/office/product/data/providers/get_product_data_controller.dart';
+import 'package:dazzles/module/office/product/data/providers/product_controller/get_products_controller.dart';
 import 'package:dazzles/module/office/product/data/repo/upload_image_from_product_repo.dart';
 import 'package:dazzles/module/office/packaging/data/repo/update_image_from_po_repo.dart';
 import 'package:flutter/material.dart';
@@ -104,11 +107,12 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
           pickedFile.path,
         );
         if (_croppedFile != null) {
-          _uploadImage([productModel.id], _croppedFile.path,
+          await _uploadImage([productModel.id], _croppedFile.path,
               uploadManagerController, true, logoColor);
-          ref.invalidate(dashboardControllerProvider);
-          ref.read(officeNavigationController.notifier).state = 0;
+          // ref.invalidate(dashboardControllerProvider);
+          // ref.read(officeNavigationController.notifier).state = 0;
           context.go(route);
+          return ref.refresh(allProductControllerProvider);
         }
       }
     } catch (e) {
@@ -132,7 +136,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
     context.go(route);
   }
 
-  // -------------------  UPLOAD IMAGE FROM PURCHASE ORDER
+  // -------------------  UPLOAD IMAGE FROM PURCHASE ORDER / SUPPLIER
 
   Future<void> pickImageAndUploadForSupplier(
       BuildContext context,
@@ -155,12 +159,13 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
           pickedFile.path,
         );
         if (_croppedFile != null) {
-          _uploadImage(ids, _croppedFile.path, uploadManagerController, false,
-              logoColor);
-          ref.invalidate(dashboardControllerProvider);
-          ref.read(officeNavigationController.notifier).state = 0;
+          await _uploadImage(ids, _croppedFile.path, uploadManagerController,
+              false, logoColor);
+          return ref.refresh(getAllPoProductsControllerProvider(suppliedId));
+          // ref.invalidate(dashboardControllerProvider);
+          // ref.read(officeNavigationController.notifier).state = 0;
 
-          context.go(route);
+          // context.go(route);
         }
       }
     } catch (e) {

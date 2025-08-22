@@ -994,7 +994,7 @@ class _DriverProfileState extends ConsumerState<OtherUsersNaviagationScreen>
           child: InkWell(
             onTap: () {
               HapticFeedback.mediumImpact();
-              ProfilePage.showLogoutConfirmation(context, ref);
+              ProfilePageNew.showLogoutConfirmation(context, ref);
             },
             borderRadius: BorderRadius.circular(16),
             child: Padding(

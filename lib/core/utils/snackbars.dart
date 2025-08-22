@@ -10,27 +10,27 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-showCustomSnackBar(
-  BuildContext context, {
-  String? title,
-  ContentType? contentType,
-  required String content,
-}) {
-  final snackBar = SnackBar(
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: title ?? '',
-      message: content,
-      contentType: contentType ?? ContentType.success,
-    ),
-  );
+// showCustomSnackBar(
+//   BuildContext context, {
+//   String? title,
+//   ContentType? contentType,
+//   required String content,
+// }) {
+//   final snackBar = SnackBar(
+//     elevation: 0,
+//     behavior: SnackBarBehavior.floating,
+//     backgroundColor: Colors.transparent,
+//     content: AwesomeSnackbarContent(
+//       title: title ?? '',
+//       message: content,
+//       contentType: contentType ?? ContentType.success,
+//     ),
+//   );
 
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(snackBar);
-}
+//   ScaffoldMessenger.of(context)
+//     ..hideCurrentSnackBar()
+//     ..showSnackBar(snackBar);
+// }
 
 showToastMessage(
   BuildContext context,
@@ -58,7 +58,6 @@ showCustomSnackBarAdptive(
   bool? isError,
   Color? color,
 }) {
-  
   final snackbar = SnackBar(
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,
@@ -67,9 +66,9 @@ showCustomSnackBarAdptive(
       margin: EdgeInsets.only(
         left: ResponsiveHelper.wp * .03,
         right: ResponsiveHelper.wp * .03,
-        bottom: Platform.isAndroid
-            ? ResponsiveHelper.hp * .07
-            : ResponsiveHelper.hp * .09,
+        // bottom: Platform.isAndroid
+        //     ? ResponsiveHelper.hp * .07
+        //     : ResponsiveHelper.hp * .09,
       ),
       backgroundColor: isError == true
           ? AppColors.kErrorPrimary
@@ -154,5 +153,3 @@ void showCustomDialog({
     },
   );
 }
-
-

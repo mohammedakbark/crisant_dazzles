@@ -5,10 +5,12 @@ import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/packaging/data/model/po_product_model.dart';
 
 class GetPoProductsRepo {
-  static Future<Map<String, dynamic>> onGetPoProducts(int page, int id) async {
+  static Future<Map<String, dynamic>> onGetPoProducts(
+      int page, int id, String? query) async {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.getRequest(
-      endpoint: "${ApiConstants.getPurshaseOrderProducts}/$id",
+      endpoint:
+          "${ApiConstants.getPurshaseOrderProducts}/$id?page=$page&search=${query ?? ''}",
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",
