@@ -847,7 +847,7 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
       case "cancelled":
         return const Color(0xFFEF4444); // Red
       default:
-        return const Color(0xFF6B7280); // Gray
+        return Colors.white; // Gray
     }
   }
 
@@ -941,8 +941,7 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
       children: [
         const SizedBox(width: 8),
         _buildStatusBar("Parked", false),
-        _buildConnector(
-            _getStatusColor("Parked"), _getStatusColor("Delivered")),
+        _buildConnector(_getStatusColor("Delivered"), _getStatusColor("")),
         _buildStatusBar("Delivered", true),
         const SizedBox(width: 8),
       ],
