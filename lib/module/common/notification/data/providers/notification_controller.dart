@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
-import 'package:dazzles/module/office/notification/data/repo/set_notification_repo.dart';
+import 'package:dazzles/module/common/notification/data/repo/set_notification_repo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

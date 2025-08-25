@@ -818,7 +818,21 @@ class _DriverProfileState extends ConsumerState<OtherUsersNaviagationScreen>
             AppSpacer(hp: .12),
             _buildProfileInfoCard(userModel),
             AppSpacer(hp: .04),
-            _buildNotificationButton(userModel),
+            _buildButton(
+              CupertinoIcons.qrcode_viewfinder,
+              "Scan Product",
+              () {
+                context.push(qrScanScreen);
+              },
+            ),
+            AppSpacer(hp: .01),
+            _buildButton(
+              CupertinoIcons.bell_fill,
+              "Notifications",
+              () {
+                context.push(notificationScreen);
+              },
+            ),
             AppSpacer(hp: .03),
           ],
         ),
@@ -895,7 +909,80 @@ class _DriverProfileState extends ConsumerState<OtherUsersNaviagationScreen>
     );
   }
 
-  Widget _buildNotificationButton(dynamic userModel) {
+  Widget _buildButton(IconData icon, String title, void Function()? onTap) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.1),
+            Colors.white.withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.lightImpact();
+            if (onTap != null) {
+              onTap();
+            }
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.kPrimaryColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: AppColors.kPrimaryColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: AppStyle.boldStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    CupertinoIcons.arrow_right,
+                    color: Colors.white70,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQrScan(dynamic userModel) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(

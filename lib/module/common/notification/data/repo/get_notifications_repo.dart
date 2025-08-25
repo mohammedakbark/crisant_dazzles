@@ -4,7 +4,7 @@
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
-import 'package:dazzles/module/office/notification/data/models/notification_model.dart';
+import 'package:dazzles/module/common/notification/data/models/notification_model.dart';
 
 class GetNotificationsRepo {
   static Future<Map<String, dynamic>> getAllNotifications() async {

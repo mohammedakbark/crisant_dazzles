@@ -12,6 +12,8 @@ const viewAndEditProductScreen = "/viewAndEditProductScreen";
 
 //OTHER USER UROUTE
 const otherUsersRoute = "/otherUsersRoute";
+const qrScanScreen = "/qrScanScreen";
+const scannedProductDetailScreen = "/scannedProductScreen";
 
 // DRIVER MODULE
 

@@ -37,6 +37,8 @@ class ApiConstants {
   static const String setTokenURL = "notification/token";
   static const String getNotificationsURL = "notification";
 
+  static const String getScannedProductDetails="productqr";
+
   // DRIVER MODULE
   static const drDashboardData = "valet/dailyvalet";
 // check in

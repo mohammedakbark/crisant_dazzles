@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/module/Auth/presentation/login_screen.dart';
+import 'package:dazzles/module/common/Auth/presentation/login_screen.dart';
+import 'package:dazzles/module/common/scan%20product/data/model/scanned_product_model.dart';
+import 'package:dazzles/module/common/scan%20product/screen/presentation/qr_scan_screen.dart';
+import 'package:dazzles/module/common/scan%20product/screen/presentation/scanned_product_screen.dart';
 import 'package:dazzles/module/driver/check%20in/presentation/driver_user_reg_screen.dart';
 import 'package:dazzles/module/driver/check%20out/presentation/dr_location_screen.dart';
 import 'package:dazzles/module/driver/driver_nav_screen.dart';
@@ -10,7 +13,7 @@ import 'package:dazzles/module/driver/home/presentation/driver_qr_scanner_screen
 import 'package:dazzles/module/office/camera%20and%20upload/presentation/products_selection_screen.dart';
 import 'package:dazzles/module/office/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/module/office/navigation_screen.dart';
-import 'package:dazzles/module/office/notification/presentation/notification_screen.dart';
+import 'package:dazzles/module/common/notification/presentation/notification_screen.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/module/office/product/presentation/widgets/product_image_view.dart';
@@ -143,7 +146,7 @@ class RouteProvider {
             );
           }),
 
-      // OTHER ROLE ROUTES
+      // OTHER ROLE ROUTES AND COMMON
 
       GoRoute(
           path: otherUsersRoute,
@@ -152,6 +155,15 @@ class RouteProvider {
       GoRoute(
           path: notificationScreen,
           builder: (context, state) => NotificationScreen()),
+      GoRoute(path: qrScanScreen, builder: (context, state) => QrScanScreen()),
+      GoRoute(
+          path: scannedProductDetailScreen,
+          builder: (context, state) {
+            final detials = state.extra as Map<String, dynamic>;
+
+            return ScannedProductScreen(
+                productDataModel: ScannedProductModel.fromJson(detials));
+          }),
     ],
   );
 }

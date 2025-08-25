@@ -12,7 +12,7 @@ import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/module/office/notification/data/providers/notification_controller.dart';
+import 'package:dazzles/module/common/notification/data/providers/notification_controller.dart';
 import 'package:dazzles/module/office/profile/data/models/user_profile_model.dart';
 import 'package:dazzles/module/office/profile/data/providers/get_profile_controller.dart';
 import 'package:dazzles/module/office/profile/presentation/widgets/profile_shimmer.dart';
@@ -327,6 +327,9 @@ class _ProfilePageState extends ConsumerState<ProfilePageNew>
                   hp: .04,
                 ),
                 _buildLogoutSection(),
+                AppSpacer(
+                  hp: .08,
+                ),
               ],
             ),
           ),
@@ -507,10 +510,91 @@ class _ProfilePageState extends ConsumerState<ProfilePageNew>
           children: [
             AppSpacer(hp: .12),
             _buildProfileInfoCard(userModel),
+            AppSpacer(hp: .01),
+            _buildButton(
+              CupertinoIcons.qrcode_viewfinder,
+              "Scan Product",
+              () {
+                context.push(qrScanScreen);
+              },
+            ),
             // AppSpacer(hp: .04),
             // _buildNotificationButton(userModel),
             // AppSpacer(hp: .03),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton(IconData icon, String title, void Function()? onTap) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.1),
+            Colors.white.withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.lightImpact();
+            if (onTap != null) {
+              onTap();
+            }
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.kPrimaryColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: AppColors.kPrimaryColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: AppStyle.boldStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    CupertinoIcons.arrow_right,
+                    color: Colors.white70,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:dazzles/module/office/notification/data/models/notification_model.dart';
-import 'package:dazzles/module/office/notification/data/repo/get_notifications_repo.dart';
+import 'package:dazzles/module/common/notification/data/models/notification_model.dart';
+import 'package:dazzles/module/common/notification/data/repo/get_notifications_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotificationListController

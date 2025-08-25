@@ -131,6 +131,21 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                 );
               }),
         ),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: InkWell(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              onTap: () {
+                context.push(qrScanScreen);
+              },
+              child: CircleAvatar(
+                radius: ResponsiveHelper.isTablet() ? 40 : null,
+                backgroundColor: AppColors.kPrimaryColor.withAlpha(50),
+                child: Icon(CupertinoIcons.qrcode_viewfinder,
+                    size: ResponsiveHelper.isTablet() ? 40 : 18,
+                    color: AppColors.kWhite),
+              )),
+        )
         // Padding(
         //   padding: EdgeInsets.only(right: 10),
         //   child: InkWell(
