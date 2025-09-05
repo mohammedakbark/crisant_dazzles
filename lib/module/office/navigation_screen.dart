@@ -198,17 +198,9 @@ class _NavigationScreenState extends ConsumerState<NavigationScreen> {
         icon: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            index == 1
-                ? _buildBadge(
-                    Icon(
-                      icon,
-                      size: isTab ? 50 : null,
-                      color: isSelected
-                          ? AppColors.kPrimaryColor
-                          : AppColors.kWhite,
-                    ),
-                  )
-                : Icon(
+        
+        
+                Icon(
                     icon,
                     size: isTab ? 50 : null,
                     color:

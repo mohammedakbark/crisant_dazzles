@@ -240,7 +240,14 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
     bool isSelected =
         poProductsController.value!.selectedIds.contains(poProduct.productId);
     return GestureDetector(
-      onTap: () => poProductsNotifier.onSelectProducts(poProduct.productId),
+      onTap: () async {
+        if (!poProductsController.value!.isSelectionEnabled) {
+          showGallerySheet(context, ref,
+              supplierId: widget.id, productId: poProduct.productId);
+        } else {
+          poProductsNotifier.onSelectProducts(poProduct.productId);
+        }
+      },
       onLongPress: () =>
           poProductsNotifier.onEnableSelection(id: poProduct.productId),
       child: Stack(

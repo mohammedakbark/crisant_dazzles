@@ -63,7 +63,10 @@ final cameraControllerProvider =
 );
 
 void showGallerySheet(BuildContext context, WidgetRef ref,
-    {ProductModel? productModel, String? supplierId}) {
+    {ProductModel? productModel, String? supplierId, int? productId}) {
+  // if(productId&&supplierId) != NULL   -- for single product update in PACKAGING
+//  productModel!=null ==> PRDUCT UPDATE
+//supplierId!=null massive PAKCAHING UPDATE
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -126,20 +129,30 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                                 ref.read(logoColorSelctionControllerProvider);
                             if (supplierId != null) {
                               // For Updating PO Images
-
-                              final controller = ref
-                                  .read(getAllPoProductsControllerProvider(
-                                      supplierId!))
-                                  .value;
-                              if (controller != null) {
+                              if (productId != null) {
                                 UploadImageNotifier()
                                     .pickImageAndUploadForSupplier(
                                         context,
                                         ImageSource.gallery,
                                         ref,
-                                        controller.selectedIds,
-                                        supplierId!,
+                                        [productId],
+                                        supplierId,
                                         logoColor);
+                              } else {
+                                final controller = ref
+                                    .read(getAllPoProductsControllerProvider(
+                                        supplierId))
+                                    .value;
+                                if (controller != null) {
+                                  UploadImageNotifier()
+                                      .pickImageAndUploadForSupplier(
+                                          context,
+                                          ImageSource.gallery,
+                                          ref,
+                                          controller.selectedIds,
+                                          supplierId,
+                                          logoColor);
+                                }
                               }
                             }
                             if (productModel != null) {
@@ -148,7 +161,7 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                                   .pickImageAndUploadForProducts(
                                       context,
                                       ImageSource.gallery,
-                                      productModel!,
+                                      productModel,
                                       ref,
                                       logoColor);
                             }
@@ -187,19 +200,30 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                                 ref.read(logoColorSelctionControllerProvider);
                             if (supplierId != null) {
                               // For Updating PO Images
-                              UploadImageNotifier()
-                                  .pickImageAndUploadForSupplier(
-                                      context,
-                                      ImageSource.camera,
-                                      ref,
-                                      ref
-                                          .read(
-                                              getAllPoProductsControllerProvider(
-                                                  supplierId!))
-                                          .value!
-                                          .selectedIds,
-                                      supplierId!,
-                                      logoColor);
+                              if (productId != null) {
+                                UploadImageNotifier()
+                                    .pickImageAndUploadForSupplier(
+                                        context,
+                                        ImageSource.camera,
+                                        ref,
+                                        [productId],
+                                        supplierId,
+                                        logoColor);
+                              } else {
+                                UploadImageNotifier()
+                                    .pickImageAndUploadForSupplier(
+                                        context,
+                                        ImageSource.camera,
+                                        ref,
+                                        ref
+                                            .read(
+                                                getAllPoProductsControllerProvider(
+                                                    supplierId))
+                                            .value!
+                                            .selectedIds,
+                                        supplierId,
+                                        logoColor);
+                              }
                             }
                             if (productModel != null) {
                               // For Updating  Product Images
@@ -207,7 +231,7 @@ void showGallerySheet(BuildContext context, WidgetRef ref,
                                   .pickImageAndUploadForProducts(
                                       context,
                                       ImageSource.camera,
-                                      productModel!,
+                                      productModel,
                                       ref,
                                       logoColor);
                             }

@@ -125,7 +125,7 @@ class GetPoProductsController
     await _fetchPOProducts(id, resetPage: true);
   }
 
-  void onSelectProducts(int id) {
+  Future<void> onSelectProducts(int id) async {
     HapticFeedback.selectionClick();
     List<int> selectedIds = List<int>.from(state.value?.selectedIds ?? []);
     bool isSelectionEnabled = state.value?.isSelectionEnabled ?? false;

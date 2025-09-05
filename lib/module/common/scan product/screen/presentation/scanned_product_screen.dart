@@ -8,7 +8,6 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/common/scan%20product/data/model/scanned_product_model.dart';
-import 'package:dazzles/module/office/product/data/models/product_data_model.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
