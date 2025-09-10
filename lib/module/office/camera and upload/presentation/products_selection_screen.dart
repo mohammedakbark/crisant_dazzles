@@ -132,7 +132,7 @@ class _CopyMoreProdutcsScreenState
                                   extra: {
                                     "heroTag": model.id.toString(),
                                     "path":
-                                        "${ApiConstants.imageBaseUrl}${model.productPicture}",
+                                        "${ApiConstants.mediaBaseUrl}${model.productPicture}",
                                   },
                                 );
                               },
@@ -163,7 +163,7 @@ class _CopyMoreProdutcsScreenState
                                           child: AppNetworkImage(
                                             imageVersion: imageVersion,
                                             imageFile:
-                                                "${ApiConstants.imageBaseUrl}${model.productPicture}",
+                                                "${ApiConstants.mediaBaseUrl}${model.productPicture}",
                                           ),
                                         ),
                                       ),
@@ -661,7 +661,7 @@ class _CopyMoreProdutcsScreenState
                                     imageVersion:
                                         DateTime.timestamp().toString(),
                                     imageFile:
-                                        '${ApiConstants.imageBaseUrl}${selectedProduct.productPicture}',
+                                        '${ApiConstants.mediaBaseUrl}${selectedProduct.productPicture}',
                                   ),
                                 ),
                               ),

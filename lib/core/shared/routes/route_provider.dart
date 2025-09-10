@@ -10,6 +10,7 @@ import 'package:dazzles/module/driver/check%20out/presentation/dr_location_scree
 import 'package:dazzles/module/driver/driver_nav_screen.dart';
 import 'package:dazzles/module/driver/home/data/model/dr_check_out_valet_info_model.dart';
 import 'package:dazzles/module/driver/home/presentation/driver_qr_scanner_screen.dart';
+import 'package:dazzles/module/driver/parked%20cars/presentation/driver_video_player_screen.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/presentation/products_selection_screen.dart';
 import 'package:dazzles/module/office/home/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/module/office/navigation_screen.dart';
@@ -143,6 +144,24 @@ class RouteProvider {
             final model = map['modelData'] as Map<String, dynamic>;
             return DrVehicleLocationScreen(
               valetInfo: DrCheckOutValetInfoModel.fromJson(model),
+            );
+          }),
+
+      GoRoute(
+          path: drVideoPlayerScreen,
+          builder: (context, state) {
+            final map = state.extra as Map<String, dynamic>;
+            final initialVideo = map['initialVideo'] as String?;
+            final finalVideo = map['finalVideo'] as String?;
+            final videos = [
+              if (initialVideo != null)
+                {"title": "Initial Video", "file": initialVideo},
+              if (finalVideo != null)
+                {"title": "Final Video", "file": finalVideo}
+            ];
+
+            return DriverVideoPlayerScreen(
+              videos: videos,
             );
           }),
 

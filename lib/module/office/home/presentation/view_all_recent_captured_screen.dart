@@ -99,7 +99,7 @@ class _ViewAllRecentCapturedScreenState
                                       imageVersion: imageVersion,
                                       // errorIcon: Image.asset(AppImages.defaultImage),
                                       fit: BoxFit.cover,
-                                      imageFile: ApiConstants.imageBaseUrl +
+                                      imageFile: ApiConstants.mediaBaseUrl +
                                           data[index].productPicture,
                                     ),
                                   ),

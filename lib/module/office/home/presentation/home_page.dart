@@ -301,7 +301,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           //  errorIcon: Image.asset(AppImages.defaultImage),
                                           imageVersion: imageVersion,
                                           fit: BoxFit.cover,
-                                          imageFile: ApiConstants.imageBaseUrl +
+                                          imageFile: ApiConstants.mediaBaseUrl +
                                               model.recentCaptured[index]
                                                   .productPicture,
                                         ),

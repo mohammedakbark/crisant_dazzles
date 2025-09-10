@@ -4,7 +4,7 @@ class ApiConstants {
 
   //  "https://api.dazzles.in/api/mobile/";
   //  "https://test.dazzles.in/";
-  static const String imageBaseUrl = "https://bill.dazzles.in/";
+  static const String mediaBaseUrl = "https://bill.dazzles.in/";
 
   // static const String imageBaseUrl = "http://192.168.0.144:5173/uploads/";
 

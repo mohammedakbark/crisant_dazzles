@@ -10,20 +10,20 @@ const openImage = "/openImage";
 const productsSelectionScreen = "/productsSelectionScreen";
 const viewAndEditProductScreen = "/viewAndEditProductScreen";
 
-//OTHER USER UROUTE
+// PO
+const poProductsScreen = "/poProductsScreen";
+
+//   --      OTHER USER UROUTE
 const otherUsersRoute = "/otherUsersRoute";
 const qrScanScreen = "/qrScanScreen";
 const scannedProductDetailScreen = "/scannedProductScreen";
 
-// DRIVER MODULE
+//  --- DRIVER MODULE
 
 const drNavScreen = "/drNavScreen";
 const drQrScannerScreen = "/drQrScannerScreen";
 // checkin
 const drCustomerRegScreen = "/drCustomerRegScreen";
-
 // checkOut
 const drlocationScreen = "/drLocationScreen";
-
-// PO
-const poProductsScreen = "/poProductsScreen";
+const drVideoPlayerScreen = "/drVideoPlayerScreen";

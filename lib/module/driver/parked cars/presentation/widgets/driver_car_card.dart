@@ -1,350 +1,4 @@
-// import 'dart:developer';
-
-// import 'package:dazzles/core/shared/routes/const_routes.dart';
-// import 'package:dazzles/core/shared/theme/app_colors.dart';
-// import 'package:dazzles/core/shared/theme/styles/text_style.dart';
-// import 'package:dazzles/core/utils/app_bottom_sheet.dart';
-// import 'package:dazzles/core/utils/intl_c.dart';
-// import 'package:dazzles/core/utils/permission_hendle.dart';
-// import 'package:dazzles/core/utils/responsive_helper.dart';
-// import 'package:dazzles/module/driver/check%20in/data/provider/driver%20controller/driver_check_in_controller.dart';
-// import 'package:dazzles/module/driver/parked%20cars/data/model/driver_parked_car_model.dart';
-// import 'package:dazzles/module/driver/parked%20cars/data/provider/my%20parked%20cars%20controller/driver_my_parked_car_controller.dart';
-// import 'package:dazzles/module/driver/parked%20cars/data/provider/parked%20car%20controller/driver_parked_car_controller.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:go_router/go_router.dart';
-
-// final isUploadingInitialVideoProvider = StateProvider<bool>((ref) => false);
-
-// class DriverValetParkingCard extends ConsumerStatefulWidget {
-//   final DriverParkedCarModel valetData;
-
-//   DriverValetParkingCard({
-//     Key? key,
-//     required this.valetData,
-//   }) : super(key: key);
-
-//   @override
-//   ConsumerState<DriverValetParkingCard> createState() =>
-//       _DriverValetParkingCardState();
-// }
-
-// class _DriverValetParkingCardState
-//     extends ConsumerState<DriverValetParkingCard> {
-//   bool isLoading = false;
-
-//   @override
-//   Widget build(
-//     BuildContext context,
-//   ) {
-//     return InkWell(
-//       onTap: () {
-//         final lat = widget.valetData.latitude;
-//         final lon = widget.valetData.longitude;
-//         final finalVideo = widget.valetData.finalVideo;
-//         if (lat == null || lon == null) {
-//           showCustomBottomSheet(
-//             isLoading: isLoading,
-//             hideIcon: true,
-//             message: "Initial video upload pending for this vehicle.",
-//             subtitle: "Please enable your location services to continue.",
-//             buttonText: "UPLOAD INITIAL VIDEO",
-//             onNext: () async {
-//               final hasPermission =
-//                   await AppPermissions.askLocationPermission();
-//               if (hasPermission) {
-//                 ref.read(isUploadingInitialVideoProvider.notifier).state = true;
-//                 await ref.watch(driverControllerProvider.notifier).onTakeVideo(
-//                     context, widget.valetData.valetId.toString(),
-//                     sheetButton: "DONE");
-//                 ref.invalidate(drGetParkedCarListControllerProvider);
-//                 ref.invalidate(drGetMyParkedCarListControllerProvider);
-//                 ref.read(isUploadingInitialVideoProvider.notifier).state =
-//                     false;
-//               }
-//             },
-//           );
-//         }
-
-//         if ((lat != null && lon != null) && finalVideo == null) {
-//           showCustomBottomSheet(
-//             hideIcon: true,
-//             message: "This vehicle is parked and ready for pickup or delivery.",
-//             subtitle: "Scan the customer's QR code to locate and proceed.",
-//             buttonText: "SCAN QR CODE",
-//             onNext: () async {
-//               context.push(drQrScannerScreen, extra: {"scanFor": "checkOut"});
-//             },
-//           );
-//         }
-//       },
-//       child: Container(
-//         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-//         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//         decoration: BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.circular(12),
-//           border: Border.all(color: Colors.grey.shade300, width: 1),
-//           boxShadow: [
-//             BoxShadow(
-//               color: _getStatusColor(widget.valetData.status).withAlpha(100),
-//               blurRadius: 8,
-//               offset: const Offset(0, 2),
-//             ),
-//           ],
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Text(
-//             //   widget.valetData.qrNumber.toString(),
-//             //   style: AppStyle.boldStyle(color: AppColors.kBgColor),
-//             // ),
-//             Row(
-//               // mainAxisSize: MainAxisSize.min,
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 _builTile(Icons.directions_car, widget.valetData.vehicleNumber,
-//                     '${widget.valetData.vehicleBrand} ${widget.valetData.vehicleModel}',
-//                     isIconLeft: true),
-//                 SizedBox(
-//                   height: 50,
-//                   child: VerticalDivider(
-//                     thickness: 1,
-//                     color: AppColors.kOrange.withAlpha(50),
-//                   ),
-//                 ),
-//                 _builTile(Icons.person_outline, widget.valetData.customerName,
-//                     widget.valetData.customerNumber)
-//               ],
-//             ),
-
-//             const SizedBox(height: 8),
-//             // Container(
-//             //   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-//             //   decoration: BoxDecoration(
-//             //       borderRadius: BorderRadius.circular(10),
-//             //       color: AppColors.kDeepPurple),
-//             //   child: Text('QR: ${valetData.qrNumber}',
-//             //       style:
-//             //           AppStyle.boldStyle(fontSize: 10, color: AppColors.kWhite)),
-//             // ),
-//             // Customer Information
-
-//             Divider(
-//               color: AppColors.kOrange.withAlpha(50),
-//             ),
-//             // Bottom Row - Store and Timing
-//             Row(
-//               crossAxisAlignment: CrossAxisAlignment.end,
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       'Store: ${widget.valetData.storeName}',
-//                       style: AppStyle.mediumStyle(
-//                         fontSize: 12,
-//                         color: Colors.grey.shade600,
-//                       ),
-//                     ),
-//                     const SizedBox(height: 4),
-//                     Text(
-//                       'Parked by: ${widget.valetData.parkedby}',
-//                       style: AppStyle.mediumStyle(
-//                         fontSize: 12,
-//                         color: Colors.grey.shade600,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//                 Column(
-//                   crossAxisAlignment: CrossAxisAlignment.end,
-//                   children: [
-//                     Text(
-//                       IntlC.convertToDateTime(widget.valetData.parkedAt),
-//                       style: AppStyle.mediumStyle(
-//                         fontSize: 12,
-//                         color: Colors.grey.shade600,
-//                       ),
-//                     ),
-//                     const SizedBox(height: 4),
-//                     Text(
-//                       'Duration: ${widget.valetData.parkingTime}h',
-//                       style: AppStyle.mediumStyle(
-//                         fontSize: 12,
-//                         fontWeight: FontWeight.w500,
-//                         color: Colors.black,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             SizedBox(height: 10),
-//             if (widget.valetData.status.toLowerCase() == "parked")
-//               _buildParkedStatusBar(),
-//             if (widget.valetData.status.toLowerCase() == "delivered")
-//               _buildDeliveredStatusBar(),
-//             if (widget.valetData.status.toLowerCase() == "cancelled")
-//               _buildCancelledStatusBar(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _builTile(IconData icon, String title, String subttile,
-//       {bool? isIconLeft}) {
-//     return Expanded(
-//       child: Row(
-//         // crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           if (isIconLeft == true) ...[
-//             Container(
-//               padding: const EdgeInsets.all(12),
-//               decoration: BoxDecoration(
-//                 color: Colors.grey.shade100,
-//                 borderRadius: BorderRadius.circular(8),
-//               ),
-//               child: Icon(
-//                 icon,
-//                 color: Colors.grey.shade600,
-//                 size: 20,
-//               ),
-//             ),
-//             const SizedBox(width: 12),
-//           ],
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: isIconLeft == null
-//                   ? CrossAxisAlignment.end
-//                   : CrossAxisAlignment.start,
-//               children: [
-//                 Text(title,
-//                     style: AppStyle.boldStyle(color: AppColors.kBgColor)),
-//                 const SizedBox(height: 2),
-//                 Text(subttile,
-//                     style: AppStyle.mediumStyle(
-//                         color: AppColors.kTextPrimaryColor)),
-//               ],
-//             ),
-//           ),
-//           if (isIconLeft == null) ...[
-//             const SizedBox(width: 12),
-//             Container(
-//               padding: const EdgeInsets.all(12),
-//               decoration: BoxDecoration(
-//                 color: Colors.grey.shade100,
-//                 borderRadius: BorderRadius.circular(8),
-//               ),
-//               child: Icon(
-//                 icon,
-//                 color: Colors.grey.shade600,
-//                 size: 20,
-//               ),
-//             ),
-//           ]
-//         ],
-//       ),
-//     );
-//   }
-
-//   Color _getStatusColor(String status) {
-//     switch (status.toLowerCase()) {
-//       case 'parked':
-//         return AppColors.kTeal;
-//       case 'delivered':
-//         return AppColors.kDeepPurple;
-//       case "cancelled":
-//         {
-//           return AppColors.kErrorPrimary;
-//         }
-//       default:
-//         return Colors.white;
-//     }
-//   }
-
-//   Widget _buildStatusBar(String status, bool isCurrent) {
-//     return Column(
-//       children: [
-//         Container(
-//           alignment: Alignment.center,
-//           width: ResponsiveHelper.wp * .2,
-//           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-//           decoration: BoxDecoration(
-//             color: _getStatusColor(status),
-//             borderRadius: BorderRadius.circular(10),
-//           ),
-//           child: Text(
-//             status,
-//             maxLines: 1,
-//             overflow: TextOverflow.ellipsis,
-//             style: AppStyle.mediumStyle(
-//               fontSize: 12,
-//             ),
-//           ),
-//         ),
-//         SizedBox(
-//           height: 2,
-//         ),
-//         isCurrent
-//             ? Container(
-//                 width: ResponsiveHelper.wp * .17,
-//                 height: 2,
-//                 decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(10),
-//                     color: _getStatusColor(status)),
-//               )
-//             : SizedBox.shrink()
-//       ],
-//     );
-//   }
-
-//   Widget _buildParkedStatusBar() {
-//     return Row(
-//       children: [
-//         _buidlDevider(_getStatusColor(""), _getStatusColor("Parked")),
-//         _buildStatusBar("Parked", true),
-//       ],
-//     );
-//   }
-
-//   Widget _buildDeliveredStatusBar() {
-//     return Row(
-//       children: [
-//         _buildStatusBar("Parked", false),
-//         _buidlDevider(_getStatusColor("Parked"), _getStatusColor("Delivered")),
-//         _buildStatusBar("Delivered", true),
-//       ],
-//     );
-//   }
-
-//   Widget _buildCancelledStatusBar() {
-//     return Row(
-//       children: [
-//         _buildStatusBar("Parked", false),
-//         _buidlDevider(_getStatusColor("Parked"), _getStatusColor("Cancelled")),
-//         _buildStatusBar("Cancelled", true),
-//       ],
-//     );
-//   }
-
-//   Widget _buidlDevider(Color a, Color b) {
-//     return Flexible(
-//       child: Container(
-//         margin: EdgeInsets.symmetric(horizontal: 10),
-//         height: 1,
-//         decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(10),
-//             gradient: LinearGradient(colors: [AppColors.kWhite, a, b])),
-//       ),
-//     );
-//   }
-// }
-
+import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -358,6 +12,7 @@ import 'package:dazzles/module/driver/parked%20cars/data/provider/parked%20car%2
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 final isUploadingInitialVideoProvider = StateProvider<bool>((ref) => false);
 
@@ -491,88 +146,20 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
           const SizedBox(height: 5),
           _buildFooterInfo(),
           const SizedBox(height: 10),
-          _buildStatusProgress(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(child: _buildStatusProgress()),
+              AppSpacer(
+                wp: .01,
+              ),
+              _buildVideoSection(),
+            ],
+          )
         ],
       ),
     );
   }
-
-  // Widget _buildHeader() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Container(
-  //         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-  //         decoration: BoxDecoration(
-  //           color: Colors.white.withOpacity(0.2),
-  //           borderRadius: BorderRadius.circular(20),
-  //           border: Border.all(color: Colors.white.withOpacity(0.3)),
-  //         ),
-  //         child: Row(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             Icon(
-  //               Icons.qr_code_2,
-  //               size: 16,
-  //               color: Colors.white.withOpacity(0.9),
-  //             ),
-  //             const SizedBox(width: 6),
-  //             Text(
-  //               'QR: ${widget.valetData.qrNumber}',
-  //               style: AppStyle.mediumStyle(
-  //                 fontSize: 12,
-  //                 color: Colors.white.withOpacity(0.9),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       _buildActionButton(),
-  //     ],
-  //   );
-  // }
-
-  // Widget _buildActionButton() {
-  //   final lat = widget.valetData.latitude;
-  //   final lon = widget.valetData.longitude;
-  //   final finalVideo = widget.valetData.finalVideo;
-
-  //   IconData icon;
-  //   Color color;
-
-  //   if (lat == null || lon == null) {
-  //     icon = Icons.videocam;
-  //     color = Colors.grey;
-  //   } else if ((lat != null && lon != null) && finalVideo == null) {
-  //     icon = Icons.qr_code_scanner;
-  //     color = Colors.white;
-  //   } else {
-  //     icon = Icons.check_circle;
-  //     color = Colors.green;
-  //   }
-
-  //   return AnimatedBuilder(
-  //     animation: _pulseAnimation,
-  //     builder: (context, child) {
-  //       return Transform.scale(
-  //         scale: (lat == null || lon == null) ? _pulseAnimation.value : 1.0,
-  //         child: Container(
-  //           padding: const EdgeInsets.all(12),
-  //           decoration: BoxDecoration(
-  //             color: color.withOpacity(0.2),
-  //             shape: BoxShape.circle,
-  //             border: Border.all(color: color.withOpacity(0.5)),
-  //           ),
-  //           child: Icon(
-  //             icon,
-  //             color: color,
-  //             size: 20,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget _buildMainInfo() {
     return Row(
@@ -789,6 +376,20 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
       default:
         return _buildParkedStatusBar();
     }
+  }
+
+  Widget _buildVideoSection() {
+    return InkWell(
+      onTap: () {
+        context.push(drVideoPlayerScreen, extra: {
+          "initialVideo": widget.valetData.initialVideo,
+          "finalVideo": widget.valetData.finalVideo
+        });
+      },
+      child: CircleAvatar(
+          backgroundColor: AppColors.kWhite.withAlpha(50),
+          child: Icon(SolarIconsOutline.videoLibrary, color: AppColors.kWhite)),
+    );
   }
 
   Widget _buildStatusIndicator() {

@@ -81,7 +81,7 @@ class _ViewAndEditProductScreenState
                             // errorIcon: Image.asset(AppImages.defaultImage),
                             fit: BoxFit.cover,
                             imageVersion: imageVersion,
-                            imageFile: ApiConstants.imageBaseUrl +
+                            imageFile: ApiConstants.mediaBaseUrl +
                                 model.productPicture),
                       ),
                       Positioned(
@@ -90,7 +90,7 @@ class _ViewAndEditProductScreenState
                           child: OutlinedButton(
                               onPressed: () {
                                 context.push(openImage, extra: {
-                                  "path": ApiConstants.imageBaseUrl +
+                                  "path": ApiConstants.mediaBaseUrl +
                                       model.productPicture,
                                   "heroTag": widget.productId.toString(),
                                   "enableEditButton": true,

@@ -218,7 +218,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
 
                           imageVersion: imageVersion,
                           imageFile:
-                              "${ApiConstants.imageBaseUrl}${product.productPicture}",
+                              "${ApiConstants.mediaBaseUrl}${product.productPicture}",
                         )),
                   ),
                 ),

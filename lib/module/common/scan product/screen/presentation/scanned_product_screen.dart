@@ -36,7 +36,7 @@ class ScannedProductScreen extends StatelessWidget {
             InkWell(
               onTap: () {
                 context.push(openImage, extra: {
-                  "path": ApiConstants.imageBaseUrl +
+                  "path": ApiConstants.mediaBaseUrl +
                       productDataModel.productPicture,
                   "heroTag": productDataModel.id.toString(),
                   "enableEditButton": false,
@@ -65,7 +65,7 @@ class ScannedProductScreen extends StatelessWidget {
                           // errorIcon: Image.asset(AppImages.defaultImage),
                           fit: BoxFit.cover,
                           imageVersion: imageVersion,
-                          imageFile: ApiConstants.imageBaseUrl +
+                          imageFile: ApiConstants.mediaBaseUrl +
                               productDataModel.productPicture),
                     ),
                     // Positioned(

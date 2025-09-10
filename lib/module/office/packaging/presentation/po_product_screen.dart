@@ -308,7 +308,7 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                                     child: AppNetworkImage(
                                       imageVersion: imageVersion,
                                       fit: BoxFit.cover,
-                                      imageFile: ApiConstants.imageBaseUrl +
+                                      imageFile: ApiConstants.mediaBaseUrl +
                                           poProduct.productPicture,
                                     ),
                                   ),

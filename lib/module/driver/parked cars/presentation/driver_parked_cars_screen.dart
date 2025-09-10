@@ -11,7 +11,7 @@ import 'package:dazzles/module/driver/parked%20cars/data/provider/my%20parked%20
 import 'package:dazzles/module/driver/parked%20cars/data/provider/parked%20car%20controller/driver_parked_car_controller.dart';
 import 'package:dazzles/module/driver/parked%20cars/data/provider/parked%20car%20controller/all_parked_car_state.dart';
 import 'package:dazzles/module/driver/parked%20cars/presentation/widgets/dr_all_tab.dart';
-import 'package:dazzles/module/driver/parked%20cars/presentation/widgets/dr_mt_tab.dart';
+import 'package:dazzles/module/driver/parked%20cars/presentation/widgets/dr_my_tab.dart';
 import 'package:dazzles/module/driver/parked%20cars/presentation/widgets/driver_car_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,7 +61,7 @@ class _DriverParkedCarsScreenState extends ConsumerState<DriverParkedCarsScreen>
                 Expanded(
                     child: TabBarView(
                         controller: _tabController,
-                        children: [DrMtTab(), DrAllTab()]))
+                        children: [DrMyTab(), DrAllTab()]))
               ],
             ),
             Positioned(
