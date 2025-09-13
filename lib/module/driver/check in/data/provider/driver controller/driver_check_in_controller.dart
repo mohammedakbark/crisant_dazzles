@@ -268,7 +268,7 @@ class DriverCheckInController
   double? lon;
   Future<void> onTakeVideo(BuildContext context, String valetId,
       {String? sheetButton}) async {
-    final hasPermission = await AppPermissions.askLocationPermission();
+    final hasPermission = await PermissionHandler.askLocationPermission();
 
     if (!hasPermission) return null;
     final pickedFile = await ImagePicker().pickVideo(

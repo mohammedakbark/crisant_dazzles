@@ -111,7 +111,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
               uploadManagerController, true, logoColor);
           // ref.invalidate(dashboardControllerProvider);
           // ref.read(officeNavigationController.notifier).state = 0;
-          context.go(route);
+          context.go(officeRoute);
           return ref.refresh(allProductControllerProvider);
         }
       }
@@ -133,7 +133,7 @@ class UploadImageNotifier extends AsyncNotifier<Map<String, dynamic>> {
     _uploadImage(ids, image.path, uploadManagerController, true, logoColor);
     ref.invalidate(dashboardControllerProvider);
     ref.read(officeNavigationController.notifier).state = 0;
-    context.go(route);
+    context.go(officeRoute);
   }
 
   // -------------------  UPLOAD IMAGE FROM PURCHASE ORDER / SUPPLIER

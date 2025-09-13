@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class AppPermissions {
+class PermissionHandler {
   static Future<void> requestPermissions() async {
     await handleCameraPermission();
   }

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:dazzles/core/config/app_permissions.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
@@ -11,7 +13,6 @@ import 'package:dazzles/module/common/notification/data/providers/notification_c
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 
 class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
   @override
@@ -98,14 +99,21 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
     // ui response
     showMessageinUI(response['message'], response['error']);
     if (response['error'] == false) {
+      List<String> permissions = List.from(response['permissions']);
       final local = LocalUserRefModel(
           token: response['token'],
           userId: response['userId'],
           userName: response['username'],
           role: response['roleName'],
+          permissions: permissions,
           roleId: roleModel.roleId);
+      log("Permissions- \n${response['permissions']}");
       await LoginRefDataBase().setUseretails(local);
-      await FirebasePushNotification().initNotification(context);
+      // ---- ---- ---- ---- ---- ---- ---- //
+      if (permissions.contains(AppPermissions.PUSHNOTIFICATION)) {
+        await FirebasePushNotification().initNotification(context);
+      }
+
       state = AsyncData(response);
       if (context.mounted) {
         final ref = ProviderContainer();
@@ -113,7 +121,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
 
         naviagteToScreen(roleModel, context);
 
- // context.go(otherUsersRoute);
+        // context.go(otherUsersRoute);
       }
     } else {
       state = AsyncError("Error null", StackTrace.empty);
@@ -135,21 +143,34 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
     state = AsyncData({});
   }
 
+//   void naviagteToScreen(
+//       UserRoleModel currentUserRoleModel, BuildContext context) async {
+//     switch (currentUserRoleModel.roleName) {
+//       case "Office":
+//         {
+//           context.go(route);
+//         }
+//       case "Driver":
+//         {
+//           context.go(drNavScreen);
+//         }
+//       default:
+//         {
+//           context.go(otherUsersRoute);
+//         }
+//     }
+//   }
+// }
   void naviagteToScreen(
       UserRoleModel currentUserRoleModel, BuildContext context) async {
     switch (currentUserRoleModel.roleName) {
       case "Office":
         {
-          context.go(route);
-        }
-      case "Driver":
-        {
-          context.go(drNavScreen);
-          // context.go(drCustomerRegScreen, extra: {"qrId":"234566"});
+          context.go(officeRoute);
         }
       default:
         {
-          context.go(otherUsersRoute);
+          context.go(routeScreen);
         }
     }
   }

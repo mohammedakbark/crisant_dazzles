@@ -497,7 +497,7 @@ class _CopyMoreProdutcsScreenState
                 ZoomIn(
                   duration: Duration(milliseconds: 700),
                   child: ElevatedButton.icon(
-                    onPressed: () => context.go(route),
+                    onPressed: () => context.go(officeRoute),
                     icon: Icon(
                       size: isTab ? 40 : null,
                       Icons.delete_outline,

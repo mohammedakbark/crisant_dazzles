@@ -59,7 +59,7 @@ class _DriverCustomerRegScreenState
     Future.microtask(
       () async {
         ref.invalidate(driverControllerProvider);
-        await AppPermissions.askLocationPermission();
+        await PermissionHandler.askLocationPermission();
       },
     );
   }

@@ -577,7 +577,7 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
         subtitle: "Please enable your location services to continue.",
         buttonText: "UPLOAD INITIAL VIDEO",
         onNext: () async {
-          final hasPermission = await AppPermissions.askLocationPermission();
+          final hasPermission = await PermissionHandler.askLocationPermission();
           if (hasPermission) {
             ref.read(isUploadingInitialVideoProvider.notifier).state = true;
             await ref.watch(driverControllerProvider.notifier).onTakeVideo(

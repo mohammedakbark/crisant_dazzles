@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/Auth/presentation/login_screen.dart';
-import 'package:dazzles/features/Dashboard/presentation/dashboard_screen.dart';
+import 'package:dazzles/features/navigation/presentation/navigation_screen.dart';
+import 'package:dazzles/features/route_sreen.dart';
 import 'package:dazzles/module/common/scan%20product/data/model/scanned_product_model.dart';
 import 'package:dazzles/module/common/scan%20product/screen/presentation/qr_scan_screen.dart';
 import 'package:dazzles/module/common/scan%20product/screen/presentation/scanned_product_screen.dart';
@@ -14,8 +15,8 @@ import 'package:dazzles/module/driver/home/presentation/driver_qr_scanner_screen
 import 'package:dazzles/module/driver/parked%20cars/presentation/driver_video_player_screen.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/presentation/products_selection_screen.dart';
 import 'package:dazzles/module/office/home/presentation/view_all_recent_captured_screen.dart';
-import 'package:dazzles/module/office/navigation_screen.dart';
 import 'package:dazzles/module/common/notification/presentation/notification_screen.dart';
+import 'package:dazzles/module/office/navigation_screen.dart';
 import 'package:dazzles/module/office/product/data/models/product_model.dart';
 import 'package:dazzles/module/office/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/module/office/product/presentation/widgets/product_image_view.dart';
@@ -52,7 +53,9 @@ class RouteProvider {
       //   final role=mapData['role'];
       //   return OtpScreen(mobileNumber: mobileNumber,role: role,);
       // }),
-      GoRoute(path: route, builder: (context, state) => NavigationScreen()),
+      GoRoute(
+          path: officeRoute,
+          builder: (context, state) => OfficeNavigationScreen()),
 
       GoRoute(
         path: uploadFialedScreen,
@@ -187,7 +190,10 @@ class RouteProvider {
 
       // ==  ---- PERMISSION BASE ROUTE
 
-      GoRoute(path: dashboard, builder: (context, state) => DashboardScreen()),
+      GoRoute(path: routeScreen, builder: (context, state) => RouteScreen()),
+      GoRoute(
+          path: navigationScreen,
+          builder: (context, state) => NavigationScreen()),
     ],
   );
 }

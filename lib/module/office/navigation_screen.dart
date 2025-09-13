@@ -22,33 +22,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:badges/badges.dart' as badges;
 
-class NavigationScreen extends ConsumerStatefulWidget {
-  const NavigationScreen({super.key});
+class OfficeNavigationScreen extends ConsumerStatefulWidget {
+  const OfficeNavigationScreen({super.key});
 
   @override
-  ConsumerState<NavigationScreen> createState() => _NavigationScreenState();
+  ConsumerState<OfficeNavigationScreen> createState() => _NavigationScreenState();
 }
 
-class _NavigationScreenState extends ConsumerState<NavigationScreen> {
-  final List<Widget> _pages = [
-    HomePage(),
-    PackagePage(),
-    CameraScreen(),
-    ProductsPage(),
-    ProfilePageNew(),
-  ];
+class _NavigationScreenState extends ConsumerState<OfficeNavigationScreen> {
+    final List<Widget> _pages = [
+      HomePage(),
+      PackagePage(),
+      CameraScreen(),
+      ProductsPage(),
+      ProfilePageNew(),
+    ];
 
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      ref.invalidate(dashboardControllerProvider);
-      ref.invalidate(profileControllerProvider);
-      // ref.invalidate(getAllPendingProductControllerProvider);
-      ref.invalidate(getAllSuppliersControllerProvider);
-      ref.invalidate(allProductControllerProvider);
-    });
-  }
+    @override
+    void initState() {
+      super.initState();
+      Future.microtask(() {
+        ref.invalidate(dashboardControllerProvider);
+        ref.invalidate(profileControllerProvider);
+        // ref.invalidate(getAllPendingProductControllerProvider);
+        ref.invalidate(getAllSuppliersControllerProvider);
+        ref.invalidate(allProductControllerProvider);
+      });
+    }
 
   @override
   Widget build(BuildContext context) {

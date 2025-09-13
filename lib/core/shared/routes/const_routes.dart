@@ -1,6 +1,6 @@
 const initialScreen = '/';
 const loginScreen = '/login';
-const route = '/route';
+const officeRoute = '/route';
 const notificationScreen = '/notification';
 const uploadFialedScreen = "/uploadFailedScreen";
 const searchScreen = "/search";
@@ -30,4 +30,5 @@ const drVideoPlayerScreen = "/drVideoPlayerScreen";
 
 //.  ---- PERMISSION BASE ROUTE
 
-const dashboard = "/dashboard";
+const routeScreen = "/dashboard";
+const navigationScreen = "/navigationScreen";

@@ -1,10 +1,22 @@
+// import 'package:flutter/material.dart';
+
+// class NavProfileScreen extends StatelessWidget {
+//   const NavProfileScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
 
 import 'dart:developer';
 
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
+import 'package:dazzles/core/config/app_permissions.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
+import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -18,15 +30,14 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class OtherUsersNaviagationScreen extends ConsumerStatefulWidget {
-  const OtherUsersNaviagationScreen({super.key});
+class NavProfileScreen extends ConsumerStatefulWidget {
+  const NavProfileScreen({super.key});
 
   @override
-  ConsumerState<OtherUsersNaviagationScreen> createState() =>
-      _DriverProfileState();
+  ConsumerState<NavProfileScreen> createState() => _DriverProfileState();
 }
 
-class _DriverProfileState extends ConsumerState<OtherUsersNaviagationScreen>
+class _DriverProfileState extends ConsumerState<NavProfileScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -279,7 +290,7 @@ class _DriverProfileState extends ConsumerState<OtherUsersNaviagationScreen>
     );
   }
 
-  Widget _buildProfileContent(dynamic userModel) {
+  Widget _buildProfileContent(LocalUserRefModel userModel) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: AppMargin(
@@ -288,29 +299,35 @@ class _DriverProfileState extends ConsumerState<OtherUsersNaviagationScreen>
             AppSpacer(hp: .12),
             _buildProfileInfoCard(userModel),
             AppSpacer(hp: .04),
-            _buildButton(
-              CupertinoIcons.qrcode_viewfinder,
-              "Scan Product",
-              () {
-                context.push(qrScanScreen);
-              },
-            ),
-            AppSpacer(hp: .01),
-            _buildButton(
-              CupertinoIcons.bell_fill,
-              "Notifications",
-              () {
-                context.push(notificationScreen);
-              },
-            ),
-            AppSpacer(hp: .03),
+            if (userModel.permissions!
+                .contains(AppPermissions.SCAN_PRODUCT)) ...[
+              _buildButton(
+                CupertinoIcons.qrcode_viewfinder,
+                "Scan Product",
+                () {
+                  context.push(qrScanScreen);
+                },
+              ),
+              AppSpacer(hp: .01),
+            ],
+            if (userModel.permissions!
+                .contains(AppPermissions.PUSHNOTIFICATION)) ...[
+              _buildButton(
+                CupertinoIcons.bell_fill,
+                "Notifications",
+                () {
+                  context.push(notificationScreen);
+                },
+              ),
+              AppSpacer(hp: .03),
+            ]
           ],
         ),
       ),
     );
   }
 
-  Widget _buildProfileInfoCard(dynamic userModel) {
+  Widget _buildProfileInfoCard(LocalUserRefModel userModel) {
     return Container(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       width: ResponsiveHelper.wp,
