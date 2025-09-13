@@ -33,7 +33,6 @@ class PoProductScreen extends ConsumerStatefulWidget {
 
 class _PendingImagePageState extends ConsumerState<PoProductScreen> {
   final _scrollController = ScrollController();
-  String imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
   late Debouncer _debauncer;
 
   @override
@@ -172,8 +171,7 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
               child: RefreshIndicator.adaptive(
                 onRefresh: () async {
                   _searchController.clear();
-                  imageVersion =
-                      DateTime.now().microsecondsSinceEpoch.toString();
+
                   return ref
                       .refresh(getAllPoProductsControllerProvider(widget.id));
                 },
@@ -231,6 +229,8 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
   }
 
   Widget _buildProductCard(PoProductModel poProduct) {
+    String imageVersion = DateTime.now().microsecondsSinceEpoch.toString();
+
     final poProductsNotifier = ref.read(
       getAllPoProductsControllerProvider(widget.id).notifier,
     );
@@ -358,6 +358,8 @@ class _PendingImagePageState extends ConsumerState<PoProductScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Text(ApiConstants.mediaBaseUrl +
+                                //     poProduct.productPicture),
                                 Text(
                                   poProduct.productName,
                                   style: AppStyle.largeStyle(

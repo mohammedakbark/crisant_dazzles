@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:dazzles/core/shared/routes/const_routes.dart';
-import 'package:dazzles/module/common/Auth/presentation/login_screen.dart';
+import 'package:dazzles/features/Auth/presentation/login_screen.dart';
+import 'package:dazzles/features/Dashboard/presentation/dashboard_screen.dart';
 import 'package:dazzles/module/common/scan%20product/data/model/scanned_product_model.dart';
 import 'package:dazzles/module/common/scan%20product/screen/presentation/qr_scan_screen.dart';
 import 'package:dazzles/module/common/scan%20product/screen/presentation/scanned_product_screen.dart';
@@ -183,6 +184,10 @@ class RouteProvider {
             return ScannedProductScreen(
                 productDataModel: ScannedProductModel.fromJson(detials));
           }),
+
+      // ==  ---- PERMISSION BASE ROUTE
+
+      GoRoute(path: dashboard, builder: (context, state) => DashboardScreen()),
     ],
   );
 }

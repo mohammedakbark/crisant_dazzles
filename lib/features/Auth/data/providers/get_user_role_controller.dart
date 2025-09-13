@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:dazzles/module/common/Auth/data/models/user_role_mode.dart';
-import 'package:dazzles/module/common/Auth/data/repo/get_roles_repo.dart';
+import 'package:dazzles/features/Auth/data/models/user_role_mode.dart';
+import 'package:dazzles/features/Auth/data/repo/get_roles_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GetUserRoleController extends AsyncNotifier<List<UserRoleModel>> {

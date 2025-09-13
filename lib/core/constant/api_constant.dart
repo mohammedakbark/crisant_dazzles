@@ -1,12 +1,10 @@
 class ApiConstants {
-  static const String baseUrl = "https://bill.dazzles.in/Api/api/mobile/";
-  // static const localHostBaseURL = "http://192.168.0.144:5173/api/mobile/";
+  // static const String baseUrl = "https://bill.dazzles.in/Api/api/mobile/";
+  static const baseUrl = "http://192.168.0.144:5173/api/mobile/";
 
-  //  "https://api.dazzles.in/api/mobile/";
-  //  "https://test.dazzles.in/";
-  static const String mediaBaseUrl = "https://bill.dazzles.in/";
+  // static const String mediaBaseUrl = "https://bill.dazzles.in/";
 
-  // static const String imageBaseUrl = "http://192.168.0.144:5173/uploads/";
+  static const String mediaBaseUrl = "http://192.168.0.144:5173/uploads/";
 
   static const String login = "login";
   static const String profile = "profile";
@@ -37,7 +35,7 @@ class ApiConstants {
   static const String setTokenURL = "notification/token";
   static const String getNotificationsURL = "notification";
 
-  static const String getScannedProductDetails="productqr";
+  static const String getScannedProductDetails = "productqr";
 
   // DRIVER MODULE
   static const drDashboardData = "valet/dailyvalet";

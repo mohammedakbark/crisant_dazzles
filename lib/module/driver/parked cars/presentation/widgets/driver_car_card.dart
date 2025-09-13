@@ -107,6 +107,7 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
                     _buildBackgroundPattern(),
                     _buildCardContent(),
                     _buildStatusIndicator(),
+                    // Text(widget.valetData.valetId.toString())
                   ],
                 ),
               ),
@@ -298,6 +299,7 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
             children: [
               _buildInfoRow(
                 icon: Icons.access_time,
+                // text: widget.valetData.parkedAt.toString(),
                 text: IntlC.convertToDateTime(widget.valetData.parkedAt),
                 label: 'Parked at',
                 isReversed: true,

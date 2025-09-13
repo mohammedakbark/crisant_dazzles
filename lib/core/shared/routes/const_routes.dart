@@ -27,3 +27,7 @@ const drCustomerRegScreen = "/drCustomerRegScreen";
 // checkOut
 const drlocationScreen = "/drLocationScreen";
 const drVideoPlayerScreen = "/drVideoPlayerScreen";
+
+//.  ---- PERMISSION BASE ROUTE
+
+const dashboard = "/dashboard";
