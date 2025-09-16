@@ -1,3 +1,4 @@
+import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,6 +43,7 @@ class LoginRefDataBase {
         _permissions, userDataModel.permissions ?? userData.permissions ?? []);
 
     await _getUserData();
+
   }
 
   Future<LocalUserRefModel> _getUserData() async {

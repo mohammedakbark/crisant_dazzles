@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:dazzles/core/config/app_permissions.dart';
+import 'package:dazzles/core/app%20permission/app_permission_extension.dart';
+import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/Auth/data/models/user_role_mode.dart';
 import 'package:dazzles/features/Auth/data/providers/resed_otp_controller.dart';
+import 'package:dazzles/features/Auth/data/repo/get_app_permissions_repo.dart';
 import 'package:dazzles/features/Auth/data/repo/login_repo.dart';
 import 'package:dazzles/features/Auth/data/repo/login_with_mobilenumber_repo.dart';
 import 'package:dazzles/features/Auth/data/repo/verify_OTP_repo.dart';
-import 'package:dazzles/module/common/notification/data/providers/notification_controller.dart';
+import 'package:dazzles/features/notification/data/providers/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -109,8 +111,10 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
           roleId: roleModel.roleId);
       log("Permissions- \n${response['permissions']}");
       await LoginRefDataBase().setUseretails(local);
+      await AppPermissionConfig().init(); // initializing app permission
+
       // ---- ---- ---- ---- ---- ---- ---- //
-      if (permissions.contains(AppPermissions.PUSHNOTIFICATION)) {
+      if (AppPermissionConfig().has(AppPermission.pushNotification)) {
         await FirebasePushNotification().initNotification(context);
       }
 
@@ -125,6 +129,18 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
       }
     } else {
       state = AsyncError("Error null", StackTrace.empty);
+    }
+  }
+
+  Future<void> getNewPermissions() async {
+    final response = await GetAppPermissionsRepo.onGetAppPermissions();
+    if (response['error'] == false) {
+      List<String> permissions = List.from(response['data']);
+      await LoginRefDataBase()
+          .setUseretails(LocalUserRefModel(permissions: permissions));
+      log(response['message']);
+    } else {
+      log("Error feting new permission" + response['message']);
     }
   }
 

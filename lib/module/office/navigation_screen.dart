@@ -7,7 +7,7 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/data/providers/camera%20controller/camera_controller.dart';
 import 'package:dazzles/module/office/camera%20and%20upload/presentation/camera_screen.dart';
-import 'package:dazzles/module/office/custom_app_bar.dart';
+import 'package:dazzles/features/custom_app_bar.dart';
 import 'package:dazzles/module/office/home/presentation/home_page.dart';
 import 'package:dazzles/module/office/home/data/providers/dashboard_controller.dart';
 import 'package:dazzles/module/office/packaging/data/provider/get%20suppliers/get_suppliers_controller.dart';

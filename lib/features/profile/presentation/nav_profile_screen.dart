@@ -1,20 +1,10 @@
-// import 'package:flutter/material.dart';
-
-// class NavProfileScreen extends StatelessWidget {
-//   const NavProfileScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
 import 'dart:developer';
 
+import 'package:dazzles/core/app%20permission/app_permission_extension.dart';
+import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
-import 'package:dazzles/core/config/app_permissions.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
@@ -299,28 +289,26 @@ class _DriverProfileState extends ConsumerState<NavProfileScreen>
             AppSpacer(hp: .12),
             _buildProfileInfoCard(userModel),
             AppSpacer(hp: .04),
-            if (userModel.permissions!
-                .contains(AppPermissions.SCAN_PRODUCT)) ...[
-              _buildButton(
-                CupertinoIcons.qrcode_viewfinder,
-                "Scan Product",
-                () {
-                  context.push(qrScanScreen);
-                },
-              ),
-              AppSpacer(hp: .01),
-            ],
-            if (userModel.permissions!
-                .contains(AppPermissions.PUSHNOTIFICATION)) ...[
-              _buildButton(
-                CupertinoIcons.bell_fill,
-                "Notifications",
-                () {
-                  context.push(notificationScreen);
-                },
-              ),
-              AppSpacer(hp: .03),
-            ]
+            // if (AppPermissionConfig().has(AppPermission.scanProduct)) ...[
+            //   _buildButton(
+            //     CupertinoIcons.qrcode_viewfinder,
+            //     "Scan Product",
+            //     () {
+            //       context.push(qrScanScreen);
+            //     },
+            //   ),
+            //   AppSpacer(hp: .01),
+            // ],
+            // if (AppPermissionConfig().has(AppPermission.pushNotification)) ...[
+            //   _buildButton(
+            //     CupertinoIcons.bell_fill,
+            //     "Notifications",
+            //     () {
+            //       context.push(notificationScreen);
+            //     },
+            //   ),
+            //   AppSpacer(hp: .03),
+            // ]
           ],
         ),
       ),

@@ -31,6 +31,7 @@ class ApiConstants {
   static const String verifyMobileOTP = "verifyotp";
 
   static const String userRoles = 'roles';
+  static const String getAppPermissions = 'apppermissions';
 
   static const String setTokenURL = "notification/token";
   static const String getNotificationsURL = "notification";
