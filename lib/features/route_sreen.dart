@@ -5,8 +5,9 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/navigation/presentation/navigation_screen.dart';
 import 'package:dazzles/features/notification/presentation/notification_screen.dart';
-import 'package:dazzles/features/profile/presentation/nav_profile_screen.dart';
 import 'package:dazzles/features/custom_app_bar.dart';
+import 'package:dazzles/features/profile/presentation/profile_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_icons/solar_icons.dart';
@@ -83,9 +84,9 @@ class _RouteScreenState extends ConsumerState<RouteScreen> {
               ),
               items: [
                 BottomNavigationBarItem(
-                  label: "HOME",
-                  icon: Icon(SolarIconsOutline.home2),
-                  activeIcon: Icon(SolarIconsBold.home2),
+                  label: "MENU",
+                  icon: Icon(CupertinoIcons.square_grid_2x2),
+                  activeIcon: Icon(CupertinoIcons.square_grid_2x2_fill),
                 ),
                 BottomNavigationBarItem(
                   label: "NOTIFICATION",

@@ -4,60 +4,15 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/valey/home/presentation/driver_home.dart';
 import 'package:dazzles/features/valey/parked%20cars/presentation/driver_parked_cars_screen.dart';
-import 'package:dazzles/features/valey/profile/presentation/driver_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class DriverNavScreen extends ConsumerWidget {
-  final _pages = [DriverHome(), DriverParkedCarsScreen(), DriverProfile()];
+  final _pages = [DriverHome(), DriverParkedCarsScreen()];
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-      // appBar: ref.watch(driverNavigationController) != 0
-      //     ? null
-      //     : AppBar(
-      //         elevation: 0,
-      //         backgroundColor: Colors.transparent,
-      //         title: Consumer(builder: (context, ref, _) {
-      //           switch (ref.watch(driverNavigationController)) {
-      //             case 0:
-      //               {
-      //                 return FadeIn(
-      //                   key: GlobalObjectKey(
-      //                       ref.watch(driverNavigationController)),
-      //                   child: Text(
-      //                     'Dashboard',
-      //                     style: AppStyle.boldStyle(
-      //                       fontSize: 24,
-      //                       color: AppColors.kWhite,
-      //                     ),
-      //                   ),
-      //                 );
-      //               }
-
-      //             case 2:
-      //               {
-      //                 return FadeIn(
-      //                   key: GlobalObjectKey(
-      //                       ref.watch(driverNavigationController)),
-      //                   child: Text(
-      //                     'Profile',
-      //                     style: AppStyle.boldStyle(
-      //                       fontSize: 24,
-      //                       color: AppColors.kWhite,
-      //                     ),
-      //                   ),
-      //                 );
-      //               }
-      //             default:
-      //               {
-      //                 return SizedBox.shrink();
-      //               }
-      //           }
-      //         }),
-      //         // centerTitle: true,
-      //       ),
       body: Consumer(builder: (context, ref, _) {
         return _pages[ref.watch(driverNavigationController)];
       }),
@@ -103,11 +58,11 @@ class DriverNavScreen extends ConsumerWidget {
                   icon: Icon(Icons.local_parking_sharp),
                   activeIcon: Icon(Icons.local_parking_sharp),
                 ),
-                BottomNavigationBarItem(
-                  label: "PROFILE",
-                  icon: Icon(SolarIconsOutline.user),
-                  activeIcon: Icon(SolarIconsBold.user),
-                ),
+                // BottomNavigationBarItem(
+                //   label: "PROFILE",
+                //   icon: Icon(SolarIconsOutline.user),
+                //   activeIcon: Icon(SolarIconsBold.user),
+                // ),
               ],
             ),
           );

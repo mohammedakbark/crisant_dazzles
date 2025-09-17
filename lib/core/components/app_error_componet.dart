@@ -2,7 +2,7 @@ import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
+import 'package:dazzles/features/profile/presentation/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
 
@@ -110,7 +110,7 @@ class AppErrorView extends StatelessWidget {
                     AppSpacer(hp: .03),
                     InkWell(
                       onTap: isTokenExpire
-                          ? () => ProfilePageNew.logout(context)
+                          ? () => NavProfileScreen.logout(context)
                           : onRetry,
                       child: Padding(
                         padding: EdgeInsets.all(

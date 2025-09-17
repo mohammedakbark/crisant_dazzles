@@ -4,7 +4,7 @@ import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:dazzles/module/office/home/data/providers/dashboard_controller.dart';
+import 'package:dazzles/features/navigation/data/provider/dashboard_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +33,7 @@ class DashboardGrid extends ConsumerWidget {
           children: [
             const Icon(SolarIconsBold.pieChart, size: 16),
             const SizedBox(width: 8),
-            Text("Dashboard", style: AppStyle.boldStyle(fontSize: 16)),
+            Text("Insight", style: AppStyle.boldStyle(fontSize: 16)),
             const SizedBox(width: 12),
             const Flexible(
               child: Divider(height: 0, color: AppColors.kGrey),

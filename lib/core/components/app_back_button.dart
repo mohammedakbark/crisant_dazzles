@@ -33,11 +33,14 @@ class AppBackButton extends StatelessWidget {
 
 class AppBarText extends StatelessWidget {
   final String title;
-  const AppBarText({super.key, required this.title});
+  final void Function()? onTap;
+  const AppBarText({super.key, required this.title,this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final isTab=ResponsiveHelper.isTablet();
-    return Text(title, style: AppStyle.boldStyle(fontSize: isTab?ResponsiveHelper.fontSmall:null));
+    return InkWell(
+      onTap:onTap ,
+      child: Text(title, style: AppStyle.boldStyle(fontSize: isTab?ResponsiveHelper.fontSmall:null)));
   }
 }

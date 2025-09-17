@@ -3,6 +3,7 @@ import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
+import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
@@ -10,8 +11,12 @@ import 'package:solar_icons/solar_icons.dart';
 class QuickActions extends StatelessWidget {
   QuickActions({super.key});
   final List<AppPermission> quickActionPermissions = [
-    AppPermission.valet,
-    AppPermission.purchaseOrderList,
+    AppPermission.productlist,
+    AppPermission.purchaseorderlist,
+    AppPermission.valey,
+    AppPermission.scanproduct,
+    AppPermission.updateproduct,
+    AppPermission.recentlyupdated
   ];
   @override
   Widget build(BuildContext context) {
@@ -39,10 +44,10 @@ class QuickActions extends StatelessWidget {
         GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          padding: const EdgeInsets.only(bottom: 24),
+          padding: const EdgeInsets.only(bottom: 50),
           itemCount: visibleQuickActions.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: ResponsiveHelper.isTablet() ? 4 : 3,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
             childAspectRatio: 0.95,

@@ -1,99 +1,114 @@
-// lib/core/app_permission/app_permission_extension.dart
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:solar_icons/solar_icons.dart';
 
 enum AppPermission {
-  valet,
-  updateImage,
-  scanProduct,
-  pushNotification,
-  purchaseOrderList,
-  productDashboard,
-  editPrice,
+  dashboardinsight,
+  productlist,
+  updateproduct,
+  scanproduct,
+  purchaseorderlist,
+  valey,
+  recentlyupdated,
+  // FEATURES
+  pricevisibility,
+  stockquantityvisibility,
+  soldquantityvisibility,
+  editprice
 }
 
 extension AppPermissionExt on AppPermission {
   // Icon for each permission
   IconData get icon {
     switch (this) {
-      case AppPermission.valet:
+      case AppPermission.valey:
         return Icons.local_parking;
-      case AppPermission.updateImage:
-        return Icons.image;
-      case AppPermission.scanProduct:
-        return SolarIconsOutline.qrCode;
-      case AppPermission.pushNotification:
-        return Icons.notifications_active;
-      case AppPermission.purchaseOrderList:
+      case AppPermission.updateproduct:
+        return CupertinoIcons.camera;
+      case AppPermission.scanproduct:
+        return CupertinoIcons.qrcode;
+      case AppPermission.purchaseorderlist:
         return CupertinoIcons.cube_box;
-      case AppPermission.productDashboard:
+      case AppPermission.dashboardinsight:
         return Icons.dashboard;
-      case AppPermission.editPrice:
-        return Icons.attach_money;
+      case AppPermission.productlist:
+        return Icons.widgets;
+      case AppPermission.recentlyupdated:
+        return Icons.list;
+      default:
+        return Icons.add_box;
     }
   }
 
   // Color for each permission
   Color get color {
     switch (this) {
-      case AppPermission.valet:
+      case AppPermission.valey:
         return Colors.cyan;
-      case AppPermission.updateImage:
-        return Colors.redAccent;
-      case AppPermission.scanProduct:
-        return Colors.teal;
-      case AppPermission.pushNotification:
+      case AppPermission.updateproduct:
         return Colors.purple;
-      case AppPermission.purchaseOrderList:
+
+      case AppPermission.scanproduct:
+        return Colors.teal;
+
+      case AppPermission.purchaseorderlist:
         return Colors.lightBlue;
-      case AppPermission.productDashboard:
+      case AppPermission.dashboardinsight:
         return Colors.green;
-      case AppPermission.editPrice:
+      case AppPermission.productlist:
         return Colors.amber;
+      case AppPermission.recentlyupdated:
+        return Colors.deepPurple;
+      default:
+        return Colors.grey;
     }
   }
 
   // Human readable title
   String get title {
     switch (this) {
-      case AppPermission.valet:
-        return 'Valet';
-      case AppPermission.updateImage:
-        return 'Update Image';
-      case AppPermission.scanProduct:
+      case AppPermission.valey:
+        return 'Valey';
+      case AppPermission.productlist:
+        return 'Products';
+      case AppPermission.scanproduct:
         return 'Scan Product';
-      case AppPermission.pushNotification:
-        return 'Notifications';
-      case AppPermission.purchaseOrderList:
+      case AppPermission.purchaseorderlist:
         return 'Purchase Orders';
-      case AppPermission.productDashboard:
+      case AppPermission.dashboardinsight:
         return 'Product Dashboard';
-      case AppPermission.editPrice:
-        return 'Edit Price';
+      case AppPermission.updateproduct:
+        return 'Update Image';
+      case AppPermission.recentlyupdated:
+        return "Recently Updated";
+      default:
+        return this.name;
     }
   }
 
   // Canonical key used for persistence / remote (uppercase snake style)
   String toKey() {
-    switch (this) {
-      case AppPermission.valet:
-        return 'valey';
-      case AppPermission.updateImage:
-        return 'update image';
-      case AppPermission.scanProduct:
-        return 'scan product';
-      case AppPermission.pushNotification:
-        return 'push notification';
-      case AppPermission.purchaseOrderList:
-        return 'purchase order list';
-      case AppPermission.productDashboard:
-        return 'product dashboard';
-      case AppPermission.editPrice:
-        return 'edit price';
-    }
+    // switch (this) {
+    //   case AppPermission.valey:
+    //     return 'valey';
+    //   case AppPermission.updateproduct:
+    //     return 'updateproduct';
+    //   case AppPermission.scanproduct:
+    //     return 'scanproduct';
+    //   case AppPermission.purchaseorderlist:
+    //     return 'purchaseorderlist';
+    //   case AppPermission.dashboardinsight:
+    //     return 'dashboardinsight';
+    //   case AppPermission.productlist:
+    //     return 'productlist';
+    //   case AppPermission.recentlyupdated:
+    //     return "recentlyupdated";
+    //   default:
+    //     return
+    // }
+
+    return this.name;
   }
 
   // Short name (enum.name)
@@ -102,26 +117,25 @@ extension AppPermissionExt on AppPermission {
   // Example onTap handler — replace with real logic (navigation / actions)
   void onTap(BuildContext context) {
     switch (this) {
-      case AppPermission.valet:
+      case AppPermission.valey:
         context.push(drNavScreen);
         break;
-      case AppPermission.updateImage:
-        // TODO: open update image
+      case AppPermission.productlist:
+        context.push(productslist);
         break;
-      case AppPermission.scanProduct:
-        // TODO: open scanner
+      case AppPermission.scanproduct:
+        context.push(qrScanScreen);
         break;
-      case AppPermission.pushNotification:
-        context.push(notificationScreen);
+      case AppPermission.purchaseorderlist:
+        context.push(packageSuppliers);
         break;
-      case AppPermission.purchaseOrderList:
-        // TODO: open purchase orders
+      case AppPermission.updateproduct:
+        context.push(cameraScreen);
         break;
-      case AppPermission.productDashboard:
-        // TODO: open dashboard
+      case AppPermission.recentlyupdated:
+        context.push(recentlyCaptured);
         break;
-      case AppPermission.editPrice:
-        // TODO: open price editor
+      default:
         break;
     }
   }
@@ -138,26 +152,32 @@ extension AppPermissionExt on AppPermission {
 
     switch (normalized) {
       case 'valey':
-        return AppPermission.valet;
+        return AppPermission.valey;
 
-      case 'update image':
-        return AppPermission.updateImage;
+      case 'productlist':
+        return AppPermission.productlist;
 
-      case 'scan product':
-        return AppPermission.scanProduct;
+      case 'scanproduct':
+        return AppPermission.scanproduct;
 
-      case 'push notification':
-        return AppPermission.pushNotification;
+      case 'updateproduct':
+        return AppPermission.updateproduct;
 
-      case 'purchase order list':
-        return AppPermission.purchaseOrderList;
+      case 'purchaseorderlist':
+        return AppPermission.purchaseorderlist;
 
-      case 'product dashboard':
-        return AppPermission.productDashboard;
-
-      case 'edit price':
-        return AppPermission.editPrice;
-
+      case 'dashboardinsight':
+        return AppPermission.dashboardinsight;
+      case "recentlyupdated":
+        return AppPermission.recentlyupdated;
+      case "pricevisibility":
+        return AppPermission.pricevisibility;
+      case "stockquantityvisibility":
+        return AppPermission.stockquantityvisibility;
+      case "soldquantityvisibility":
+        return AppPermission.soldquantityvisibility;
+      case "editprice":
+        return AppPermission.editprice;
       default:
         return null;
     }

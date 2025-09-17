@@ -1,22 +1,33 @@
 const initialScreen = '/';
 const loginScreen = '/login';
-const officeRoute = '/route';
-const notificationScreen = '/notification';
-const uploadFialedScreen = "/uploadFailedScreen";
-const searchScreen = "/search";
-const recentlyCaptured = "/viewRecentlyCaptured";
 
-const openImage = "/openImage";
-const productsSelectionScreen = "/productsSelectionScreen";
-const viewAndEditProductScreen = "/viewAndEditProductScreen";
+const routeScreen = "/dashboard";
 
-// PO
-const poProductsScreen = "/poProductsScreen";
-
-//   --      OTHER USER UROUTE
-const otherUsersRoute = "/otherUsersRoute";
+// Scan product
 const qrScanScreen = "/qrScanScreen";
 const scannedProductDetailScreen = "/scannedProductScreen";
+
+// notification
+const notificationScreen = '/notification';
+
+// Upoad Failed
+const uploadFialedScreen = "/uploadFailedScreen";
+
+// PO level
+
+const packageSuppliers = "/packageSuppliers";
+const poProductsScreen = "/poProductsScreen";
+
+// Product level
+
+const productslist = "/productslist";
+const viewAndEditProductScreen = "/viewAndEditProductScreen";
+const openImage = "/openImage";
+const recentlyCaptured = "/viewRecentlyCaptured";
+
+// Bulk Update
+const cameraScreen = "/cameraScreen";
+const productsSelectionScreen = "/productsSelectionScreen";
 
 //  --- DRIVER MODULE
 
@@ -29,6 +40,3 @@ const drlocationScreen = "/drLocationScreen";
 const drVideoPlayerScreen = "/drVideoPlayerScreen";
 
 //.  ---- PERMISSION BASE ROUTE
-
-const routeScreen = "/dashboard";
-const navigationScreen = "/navigationScreen";

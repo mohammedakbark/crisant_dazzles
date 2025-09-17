@@ -79,7 +79,7 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
         ),
       ),
       actions: [
-        if (AppPermissionConfig().has(AppPermission.updateImage))
+        if (AppPermissionConfig().has(AppPermission.updateproduct))
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: BuildStateManageComponent(
@@ -115,7 +115,7 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                   );
                 }),
           ),
-        if (AppPermissionConfig().has(AppPermission.scanProduct))
+        if (AppPermissionConfig().has(AppPermission.scanproduct))
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: InkWell(

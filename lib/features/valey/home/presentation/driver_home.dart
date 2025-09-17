@@ -21,14 +21,7 @@ class DriverHome extends ConsumerStatefulWidget {
   ConsumerState<DriverHome> createState() => _DriverHomeState();
 }
 
-class _DriverHomeState extends ConsumerState<DriverHome>
-    with TickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
-
+class _DriverHomeState extends ConsumerState<DriverHome> {
   @override
   void initState() {
     super.initState();
@@ -37,47 +30,10 @@ class _DriverHomeState extends ConsumerState<DriverHome>
         ref.invalidate(qrCodeRedControllerProvider);
       },
     );
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    )..repeat(reverse: true);
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutBack,
-    ));
-
-    _pulseAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
-
-    _animationController.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-    _pulseController.dispose();
     super.dispose();
   }
 
@@ -88,29 +44,23 @@ class _DriverHomeState extends ConsumerState<DriverHome>
         physics: AlwaysScrollableScrollPhysics(),
         child: SizedBox(
           height: ResponsiveHelper.hp,
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: SlideTransition(
-              position: _slideAnimation,
-              child: SafeArea(
-                child: AppMargin(
-                  child: RefreshIndicator.adaptive(
-                    onRefresh: () async {
-                      return await ref.refresh(qrCodeRedControllerProvider);
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppSpacer(hp: .03),
-                        _buildWelcomeSection(),
-                        AppSpacer(hp: .04),
-                        _buildActionButtons(),
-                        AppSpacer(hp: .04),
-                        _buildInsightsSection(),
-                        AppSpacer(hp: .03),
-                      ],
-                    ),
-                  ),
+          child: SafeArea(
+            child: AppMargin(
+              child: RefreshIndicator.adaptive(
+                onRefresh: () async {
+                  return await ref.refresh(qrCodeRedControllerProvider);
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppSpacer(hp: .03),
+                    _buildWelcomeSection(),
+                    AppSpacer(hp: .04),
+                    _buildActionButtons(),
+                    AppSpacer(hp: .04),
+                    _buildInsightsSection(),
+                    AppSpacer(hp: .03),
+                  ],
                 ),
               ),
             ),
@@ -143,7 +93,7 @@ class _DriverHomeState extends ConsumerState<DriverHome>
                   width: 1,
                 ),
               ),
-              child: Icon(Icons.arrow_back_ios),
+              child: Icon(CupertinoIcons.square_grid_2x2_fill),
             ),
           ),
           AppSpacer(
@@ -151,7 +101,7 @@ class _DriverHomeState extends ConsumerState<DriverHome>
           ),
           Flexible(
             child: Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -179,48 +129,21 @@ class _DriverHomeState extends ConsumerState<DriverHome>
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
-                          CupertinoIcons.person_fill,
-                          color: AppColors.kPrimaryColor,
+                          Icons.local_parking_rounded,
+                          color: AppColors.kWhite,
                           size: 24,
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Welcome back,",
-                              style: AppStyle.mediumStyle(
-                                fontSize: 14,
-                                color: Colors.white70,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            FutureBuilder(
-                              future: LoginRefDataBase().getUserData,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData && snapshot.data != null) {
-                                  return Text(
-                                    snapshot.data!.userName ?? 'Driver',
-                                    style: AppStyle.boldStyle(
-                                      fontSize: 22,
-                                      color: Colors.white,
-                                    ),
-                                  );
-                                }
-                                return Text(
-                                  "Driver",
-                                  style: AppStyle.boldStyle(
-                                    fontSize: 22,
-                                    color: Colors.white,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                      AppSpacer(
+                        wp: .05,
                       ),
+                      Text(
+                        "Valey",
+                        style: AppStyle.boldStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                      )
                     ],
                   ),
                 ],

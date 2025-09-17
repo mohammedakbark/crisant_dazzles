@@ -50,9 +50,9 @@ class _SplashScreenState extends State<SplashScreen> {
             .getNewPermissions(); // FETCH NEW PERMISSIONS FROM SERVER AND STORE
         await AppPermissionConfig().init(); // initializing app permission
 
-        if (AppPermissionConfig().has(AppPermission.pushNotification)) {
-          await FirebasePushNotification().initNotification(context);
-        }
+        // if (AppPermissionConfig().has(AppPermission.pushNotification)) {
+        await FirebasePushNotification().initNotification(context);
+        // }
 
         LoginController().naviagteToScreen(
             UserRoleModel(

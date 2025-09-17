@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/shared/models/response_model.dart';
 import 'package:dazzles/core/shared/routes/route_provider.dart';
-import 'package:dazzles/module/office/profile/presentation/profile_page.dart';
+import 'package:dazzles/features/profile/presentation/profile_page.dart';
 import 'package:dio/dio.dart';
 
 class ApiConfig {
@@ -147,7 +147,7 @@ class ApiConfig {
 
   static void _checkTokenExpired(data) async {
     if (data['error'] == true && data['message'] == "jwt expired") {
-      await ProfilePageNew.logout(rootNavigatorKey.currentContext!);
+      await NavProfileScreen.logout(rootNavigatorKey.currentContext!);
     }
   }
 }

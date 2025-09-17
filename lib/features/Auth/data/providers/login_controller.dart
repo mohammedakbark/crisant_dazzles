@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:dazzles/core/app%20permission/app_permission_extension.dart';
 import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/models/login_user_ref_model.dart';
@@ -114,9 +113,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
       await AppPermissionConfig().init(); // initializing app permission
 
       // ---- ---- ---- ---- ---- ---- ---- //
-      if (AppPermissionConfig().has(AppPermission.pushNotification)) {
-        await FirebasePushNotification().initNotification(context);
-      }
+      await FirebasePushNotification().initNotification(context);
 
       state = AsyncData(response);
       if (context.mounted) {
@@ -179,16 +176,7 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
 // }
   void naviagteToScreen(
       UserRoleModel currentUserRoleModel, BuildContext context) async {
-    switch (currentUserRoleModel.roleName) {
-      case "Office":
-        {
-          context.go(officeRoute);
-        }
-      default:
-        {
-          context.go(routeScreen);
-        }
-    }
+    context.go(routeScreen);
   }
 }
 

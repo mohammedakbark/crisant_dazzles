@@ -2,27 +2,27 @@ import 'dart:io';
 
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/Auth/presentation/login_screen.dart';
-import 'package:dazzles/features/navigation/presentation/navigation_screen.dart';
+import 'package:dazzles/features/packaging-po/presentation/package_page.dart';
+import 'package:dazzles/features/product/presentation/products_page.dart';
 import 'package:dazzles/features/route_sreen.dart';
-import 'package:dazzles/module/common/scan%20product/data/model/scanned_product_model.dart';
-import 'package:dazzles/module/common/scan%20product/screen/presentation/qr_scan_screen.dart';
-import 'package:dazzles/module/common/scan%20product/screen/presentation/scanned_product_screen.dart';
+import 'package:dazzles/features/scan%20product/data/model/scanned_product_model.dart';
+import 'package:dazzles/features/scan%20product/screen/presentation/qr_scan_screen.dart';
+import 'package:dazzles/features/scan%20product/screen/presentation/scanned_product_screen.dart';
 import 'package:dazzles/features/valey/check%20in/presentation/driver_user_reg_screen.dart';
 import 'package:dazzles/features/valey/check%20out/presentation/dr_location_screen.dart';
 import 'package:dazzles/features/valey/driver_nav_screen.dart';
 import 'package:dazzles/features/valey/home/data/model/dr_check_out_valet_info_model.dart';
 import 'package:dazzles/features/valey/home/presentation/driver_qr_scanner_screen.dart';
 import 'package:dazzles/features/valey/parked%20cars/presentation/driver_video_player_screen.dart';
-import 'package:dazzles/module/office/camera%20and%20upload/presentation/products_selection_screen.dart';
-import 'package:dazzles/module/office/home/presentation/view_all_recent_captured_screen.dart';
+import 'package:dazzles/features/camera%20and%20upload/presentation/camera_screen.dart';
+import 'package:dazzles/features/camera%20and%20upload/presentation/products_selection_screen.dart';
+import 'package:dazzles/features/recently%20uploded/presentation/view_all_recent_captured_screen.dart';
 import 'package:dazzles/features/notification/presentation/notification_screen.dart';
-import 'package:dazzles/module/office/navigation_screen.dart';
-import 'package:dazzles/module/office/product/data/models/product_model.dart';
-import 'package:dazzles/module/office/product/presentation/view_and_edit_product.dart';
-import 'package:dazzles/module/office/product/presentation/widgets/product_image_view.dart';
-import 'package:dazzles/module/office/packaging/presentation/po_product_screen.dart';
-import 'package:dazzles/module/office/upload%20failed/presentation/failed_data_screen.dart';
-import 'package:dazzles/module/other%20roles%20modules/other_users_navigationScreen.dart';
+import 'package:dazzles/features/product/data/models/product_model.dart';
+import 'package:dazzles/features/product/presentation/view_and_edit_product.dart';
+import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
+import 'package:dazzles/features/packaging-po/presentation/po_product_screen.dart';
+import 'package:dazzles/features/upload%20failed/presentation/failed_data_screen.dart';
 import 'package:dazzles/features/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -46,35 +46,51 @@ class RouteProvider {
                   : UpgradeDialogStyle.cupertino,
               child: SplashScreen())),
       GoRoute(path: loginScreen, builder: (context, state) => LoginScreen()),
-      // GoRoute(path: otpScreen, builder: (context, state) {
-      //   final mapData=state.extra as Map;
 
-      //   final mobileNumber=mapData['mobileNumber'];
-      //   final role=mapData['role'];
-      //   return OtpScreen(mobileNumber: mobileNumber,role: role,);
-      // }),
-      GoRoute(
-          path: officeRoute,
-          builder: (context, state) => OfficeNavigationScreen()),
+      // ==  ---- PERMISSION BASE ROUTE
+
+      GoRoute(path: routeScreen, builder: (context, state) => RouteScreen()),
 
       GoRoute(
         path: uploadFialedScreen,
         builder: (context, state) => UploadFaieldDataScreen(),
       ),
+
       GoRoute(
-        path: recentlyCaptured,
-        builder: (context, state) => ViewAllRecentCapturedScreen(),
-      ),
+          path: notificationScreen,
+          builder: (context, state) => NotificationScreen()),
+      GoRoute(path: qrScanScreen, builder: (context, state) => QrScanScreen()),
       GoRoute(
-        path: productsSelectionScreen,
+          path: scannedProductDetailScreen,
+          builder: (context, state) {
+            final detials = state.extra as Map<String, dynamic>;
+
+            return ScannedProductScreen(
+                productDataModel: ScannedProductModel.fromJson(detials));
+          }),
+
+      // PO LEVEL
+
+      GoRoute(
+          path: packageSuppliers, builder: (context, state) => PackagePage()),
+
+      GoRoute(
+        path: poProductsScreen,
         builder: (context, state) {
           final map = state.extra as Map<String, dynamic>;
-          final file = map['file'] as File;
-          return ProductSelectionScreen(
-            fileImage: file,
+          final id = map['id'] as String;
+          final supplier = map['supplier'] as String;
+          return PoProductScreen(
+            id: id,
+            supplier: supplier,
           );
         },
       ),
+
+      // PRODUCT :LEVEL
+
+      GoRoute(path: productslist, builder: (context, state) => ProductsPage()),
+
       GoRoute(
         path: openImage,
         builder: (context, state) {
@@ -105,14 +121,34 @@ class RouteProvider {
       ),
 
       GoRoute(
-        path: poProductsScreen,
+        path: recentlyCaptured,
+        builder: (context, state) => ViewAllRecentCapturedScreen(),
+      ),
+
+      // BULK UPDATE
+
+      GoRoute(
+        path: cameraScreen,
+        builder: (context, state) => CameraScreen(),
+      ),
+      GoRoute(
+        path: productsSelectionScreen,
         builder: (context, state) {
           final map = state.extra as Map<String, dynamic>;
-          final id = map['id'] as String;
-          final supplier = map['supplier'] as String;
-          return PoProductScreen(
-            id: id,
-            supplier: supplier,
+          final file = map['file'] as File;
+          return ProductSelectionScreen(
+            fileImage: file,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: productsSelectionScreen,
+        builder: (context, state) {
+          final map = state.extra as Map<String, dynamic>;
+          final file = map['file'] as File;
+          return ProductSelectionScreen(
+            fileImage: file,
           );
         },
       ),
@@ -169,31 +205,9 @@ class RouteProvider {
             );
           }),
 
+      //---------------------------
+
       // OTHER ROLE ROUTES AND COMMON
-
-      GoRoute(
-          path: otherUsersRoute,
-          builder: (context, state) => OtherUsersNaviagationScreen()),
-
-      GoRoute(
-          path: notificationScreen,
-          builder: (context, state) => NotificationScreen()),
-      GoRoute(path: qrScanScreen, builder: (context, state) => QrScanScreen()),
-      GoRoute(
-          path: scannedProductDetailScreen,
-          builder: (context, state) {
-            final detials = state.extra as Map<String, dynamic>;
-
-            return ScannedProductScreen(
-                productDataModel: ScannedProductModel.fromJson(detials));
-          }),
-
-      // ==  ---- PERMISSION BASE ROUTE
-
-      GoRoute(path: routeScreen, builder: (context, state) => RouteScreen()),
-      GoRoute(
-          path: navigationScreen,
-          builder: (context, state) => NavigationScreen()),
     ],
   );
 }
