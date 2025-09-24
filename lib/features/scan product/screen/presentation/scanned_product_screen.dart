@@ -1,3 +1,5 @@
+import 'package:dazzles/core/app%20permission/app_permission_extension.dart';
+import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/components/app_back_button.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_network_image.dart';
@@ -13,6 +15,7 @@ import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class ScannedProductScreen extends StatelessWidget {
   final ScannedProductModel productDataModel;
@@ -47,8 +50,10 @@ class ScannedProductScreen extends StatelessWidget {
                   "path": ApiConstants.mediaBaseUrl +
                       productDataModel.productPicture,
                   "heroTag": productDataModel.id.toString(),
-                  "enableEditButton": false,
+                  "enableEditButton":
+                      AppPermissionConfig().has(AppPermission.updateproduct),
                   "prouctModel": ProductModel(
+                      availableQuantity: productDataModel.quantity,
                       id: productDataModel.id,
                       productName: productDataModel.productName,
                       productPicture: productDataModel.productPicture,
@@ -76,37 +81,25 @@ class ScannedProductScreen extends StatelessWidget {
                           imageFile: ApiConstants.mediaBaseUrl +
                               productDataModel.productPicture),
                     ),
-                    // Positioned(
-                    //     right: 10,
-                    //     bottom: 10,
-                    //     child: OutlinedButton(
-                    //         onPressed: () {
-                    //           context.push(openImage, extra: {
-                    //             "path": ApiConstants.imageBaseUrl +
-                    //                 productDataModel.productPicture,
-                    //             "heroTag": productDataModel.id.toString(),
-                    //             "enableEditButton": false,
-                    //             "prouctModel": ProductModel(
-                    //                 id: productDataModel.id,
-                    //                 productName: productDataModel.productName,
-                    //                 productPicture:
-                    //                     productDataModel.productPicture,
-                    //                 category: productDataModel.category,
-                    //                 productSize: productDataModel.productSize,
-                    //                 color: productDataModel.color)
-                    //           });
-                    //         },
-                    //         child: Padding(
-                    //           padding: EdgeInsets.all(
-                    //               ResponsiveHelper.isTablet() ? 10 : 0),
-                    //           child: Text(
-                    //             "Edit and View",
-                    //             style: AppStyle.mediumStyle(
-                    //                 fontSize: ResponsiveHelper.isTablet()
-                    //                     ? ResponsiveHelper.fontSmall
-                    //                     : null),
-                    //           ),
-                    //         )))
+                    Positioned(
+                        right: 10,
+                        bottom: 10,
+                        child: OutlinedButton(
+                            onPressed: null,
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  ResponsiveHelper.isTablet() ? 10 : 0),
+                              child: Text(
+                                AppPermissionConfig()
+                                        .has(AppPermission.updateproduct)
+                                    ? "Edit and View"
+                                    : "View",
+                                style: AppStyle.mediumStyle(
+                                    fontSize: ResponsiveHelper.isTablet()
+                                        ? ResponsiveHelper.fontSmall
+                                        : null),
+                              ),
+                            )))
                   ],
                 ),
               ),
@@ -114,20 +107,42 @@ class ScannedProductScreen extends StatelessWidget {
             AppSpacer(
               hp: .02,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  productDataModel.productName,
-                  style: AppStyle.largeStyle(
-                      fontSize: ResponsiveHelper.isTablet()
-                          ? ResponsiveHelper.fontSmall
-                          : null),
-                ),
-              ],
+            Text(
+              productDataModel.productName,
+              style: AppStyle.largeStyle(
+                  fontSize: ResponsiveHelper.isTablet()
+                      ? ResponsiveHelper.fontSmall
+                      : null),
             ),
+
             AppSpacer(
               hp: .01,
+            ),
+            // PRICE VIEW
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.kBorderColor.withAlpha(10),
+              ),
+              child: Row(
+                children: [
+                  if (AppPermissionConfig()
+                          .has(AppPermission.purchasePriceVisibility) &&
+                      productDataModel.purchaseprice.isNotEmpty)
+                    Flexible(
+                      child: _buildEditFiled(
+                          title: "Purchase rate",
+                          value: "₹ ${productDataModel.purchaseprice}"),
+                    ),
+                  if (AppPermissionConfig()
+                          .has(AppPermission.salesPriceVisibility) &&
+                      productDataModel.salesprice.isNotEmpty)
+                    Flexible(
+                      child: _buildEditFiled(
+                          title: "Sale Price",
+                          value: "₹ ${productDataModel.salesprice}"),
+                    ),
+                ],
+              ),
             ),
 
             // PRODUCT DETAILS
@@ -138,22 +153,22 @@ class ScannedProductScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      if (productDataModel.salesprice.isNotEmpty)
-                        Flexible(
-                            child: _buildEditFiled(
-                                title: "Sales Price",
-                                value: "₹${productDataModel.salesprice}")),
-                      if (productDataModel.purchaseprice.isNotEmpty)
-                        Flexible(
-                          child: _buildEditFiled(
-                              title: "Purchase Price",
-                              value: "₹${productDataModel.purchaseprice}"),
-                        ),
-                    ],
-                  ),
-                  _buildDevider(),
+                  // Row(
+                  //   children: [
+                  //     // if (productDataModel.salesprice.isNotEmpty)
+                  //     Flexible(
+                  //         child: _buildEditFiled(
+                  //             title: "Sales Price",
+                  //             value: """₹${productDataModel.salesprice}""")),
+                  //     // if (productDataModel.purchaseprice.isNotEmpty)
+                  //     Flexible(
+                  //       child: _buildEditFiled(
+                  //           title: "Purchase Price",
+                  //           value: """₹${productDataModel.purchaseprice}"""),
+                  //     ),
+                  //   ],
+                  // ),
+                  // _buildDevider(),
                   if (productDataModel.supplier.isNotEmpty)
                     _buildEditFiled(
                         title: "Supplier", value: productDataModel.supplier),
@@ -177,69 +192,11 @@ class ScannedProductScreen extends StatelessWidget {
                 ],
               ),
             ),
-            AppSpacer(
-              hp: .02,
-            ), // QUANITY
+            // Store Availability
 
-            productDataModel.quantity.isNotEmpty
-                ? Text(
-                    "Quantity",
-                    style: AppStyle.boldStyle(
-                        fontSize: ResponsiveHelper.fontMedium),
-                  )
-                : SizedBox(),
-            AppSpacer(
-              hp: .02,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.kBorderColor.withAlpha(10),
-              ),
-              child: Column(
-                  children: productDataModel.quantity
-                      .map(
-                        (store) => Column(
-                          children: [
-                            _buildEditFiled(
-                                title: store.storeName,
-                                value: store.quantity.toString()),
-                            _buildDevider()
-                          ],
-                        ),
-                      )
-                      .toList()),
-            ),
-            AppSpacer(
-              hp: .02,
-            ),
-            // ATTRIBUTES
-            productDataModel.attributes.isNotEmpty
-                ? Text(
-                    "Attributes",
-                    style: AppStyle.boldStyle(
-                        fontSize: ResponsiveHelper.fontMedium),
-                  )
-                : SizedBox(),
-            AppSpacer(
-              hp: .02,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.kBorderColor.withAlpha(10),
-              ),
-              child: Column(
-                  children: productDataModel.attributes
-                      .map(
-                        (attribute) => Column(
-                          children: [
-                            _buildEditFiled(
-                                title: attribute.name, value: attribute.value),
-                            _buildDevider()
-                          ],
-                        ),
-                      )
-                      .toList()),
-            ),
+            _buildQuantityView(productDataModel),
+            // Attributtes
+            _buildAttributesView(productDataModel),
             AppSpacer(
               hp: .04,
             )
@@ -294,4 +251,222 @@ class ScannedProductScreen extends StatelessWidget {
           ],
         ),
       );
+
+  Widget _buildQuantityView(ScannedProductModel model) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if ((model.quantity.isNotEmpty) &&
+            (AppPermissionConfig().has(AppPermission.stockquantityvisibility) ||
+                AppPermissionConfig()
+                    .has(AppPermission.soldquantityvisibility))) ...[
+          AppSpacer(
+            hp: .02,
+          ),
+          Text(
+            "Store Availability",
+            style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
+          ),
+          AppSpacer(
+            hp: .02,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.kBorderColor.withAlpha(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Header row
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      // Store name column
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          "Store",
+                          style: AppStyle.boldStyle(
+                              fontSize: ResponsiveHelper.fontSmall),
+                        ),
+                      ),
+                      // Stock header (centered)
+                      if (AppPermissionConfig()
+                          .has(AppPermission.stockquantityvisibility))
+                        Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Stock",
+                              style: AppStyle.boldStyle(
+                                  fontSize: ResponsiveHelper.fontSmall),
+                            ),
+                          ),
+                        ),
+                      // Sales header (centered)
+                      if (AppPermissionConfig()
+                          .has(AppPermission.soldquantityvisibility))
+                        Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Sales",
+                              style: AppStyle.boldStyle(
+                                  fontSize: ResponsiveHelper.fontSmall),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                // List of stores
+                Column(
+                  children: model.quantity.map((store) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              // Store name
+                              Expanded(
+                                flex: 4,
+                                child: Row(
+                                  children: [
+                                    Icon(SolarIconsBold.shop, size: 15),
+                                    SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        store.storeShortName,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: AppStyle.boldStyle(
+                                          fontSize: ResponsiveHelper.isTablet()
+                                              ? ResponsiveHelper.fontExtraSmall
+                                              : ResponsiveHelper.fontSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // Stock value (centered)
+
+                              if (AppPermissionConfig()
+                                  .has(AppPermission.stockquantityvisibility))
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kBgColor,
+                                      borderRadius: BorderRadius.circular(6),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                AppColors.kWhite.withAlpha(10)),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        store.quantity?.toString() ?? '0',
+                                        style: AppStyle.smallStyle(
+                                            fontSize:
+                                                ResponsiveHelper.fontSmall),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              SizedBox(width: 8),
+
+                              // Sales value (centered)
+                              if (AppPermissionConfig()
+                                  .has(AppPermission.soldquantityvisibility))
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kBgColor,
+                                      borderRadius: BorderRadius.circular(6),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                AppColors.kWhite.withAlpha(10)),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        store.sales?.toString() ?? '0',
+                                        style: AppStyle.smallStyle(
+                                            fontSize:
+                                                ResponsiveHelper.fontSmall),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+
+                        // Divider between rows
+
+                        _buildDevider(),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildAttributesView(ScannedProductModel model) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppSpacer(
+          hp: .02,
+        ),
+        model.attributes.isNotEmpty
+            ? Text(
+                "Attributes",
+                style:
+                    AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
+              )
+            : SizedBox(),
+        AppSpacer(
+          hp: .02,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.kBorderColor.withAlpha(10),
+          ),
+          child: Column(
+              children: model.attributes
+                  .map(
+                    (attribute) => Column(
+                      children: [
+                        _buildEditFiled(
+                            title: attribute.name, value: attribute.value),
+                        _buildDevider()
+                      ],
+                    ),
+                  )
+                  .toList()),
+        ),
+      ],
+    );
+  }
 }

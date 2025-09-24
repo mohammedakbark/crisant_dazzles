@@ -1,3 +1,5 @@
+import 'package:dazzles/features/product/data/models/product_vailable_quantity_model.dart';
+
 class ScannedProductModel {
   final int id;
   final String productName;
@@ -8,8 +10,9 @@ class ScannedProductModel {
   final String productSize;
   final String color;
   final String supplier;
-  final List<Quantity> quantity;
+  final List<ProductavailableQuantity> quantity;
   final List<Attribute> attributes;
+  final List<SimilarProduct> similarProducts;
 
   ScannedProductModel({
     required this.id,
@@ -23,6 +26,7 @@ class ScannedProductModel {
     required this.supplier,
     required this.quantity,
     required this.attributes,
+    required this.similarProducts,
   });
 
   factory ScannedProductModel.fromJson(Map<String, dynamic> json) =>
@@ -36,10 +40,12 @@ class ScannedProductModel {
         productSize: json["productSize"] ?? '',
         color: json["color"] ?? '',
         supplier: json["supplier"] ?? '',
-        quantity: List<Quantity>.from(
-            json["quantity"].map((x) => Quantity.fromJson(x))),
+        quantity: List<ProductavailableQuantity>.from(
+            json["quantity"].map((x) => ProductavailableQuantity.fromJson(x))),
         attributes: List<Attribute>.from(
             json["attributes"].map((x) => Attribute.fromJson(x))),
+        similarProducts: List<SimilarProduct>.from(
+            json["similarProducts"].map((x) => SimilarProduct.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +60,8 @@ class ScannedProductModel {
         "supplier": supplier,
         "quantity": List<dynamic>.from(quantity.map((x) => x.toJson())),
         "attributes": List<dynamic>.from(attributes.map((x) => x.toJson())),
+        "similarProducts":
+            List<dynamic>.from(similarProducts.map((x) => x.toJson())),
       };
 }
 
@@ -77,26 +85,37 @@ class Attribute {
       };
 }
 
-class Quantity {
-  final int storeId;
-  final String storeName;
-  final int quantity;
 
-  Quantity({
-    required this.storeId,
-    required this.storeName,
-    required this.quantity,
+
+class SimilarProduct {
+  final int id;
+  final String productPicture;
+  final String size;
+  final String color;
+  // final List<SimilarProductQuantity> quantity;
+
+  SimilarProduct({
+    required this.id,
+    required this.productPicture,
+    required this.size,
+    required this.color,
+    // required this.quantity,
   });
 
-  factory Quantity.fromJson(Map<String, dynamic> json) => Quantity(
-        storeId: json["storeId"] ?? "",
-        storeName: json["storeName"] ?? "",
-        quantity: json["quantity"] ?? "",
+  factory SimilarProduct.fromJson(Map<String, dynamic> json) => SimilarProduct(
+        id: json["id"],
+        productPicture: json["productPicture"],
+        size: json["size"],
+        color: json["color"],
+        // quantity: List<SimilarProductQuantity>.from(
+        //     json["quantity"].map((x) => SimilarProductQuantity.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "storeId": storeId,
-        "storeName": storeName,
-        "quantity": quantity,
+        "id": id,
+        "productPicture": productPicture,
+        "size": size,
+        "color": color,
+        // "quantity": List<dynamic>.from(quantity.map((x) => x.toJson())),
       };
 }

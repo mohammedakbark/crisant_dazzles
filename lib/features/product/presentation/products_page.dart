@@ -211,7 +211,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              // borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.kPrimaryColor),
             ),
             child: Column(
@@ -245,7 +245,10 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                       ),
                       Container(
                         padding: EdgeInsets.all(4),
-                        color: AppColors.kPrimaryColor,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: AppColors.kPrimaryColor,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -262,11 +265,17 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                                 ),
                               ),
                             ),
+                            AppSpacer(
+                              wp: .01,
+                            ),
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal:
                                       ResponsiveHelper.isTablet() ? 12 : 6),
-                              color: AppColors.kBgColor,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AppColors.kBgColor.withAlpha(100),
+                              ),
                               child: Text(
                                 product.productSize,
                                 style: AppStyle.mediumStyle(
@@ -278,6 +287,19 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
                           ],
                         ),
                       ),
+                      // AppSpacer(
+                      //   hp: .005,
+                      // ),
+                      // Text(
+                      //   maxLines: 1,
+                      //   overflow: TextOverflow.ellipsis,
+                      //   style: AppStyle.mediumStyle(
+                      //     fontSize: ResponsiveHelper.isTablet()
+                      //         ? ResponsiveHelper.fontExtraSmall
+                      //         : null,
+                      //     color: AppColors.kWhite,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

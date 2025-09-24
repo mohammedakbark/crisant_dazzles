@@ -35,7 +35,7 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
       _query = null;
       _isLoadingMore = false;
 
-      final result = await GetPoRepo.onGetAllPos(_page, _query);
+      final result = await GetPoRepo.onGetAllSuppliers(_page, _query);
       if (result['error'] == false) {
         final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;
@@ -74,7 +74,7 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
               isLoadingMore: true,
             ),
       );
-      final result = await GetPoRepo.onGetAllPos(_page, _query);
+      final result = await GetPoRepo.onGetAllSuppliers(_page, _query);
       if (result['error'] == false) {
         final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;
@@ -112,7 +112,7 @@ class GetSuppliersController extends AsyncNotifier<SuppliersSuccessState> {
       _page = 1;
       _isLoadingMore = false;
 
-      final result = await GetPoRepo.onGetAllPos(_page, _query);
+      final result = await GetPoRepo.onGetAllSuppliers(_page, _query);
       if (result['error'] == false) {
         final fetchedPos = result['data'] as List<SupplierModel>;
         final paginationData = result['pagination'] as PaginationModel;

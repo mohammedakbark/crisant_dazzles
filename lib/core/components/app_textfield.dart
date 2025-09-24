@@ -23,12 +23,14 @@ class CustomTextField extends StatelessWidget {
   final void Function()? onTap;
   final bool? isTextCapital;
   final bool? isReadOnly;
- final  void Function(String)? onChanged;
+  final void Function(String)? onChanged;
+  final bool? isRequired;
   const CustomTextField({
     super.key,
     // this.hintColor,
     // this.borderColor,
     this.onChanged,
+    this.isRequired,
     this.title,
     this.isReadOnly,
     this.fillColor,
@@ -54,8 +56,20 @@ class CustomTextField extends StatelessWidget {
         title != null
             ? Column(
                 children: [
-                  Text(title!, style: AppStyle.boldStyle()),
-                  AppSpacer(hp: .015),
+                  RichText(
+                    text: TextSpan(
+                        text: title!,
+                        style: AppStyle.boldStyle(),
+                        children: [
+                          if(isRequired==true)
+                          TextSpan(
+                              text: " *",
+                              style: AppStyle.boldStyle(
+                                  color: AppColors.kErrorPrimary))
+                        ]),
+                  ),
+                  // Text(title!, style: AppStyle.boldStyle()),
+                  AppSpacer(hp: .005),
                 ],
               )
             : SizedBox(),

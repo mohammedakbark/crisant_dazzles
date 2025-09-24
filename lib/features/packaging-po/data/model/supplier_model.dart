@@ -5,7 +5,7 @@ class SupplierModel {
   String status;
   DateTime invoiceDate;
   String transportName;
-  DateTime? receivedDate;
+  String? receivedDate;
   String supplierId;
   String supplierName;
 
@@ -21,14 +21,14 @@ class SupplierModel {
       required this.supplierName});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) => SupplierModel(
-        supplierName: json['supplierName'],
+        supplierName: json['supplierName'] ?? '',
         id: json["id"],
-        invoiceNumber: json["invoiceNumber"],
-        storeId: json["storeId"],
-        status: json["Status"],
+        invoiceNumber: json["invoiceNumber"] ?? '',
+        storeId: json["storeId"] ?? '',
+        status: json["Status"] ?? '',
         invoiceDate: DateTime.parse(json["invoiceDate"]),
-        transportName: json["transportName"],
-        receivedDate: json["receivedDate"],
+        transportName: json["transportName"] ?? '',
+        receivedDate: json["receivedDate"] ?? '',
         supplierId: json["supplierId"].toString(),
       );
 

@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
-import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/services/office_navigation_controller.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
@@ -13,9 +11,7 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
 import 'package:dazzles/features/notification/data/providers/notification_controller.dart';
-import 'package:dazzles/features/profile/data/providers/get_profile_controller.dart';
-import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
-import 'package:dazzles/features/profile/presentation/widgets/profile_shimmer.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

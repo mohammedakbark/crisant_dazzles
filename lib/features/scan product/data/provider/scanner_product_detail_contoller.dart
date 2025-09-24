@@ -34,8 +34,8 @@ class ScannerProductDetailController
       if (response['error'] == false) {
         log(response['data'].toString());
         final product = response['data'] as ScannedProductModel;
-        context.pushReplacement(scannedProductDetailScreen,
-            extra: product.toJson());
+        context.pushReplacement(scannedProductDetailScreen, extra: product.toJson());
+        // context.push(scannedProductDetailScreen, extra: product.toJson());
         return ScannedProductLoaded(product);
       } else {
         showCustomSnackBarAdptive(response['data'], isError: true);

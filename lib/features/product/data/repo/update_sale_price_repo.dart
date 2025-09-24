@@ -1,14 +1,16 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
-import 'package:dazzles/features/packaging-po/data/model/supplier_model.dart';
 
-class GetPoRepo {
-  static Future<Map<String, dynamic>> onGetAllSuppliers(
-      int pageNumber, String? query) async {
+class UpdateSalePriceRepo {
+  static Future<Map<String, dynamic>> onUpdateSalePrice(
+      String productId, String price) async {
     final userData = await LoginRefDataBase().getUserData;
-    final response = await ApiConfig.getRequest(
-      endpoint: "${ApiConstants.getAllSuppliers}?page=$pageNumber&search=${query??''}",
+    final response = await ApiConfig.postRequest(
+      endpoint: "${ApiConstants.updateProductPrice}/$productId",
+      body: {"productSellingPrice": price},
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",
@@ -16,11 +18,10 @@ class GetPoRepo {
     );
 
     if (response.status == 200) {
-      final data = response.data as List;
+      final data = response.data as Map;
       return {
+        "data": data['productSellingPrice'].toString(),
         "error": false,
-        "data": data.map((e) => SupplierModel.fromJson(e)).toList(),
-        "pagination": response.pagination,
       };
     } else {
       return {"error": true, "data": response.message};

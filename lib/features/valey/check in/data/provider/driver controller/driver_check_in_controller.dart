@@ -207,8 +207,8 @@ class DriverCheckInController
       String name,
       String qrId,
       String regNumber,
-      String brand,
-      String model,
+      String? brand,
+      String? model,
       int? carId,
       int? customerId) async {
     try {

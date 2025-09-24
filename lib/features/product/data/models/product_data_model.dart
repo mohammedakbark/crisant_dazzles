@@ -1,3 +1,5 @@
+import 'package:dazzles/features/product/data/models/product_vailable_quantity_model.dart';
+
 class ProductDataModel {
   String productName;
   String productsize;
@@ -11,6 +13,7 @@ class ProductDataModel {
   String? productDescription;
   String productPicture;
   List<FormattedAttribute> formattedAttributes;
+  final List<ProductavailableQuantity> productavailableQuantity;
 
   ProductDataModel({
     required this.productName,
@@ -25,6 +28,7 @@ class ProductDataModel {
     required this.productDescription,
     required this.productPicture,
     required this.formattedAttributes,
+    required this.productavailableQuantity,
   });
 
   factory ProductDataModel.fromJson(Map<String, dynamic> json) =>
@@ -45,6 +49,9 @@ class ProductDataModel {
         formattedAttributes: List<FormattedAttribute>.from(
             json["formattedAttributes"]
                 .map((x) => FormattedAttribute.fromJson(x))),
+        productavailableQuantity: List<ProductavailableQuantity>.from(
+            json["productavailableQuantity"]
+                .map((x) => ProductavailableQuantity.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,6 +68,8 @@ class ProductDataModel {
         "productPicture": productPicture,
         "formattedAttributes":
             List<dynamic>.from(formattedAttributes.map((x) => x.toJson())),
+        "productavailableQuantity":
+            List<dynamic>.from(productavailableQuantity.map((x) => x.toJson())),
       };
 }
 

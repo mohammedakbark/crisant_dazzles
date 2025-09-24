@@ -12,7 +12,8 @@ enum AppPermission {
   valey,
   recentlyupdated,
   // FEATURES
-  pricevisibility,
+  purchasePriceVisibility,
+  salesPriceVisibility,
   stockquantityvisibility,
   soldquantityvisibility,
   editprice
@@ -170,8 +171,10 @@ extension AppPermissionExt on AppPermission {
         return AppPermission.dashboardinsight;
       case "recentlyupdated":
         return AppPermission.recentlyupdated;
-      case "pricevisibility":
-        return AppPermission.pricevisibility;
+      case "purchasepricevisibility":
+        return AppPermission.purchasePriceVisibility;
+      case "salespricevisibility":
+        return AppPermission.salesPriceVisibility;
       case "stockquantityvisibility":
         return AppPermission.stockquantityvisibility;
       case "soldquantityvisibility":

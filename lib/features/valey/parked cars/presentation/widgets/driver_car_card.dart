@@ -381,6 +381,8 @@ class _DriverValetParkingCardState extends ConsumerState<DriverValetParkingCard>
   }
 
   Widget _buildVideoSection() {
+    if (widget.valetData.initialVideo == null &&
+        widget.valetData.finalVideo == null) return SizedBox();
     return InkWell(
       onTap: () {
         context.push(drVideoPlayerScreen, extra: {

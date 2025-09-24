@@ -17,12 +17,13 @@ class ApiConstants {
   static const String searchProduct = "dashboard/search";
   static const String updateImage = "product";
   static const String updateImageFromPo = "purchase/similar/image";
+  static const String updateProductPrice = "product";
 
   static const String searchProductById = "upload/";
 
 //PO
 
-  static const String allPurchases = "purchase";
+  static const String getAllSuppliers = "purchase";
   static const String getPurshaseOrderProducts = "purchase/order";
 
   // Other Module

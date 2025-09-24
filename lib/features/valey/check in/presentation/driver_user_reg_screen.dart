@@ -65,7 +65,7 @@ class _DriverCustomerRegScreenState
   }
 
   bool _isLoadingUploadVideo = false;
-  bool _genarateRandomeNumber = false;
+  // bool _genarateRandomeNumber = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +141,7 @@ class _DriverCustomerRegScreenState
             hp: .01,
           ),
           CustomTextField(
+            isRequired: true,
             hintText: "Enter customer name",
             title: 'Customer Name',
             controller: _customerNameController,
@@ -150,6 +151,7 @@ class _DriverCustomerRegScreenState
             hp: .01,
           ),
           CustomTextField(
+            isRequired: true,
             isTextCapital: true,
             onChanged: (p0) {
               ref.watch(driverControllerProvider.notifier).clearSelectedCar();
@@ -222,6 +224,10 @@ class _DriverCustomerRegScreenState
                 return AppButton(
                     onPressed: () async {
                       if (_formkey.currentState!.validate()) {
+                        final mobileNumber =
+                            _mobileNumberController.text.trim();
+                        final brand = _brandController.text.trim();
+                        final model = _modelController.text.trim();
                         final state = ref.read(driverControllerProvider).value;
                         int? customerId = state?.selectedCustomerId;
                         int? vehicleId = state?.selectedVehicleId;
@@ -230,14 +236,15 @@ class _DriverCustomerRegScreenState
                         final valetId = await ref
                             .read(driverControllerProvider.notifier)
                             .onSubmitCustomerRegister(
-                                _genarateRandomeNumber
-                                    ? null
-                                    : _mobileNumberController.text.trim(),
+                                // _genarateRandomeNumber
+                                //     ? null
+                                //     :
+                                mobileNumber.isNotEmpty ? mobileNumber : null,
                                 _customerNameController.text.trim(),
                                 widget.qrId,
                                 _regNumberController.text.trim(),
-                                _brandController.text.trim(),
-                                _modelController.text.trim(),
+                                brand.isNotEmpty ? brand : null,
+                                model.isNotEmpty ? model : null,
                                 vehicleId,
                                 customerId);
 
@@ -286,38 +293,40 @@ class _DriverCustomerRegScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Genarate random 10 digit",
-              style:
-                  AppStyle.normalStyle(color: AppColors.kWhite.withAlpha(200)),
-            ),
-            CupertinoSwitch(
-              // activeColor: AppColors.kTeal,
-              value: _genarateRandomeNumber,
-              onChanged: (value) {
-                if(value){
-                  _mobileNumberController.clear();
-                }
-                setState(
-                  () => _genarateRandomeNumber = value,
-                );
-              },
-            )
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Text(
+        //       "Genarate random 10 digit",
+        //       style:
+        //           AppStyle.normalStyle(color: AppColors.kWhite.withAlpha(200)),
+        //     ),
+        //     CupertinoSwitch(
+        //       // activeColor: AppColors.kTeal,
+        //       value: _genarateRandomeNumber,
+        //       onChanged: (value) {
+        //         if(value){
+        //           _mobileNumberController.clear();
+        //         }
+        //         setState(
+        //           () => _genarateRandomeNumber = value,
+        //         );
+        //       },
+        //     )
+        //   ],
+        // ),
+
         Text("Mobile Number",
             style: AppStyle.boldStyle(
-                color: _genarateRandomeNumber
-                    ? AppColors.kTextPrimaryColor
-                    : null)),
+                // color: _genarateRandomeNumber
+                //     ? AppColors.kTextPrimaryColor
+                //     : null
+                )),
         AppSpacer(
-          hp: .01,
+          hp: .005,
         ),
         TextFormField(
-          enabled: !_genarateRandomeNumber,
+          // enabled: !_genarateRandomeNumber,
           onChanged: (value) {
             if (value.length >= 4) {
               _debouncer.run(() {
@@ -332,9 +341,9 @@ class _DriverCustomerRegScreenState
             }
           },
           inputFormatters: [LengthLimitingTextInputFormatter(10)],
-          validator: _genarateRandomeNumber
-              ? null
-              : AppValidator.mobileNumberValidator,
+          // validator: _genarateRandomeNumber
+          //     ? null
+          //     : AppValidator.mobileNumberValidator,
           keyboardType: TextInputType.number,
           controller: _mobileNumberController,
           cursorColor: AppColors.kPrimaryColor,
@@ -379,9 +388,11 @@ class _DriverCustomerRegScreenState
   _border({bool? error}) {
     return OutlineInputBorder(
       borderSide: BorderSide(
-          color: _genarateRandomeNumber
-              ? AppColors.kTextPrimaryColor
-              : error == true
+          color:
+              // _genarateRandomeNumber
+              //     ? AppColors.kTextPrimaryColor
+              //     :
+              error == true
                   ? AppColors.kErrorPrimary
                   : AppColors.kPrimaryColor),
       borderRadius: BorderRadius.circular(
@@ -515,7 +526,7 @@ class _DriverCustomerRegScreenState
           hintText: "Enter vehicle brand name",
           title: 'Brand',
           controller: _brandController,
-          validator: AppValidator.requiredValidator,
+          // validator: AppValidator.requiredValidator,
           onChanged: (p0) {
             ref.read(driverControllerProvider.notifier).clearExistingModels();
           },
@@ -561,7 +572,7 @@ class _DriverCustomerRegScreenState
           hintText: "Enter vehicle model name",
           title: 'Model',
           controller: _modelController,
-          validator: AppValidator.requiredValidator,
+          // validator: AppValidator.requiredValidator,
           sufixicon: PopupMenuButton<CarModelModel>(
             enabled: value.selectedVehicleId == null,
             icon: Icon(

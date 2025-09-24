@@ -254,6 +254,7 @@ class _DriverHomeState extends ConsumerState<DriverHome> {
                 () {
                   context
                       .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
+                  // context.push(drCustomerRegScreen, extra: {"qrId": "6"});
                 },
               ),
             ),
