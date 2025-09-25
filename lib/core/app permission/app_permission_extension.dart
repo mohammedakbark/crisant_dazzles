@@ -2,6 +2,7 @@ import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 enum AppPermission {
   dashboardinsight,
@@ -11,12 +12,14 @@ enum AppPermission {
   purchaseorderlist,
   valey,
   recentlyupdated,
+  operationtask,
   // FEATURES
   purchasePriceVisibility,
   salesPriceVisibility,
   stockquantityvisibility,
   soldquantityvisibility,
-  editprice
+  editprice,
+  createoperationtask
 }
 
 extension AppPermissionExt on AppPermission {
@@ -37,6 +40,8 @@ extension AppPermissionExt on AppPermission {
         return Icons.widgets;
       case AppPermission.recentlyupdated:
         return Icons.list;
+      case AppPermission.operationtask:
+        return SolarIconsOutline.notificationUnreadLines;
       default:
         return Icons.add_box;
     }
@@ -61,6 +66,8 @@ extension AppPermissionExt on AppPermission {
         return Colors.amber;
       case AppPermission.recentlyupdated:
         return Colors.deepPurple;
+      case AppPermission.operationtask:
+        return Colors.red;
       default:
         return Colors.grey;
     }
@@ -83,6 +90,8 @@ extension AppPermissionExt on AppPermission {
         return 'Update Image';
       case AppPermission.recentlyupdated:
         return "Recently Updated";
+      case AppPermission.operationtask:
+        return "Operations";
       default:
         return this.name;
     }
@@ -136,6 +145,9 @@ extension AppPermissionExt on AppPermission {
       case AppPermission.recentlyupdated:
         context.push(recentlyCaptured);
         break;
+      case AppPermission.operationtask:
+        context.push(operationTaskViewScreen);
+        break;
       default:
         break;
     }
@@ -181,6 +193,10 @@ extension AppPermissionExt on AppPermission {
         return AppPermission.soldquantityvisibility;
       case "editprice":
         return AppPermission.editprice;
+      case "operationtask":
+        return AppPermission.operationtask;
+      case "createoperationtask":
+        return AppPermission.createoperationtask;
       default:
         return null;
     }

@@ -11,7 +11,7 @@ import 'package:dazzles/features/camera%20and%20upload/data/providers/upload_ima
 import 'package:dazzles/features/camera%20and%20upload/presentation/widget/image_source_sheet.dart';
 import 'package:dazzles/features/camera%20and%20upload/presentation/widget/logo_color_selection_tile.dart';
 import 'package:dazzles/features/product/data/models/product_model.dart';
-import 'package:dazzles/features/packaging-po/data/provider/get%20po%20products/get_po_products_controller.dart';
+import 'package:dazzles/features/packaging-or-po/data/provider/get%20po%20products/get_po_products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

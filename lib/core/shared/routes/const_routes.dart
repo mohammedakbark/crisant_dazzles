@@ -2,6 +2,8 @@ const initialScreen = '/';
 const loginScreen = '/login';
 
 const routeScreen = "/dashboard";
+const imagePendingScreen = "/imagePendingScreen";
+const upcomingProductsScreen = "/upcomingProductsScreen";
 
 // Scan product
 const qrScanScreen = "/qrScanScreen";
@@ -39,4 +41,6 @@ const drCustomerRegScreen = "/drCustomerRegScreen";
 const drlocationScreen = "/drLocationScreen";
 const drVideoPlayerScreen = "/drVideoPlayerScreen";
 
-//.  ---- PERMISSION BASE ROUTE
+// ---- Operation Level Task
+const operationTaskViewScreen = "/operationTaskViewScreen";
+const creatNewOperationTaskScreen = "/creatNewOperationTaskScreen";

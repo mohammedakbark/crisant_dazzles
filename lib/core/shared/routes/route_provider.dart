@@ -2,7 +2,11 @@ import 'dart:io';
 
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/features/Auth/presentation/login_screen.dart';
-import 'package:dazzles/features/packaging-po/presentation/package_page.dart';
+import 'package:dazzles/features/navigation/presentation/pending_image_screen.dart';
+import 'package:dazzles/features/navigation/presentation/upcoming_products_screen.dart';
+import 'package:dazzles/features/operation-or-task/presentation/create_new_operation_task_screen.dart';
+import 'package:dazzles/features/operation-or-task/presentation/operation_task_view_scree.dart';
+import 'package:dazzles/features/packaging-or-po/presentation/package_page.dart';
 import 'package:dazzles/features/product/presentation/products_page.dart';
 import 'package:dazzles/features/route_sreen.dart';
 import 'package:dazzles/features/scan%20product/data/model/scanned_product_model.dart';
@@ -21,7 +25,7 @@ import 'package:dazzles/features/notification/presentation/notification_screen.d
 import 'package:dazzles/features/product/data/models/product_model.dart';
 import 'package:dazzles/features/product/presentation/view_and_edit_product.dart';
 import 'package:dazzles/features/product/presentation/widgets/product_image_view.dart';
-import 'package:dazzles/features/packaging-po/presentation/po_product_screen.dart';
+import 'package:dazzles/features/packaging-or-po/presentation/po_product_screen.dart';
 import 'package:dazzles/features/upload%20failed/presentation/failed_data_screen.dart';
 import 'package:dazzles/features/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +72,13 @@ class RouteProvider {
             return ScannedProductScreen(
                 productDataModel: ScannedProductModel.fromJson(detials));
           }),
+
+      GoRoute(
+          path: imagePendingScreen,
+          builder: (context, state) => PendingImageScreen()),
+      GoRoute(
+          path: upcomingProductsScreen,
+          builder: (context, state) => UpcomingProductsScreen()),
 
       // PO LEVEL
 
@@ -207,7 +218,18 @@ class RouteProvider {
 
       //---------------------------
 
-      // OTHER ROLE ROUTES AND COMMON
+      // ---- Operation Level Task
+
+      GoRoute(
+          path: operationTaskViewScreen,
+          builder: (context, state) {
+            return OperationTaskViewScreen();
+          }),
+      GoRoute(
+          path: creatNewOperationTaskScreen,
+          builder: (context, state) {
+            return CreateNewOperationTaskScreen();
+          }),
     ],
   );
 }

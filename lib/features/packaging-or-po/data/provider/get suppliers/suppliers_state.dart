@@ -1,4 +1,4 @@
-import 'package:dazzles/features/packaging-po/data/model/supplier_model.dart';
+import 'package:dazzles/features/packaging-or-po/data/model/supplier_model.dart';
 
 class SuppliersSuccessState {
   final List<SupplierModel> purchaseOrderList;

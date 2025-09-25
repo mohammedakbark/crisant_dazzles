@@ -32,7 +32,7 @@ class ScannerProductDetailController
       final response = await GetProductDetailsRepo.onGetDetials(productId);
       log(response.toString());
       if (response['error'] == false) {
-        log(response['data'].toString());
+        // log(response['data'].toString());
         final product = response['data'] as ScannedProductModel;
         context.pushReplacement(scannedProductDetailScreen, extra: product.toJson());
         // context.push(scannedProductDetailScreen, extra: product.toJson());

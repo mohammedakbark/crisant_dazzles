@@ -4,7 +4,6 @@ import 'package:dazzles/core/components/app_network_image.dart';
 import 'package:dazzles/core/components/build_state_manage_button.dart';
 import 'package:dazzles/core/components/custom_componets.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
-import 'package:dazzles/core/constant/app_images.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
@@ -85,7 +84,7 @@ class _ViewAllRecentCapturedScreenState
                             ),
                           ],
                           // border: Border.all(color: AppColors.kPrimaryColor),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           children: [
@@ -158,13 +157,17 @@ class _ViewAllRecentCapturedScreenState
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    data[index].productName,
-                                    style: AppStyle.mediumStyle(
-                                        fontSize: ResponsiveHelper.isTablet()
-                                            ? ResponsiveHelper.fontExtraSmall
-                                            : null,
-                                        color: AppColors.kWhite),
+                                  Flexible(
+                                    child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      data[index].productName,
+                                      style: AppStyle.mediumStyle(
+                                          fontSize: ResponsiveHelper.isTablet()
+                                              ? ResponsiveHelper.fontExtraSmall
+                                              : null,
+                                          color: AppColors.kWhite),
+                                    ),
                                   ),
                                   Icon(
                                     CupertinoIcons.arrow_right_circle,

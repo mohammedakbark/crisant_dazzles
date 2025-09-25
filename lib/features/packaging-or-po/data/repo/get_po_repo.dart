@@ -1,7 +1,7 @@
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
-import 'package:dazzles/features/packaging-po/data/model/supplier_model.dart';
+import 'package:dazzles/features/packaging-or-po/data/model/supplier_model.dart';
 
 class GetPoRepo {
   static Future<Map<String, dynamic>> onGetAllSuppliers(

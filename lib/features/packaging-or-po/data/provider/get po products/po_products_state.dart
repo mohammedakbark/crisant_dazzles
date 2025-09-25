@@ -1,4 +1,4 @@
-import 'package:dazzles/features/packaging-po/data/model/po_product_model.dart';
+import 'package:dazzles/features/packaging-or-po/data/model/po_product_model.dart';
 
 class PoProductsSuccessState {
   final List<PoProductModel> poProducts;

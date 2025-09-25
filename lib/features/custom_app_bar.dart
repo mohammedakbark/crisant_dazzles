@@ -122,10 +122,10 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
             child: InkWell(
                 overlayColor: WidgetStatePropertyAll(Colors.transparent),
                 onTap: () {
-                  // context.push(qrScanScreen);
+                  context.push(qrScanScreen);
 
-                  ref.read(scannerProductDetailProvider(
-                      {"context": context, "productId": "91656"}));
+                  // ref.read(scannerProductDetailProvider(
+                  //     {"context": context, "productId": "91656"}));
                 },
                 child: CircleAvatar(
                   radius: ResponsiveHelper.isTablet() ? 40 : null,

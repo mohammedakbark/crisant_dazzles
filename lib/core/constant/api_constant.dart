@@ -10,10 +10,13 @@ class ApiConstants {
   static const String profile = "profile";
   static const String dashboard = "dashboard";
   static const String dashboardRecentlyCaptured = "dashboard/recentCaptured";
+  static const String upcomingProductList = "dashboard/upcomingproducts";
+
+  static const String pendingImageList = "dashboard/pendingimages";
 
   static const String allProduct = "product";
   static const String productData = "product/view";
-  static const String pendingProduct = "product/pending";
+  // static const String pendingProduct = "product/pending";
   static const String searchProduct = "dashboard/search";
   static const String updateImage = "product";
   static const String updateImageFromPo = "purchase/similar/image";

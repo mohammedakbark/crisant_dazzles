@@ -1,6 +1,7 @@
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/services/office_navigation_controller.dart';
+import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
@@ -8,6 +9,7 @@ import 'package:dazzles/features/navigation/data/provider/dashboard_controller.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class DashboardGrid extends ConsumerWidget {
@@ -49,9 +51,10 @@ class DashboardGrid extends ConsumerWidget {
             child: Column(
               children: [
                 _buildGridTile(
-                  isLoading ? "..." : model.totalProduct.toString(),
-                  "Products",
-                ),
+                    isLoading ? "..." : model.totalProduct.toString(),
+                    "Products", () {
+                  context.push(productslist);
+                }),
                 AppSpacer(
                   hp: .02,
                 ),
@@ -65,11 +68,17 @@ class DashboardGrid extends ConsumerWidget {
                       crossAxisCount: 3),
                   itemCount: titles.length,
                   itemBuilder: (context, index) => _buildGridTile(
-                    isLoading
-                        ? "..."
-                        : '${index == 0 ? model.imagePending : index == 1 ? model.upcomingProducts : model.supplierReturn}',
-                    titles[index],
-                  ),
+                      isLoading
+                          ? "..."
+                          : '${index == 0 ? model.imagePending : index == 1 ? model.upcomingProducts : model.supplierReturn}',
+                      titles[index], () {
+                    if (index == 0) {
+                      context.push(imagePendingScreen);
+                    }
+                    if (index == 1) {
+                      context.push(upcomingProductsScreen);
+                    }
+                  }),
                 ),
               ],
             )),
@@ -77,50 +86,50 @@ class DashboardGrid extends ConsumerWidget {
     );
   }
 
-  Widget _buildGridTile(
-    String title,
-    String data,
-  ) {
+  Widget _buildGridTile(String title, String data, void Function()? onTap) {
     final isTab = ResponsiveHelper.isTablet();
-    return Container(
-      width: ResponsiveHelper.wp,
-      height: ResponsiveHelper.hp * .12,
-      padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
-      decoration: BoxDecoration(
-        color: AppColors.kSecondaryColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.kPrimaryColor.withAlpha(30),
-            blurRadius: 1,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            title,
-            style: AppStyle.largeStyle(
-              fontSize: ResponsiveHelper.wp * .06,
-              color: AppColors.kPrimaryColor,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: ResponsiveHelper.wp,
+        height: ResponsiveHelper.hp * .12,
+        padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
+        decoration: BoxDecoration(
+          color: AppColors.kSecondaryColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.kPrimaryColor.withAlpha(30),
+              blurRadius: 1,
+              spreadRadius: 1,
             ),
-          ),
-          Flexible(
-            child: Text(
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              data,
-              style: AppStyle.mediumStyle(
-                  fontSize: ResponsiveHelper.fontSmall,
-                  color: AppColors.kPrimaryColor),
+              title,
+              style: AppStyle.largeStyle(
+                fontSize: ResponsiveHelper.wp * .06,
+                color: AppColors.kPrimaryColor,
+              ),
             ),
-          ),
-        ],
+            Flexible(
+              child: Text(
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                data,
+                style: AppStyle.mediumStyle(
+                    fontSize: ResponsiveHelper.fontSmall,
+                    color: AppColors.kPrimaryColor),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

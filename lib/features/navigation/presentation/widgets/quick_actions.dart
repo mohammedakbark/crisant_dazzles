@@ -14,9 +14,10 @@ class QuickActions extends StatelessWidget {
     AppPermission.productlist,
     AppPermission.purchaseorderlist,
     AppPermission.valey,
+    AppPermission.operationtask,
     AppPermission.scanproduct,
     AppPermission.updateproduct,
-    AppPermission.recentlyupdated
+    AppPermission.recentlyupdated,
   ];
   @override
   Widget build(BuildContext context) {

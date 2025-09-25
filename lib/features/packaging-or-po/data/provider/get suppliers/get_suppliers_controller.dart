@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:dazzles/core/shared/models/pagination_model.dart';
-import 'package:dazzles/features/packaging-po/data/model/supplier_model.dart';
-import 'package:dazzles/features/packaging-po/data/provider/get%20suppliers/suppliers_state.dart';
-import 'package:dazzles/features/packaging-po/data/repo/get_po_repo.dart';
+import 'package:dazzles/features/packaging-or-po/data/model/supplier_model.dart';
+import 'package:dazzles/features/packaging-or-po/data/provider/get%20suppliers/suppliers_state.dart';
+import 'package:dazzles/features/packaging-or-po/data/repo/get_po_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final getAllSuppliersControllerProvider =
