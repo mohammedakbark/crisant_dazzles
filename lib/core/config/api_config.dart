@@ -27,7 +27,7 @@ class ApiConfig {
         options: Options(headers: header),
       );
       // log(response.data.toString());
-   
+
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
@@ -137,6 +137,128 @@ class ApiConfig {
     } catch (e) {
       log("Unexpected Error");
 
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Unexpected Error: $e",
+        status: 500,
+      );
+    }
+  }
+
+  //---------------------------PATCH
+  static Future<ResponseModel> patchRequest({
+    required String endpoint,
+    required Map<String, dynamic> header,
+    Object? body,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        endpoint,
+        data: body,
+        options: Options(headers: header),
+      );
+
+      // log(response.data.toString());
+      return ResponseModel.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null && e.response?.data != null) {
+        try {
+          log("response 401  (No Error) PATCH");
+          log(e.response!.data['message'].toString());
+          _checkTokenExpired(e.response!.data);
+          return ResponseModel.fromJson(e.response!.data);
+        } catch (_) {
+          log("response 401  (Error) PATCH");
+
+          return ResponseModel(
+            data: null,
+            error: true,
+            message: "Server error !",
+            status: e.response?.statusCode ?? 500,
+          );
+        }
+      }
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+        log("Connection Error ! PATCH");
+        return ResponseModel(
+          data: null,
+          error: true,
+          message: "No Internet Connection!",
+          status: 503,
+        );
+      }
+      log("Dio Error PATCH");
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Dio Error: ${e.message}",
+        status: e.response?.statusCode ?? 500,
+      );
+    } catch (e) {
+      log("Unexpected Error PATCH");
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Unexpected Error: $e",
+        status: 500,
+      );
+    }
+  }
+
+  //---------------------------DELETE
+  static Future<ResponseModel> deleteRequest({
+    required String endpoint,
+    required Map<String, dynamic> header,
+    Object? body, // optional body (Dio supports data for DELETE)
+  }) async {
+    try {
+      final response = await _dio.delete(
+        endpoint,
+        data: body,
+        options: Options(headers: header),
+      );
+
+      // log(response.data.toString());
+      return ResponseModel.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null && e.response?.data != null) {
+        try {
+          log("response 401  (No Error) DELETE");
+          log(e.response!.data['message'].toString());
+          _checkTokenExpired(e.response!.data);
+          return ResponseModel.fromJson(e.response!.data);
+        } catch (_) {
+          log("response 401  (Error) DELETE");
+
+          return ResponseModel(
+            data: null,
+            error: true,
+            message: "Server error !",
+            status: e.response?.statusCode ?? 500,
+          );
+        }
+      }
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+        log("Connection Error ! DELETE");
+        return ResponseModel(
+          data: null,
+          error: true,
+          message: "No Internet Connection!",
+          status: 503,
+        );
+      }
+      log("Dio Error DELETE");
+      return ResponseModel(
+        data: null,
+        error: true,
+        message: "Dio Error: ${e.message}",
+        status: e.response?.statusCode ?? 500,
+      );
+    } catch (e) {
+      log("Unexpected Error DELETE");
       return ResponseModel(
         data: null,
         error: true,

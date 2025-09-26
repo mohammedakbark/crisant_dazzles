@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
   final bool? isReadOnly;
   final void Function(String)? onChanged;
   final bool? isRequired;
+  final bool? isOutlineBorder;
   const CustomTextField({
     super.key,
     // this.hintColor,
@@ -45,6 +46,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLenght,
     this.maxLine,
     this.onTap,
+    this.isOutlineBorder = true,
     this.isTextCapital,
   });
 
@@ -61,11 +63,11 @@ class CustomTextField extends StatelessWidget {
                         text: title!,
                         style: AppStyle.boldStyle(),
                         children: [
-                          if(isRequired==true)
-                          TextSpan(
-                              text: " *",
-                              style: AppStyle.boldStyle(
-                                  color: AppColors.kErrorPrimary))
+                          if (isRequired == true)
+                            TextSpan(
+                                text: " *",
+                                style: AppStyle.boldStyle(
+                                    color: AppColors.kErrorPrimary))
                         ]),
                   ),
                   // Text(title!, style: AppStyle.boldStyle()),
@@ -98,67 +100,54 @@ class CustomTextField extends StatelessWidget {
                   ? ResponsiveHelper.fontExtraSmall
                   : null),
           decoration: InputDecoration(
-            errorStyle: AppStyle.mediumStyle(
-                color: AppColors.kErrorPrimary,
+              errorStyle: AppStyle.mediumStyle(
+                  color: AppColors.kErrorPrimary,
+                  fontSize: ResponsiveHelper.isTablet()
+                      ? ResponsiveHelper.fontExtraSmall
+                      : null),
+              hintStyle: AppStyle.mediumStyle(
                 fontSize: ResponsiveHelper.isTablet()
                     ? ResponsiveHelper.fontExtraSmall
-                    : null),
-            hintStyle: AppStyle.mediumStyle(
-              fontSize: ResponsiveHelper.isTablet()
-                  ? ResponsiveHelper.fontExtraSmall
-                  : null,
-              color:
-                  // hintColor ??
-                  AppColors.kTextPrimaryColor,
-              fontWeight: FontWeight.w500,
-            ),
-            suffixIconColor: AppColors.kWhite,
-            prefixIconColor: AppColors.kWhite,
-            fillColor: fillColor ?? AppColors.kBgColor,
-            filled: true,
-            suffixIcon: sufixicon,
-            prefixIcon: prefixIcon,
-            hintText: hintText,
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: isReadOnly == true
-                    ? AppColors.kGrey
-                    :
-                    // borderColor ??
-                    AppColors.kPrimaryColor,
+                    : null,
+                color:
+                    // hintColor ??
+                    AppColors.kTextPrimaryColor,
+                fontWeight: FontWeight.w500,
               ),
-              borderRadius: BorderRadius.circular(
-                ResponsiveHelper.borderRadiusSmall,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: isReadOnly == true
-                      ? AppColors.kGrey
-                      : AppColors.kPrimaryColor
-
-                  // borderColor ??
-
-                  ),
-              borderRadius: BorderRadius.circular(
-                ResponsiveHelper.borderRadiusSmall,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.kErrorPrimary),
-              borderRadius: BorderRadius.circular(
-                ResponsiveHelper.borderRadiusSmall,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.kErrorPrimary),
-              borderRadius: BorderRadius.circular(
-                ResponsiveHelper.borderRadiusSmall,
-              ),
-            ),
-          ),
+              suffixIconColor: AppColors.kWhite,
+              prefixIconColor: AppColors.kWhite,
+              fillColor: fillColor ?? AppColors.kBgColor,
+              filled: true,
+              suffixIcon: sufixicon,
+              prefixIcon: prefixIcon,
+              hintText: hintText,
+                focusedBorder: _border(),
+              enabledBorder: _border(),
+              errorBorder: _border(isError: true),
+              focusedErrorBorder: _border(isError: true)),
         ),
       ],
     );
   }
+
+  _border({bool? isError}) => isOutlineBorder == true
+      ? OutlineInputBorder(
+          borderSide: BorderSide(
+              color: isError == true
+                  ? AppColors.kErrorPrimary
+                  : isReadOnly == true
+                      ? AppColors.kGrey
+                      : AppColors.kWhite),
+          borderRadius: BorderRadius.circular(
+            ResponsiveHelper.borderRadiusSmall,
+          ),
+        )
+      : UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: isError == true
+                  ? AppColors.kErrorPrimary
+                  : isReadOnly == true
+                      ? AppColors.kGrey
+                      : AppColors.kWhite),
+        );
 }

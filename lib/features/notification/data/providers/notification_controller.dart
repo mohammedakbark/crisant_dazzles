@@ -40,36 +40,42 @@ class FirebasePushNotification {
           sound: RawResourceAndroidNotificationSound('notification_sound'));
 
   Future<void> initNotification(BuildContext context) async {
-    log('Requesting push notification permissions...');
+    try {
+      log('Requesting push notification permissions...');
 
-    if (Platform.isAndroid || Platform.isIOS) {
-      // _firebaseMessaging.subscribeToTopic("all-devices");
-      await _firebaseMessaging.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-    }
-    await _initLocalNotification();
-    await _getExistingToken(context);
-
-    FirebaseMessaging.onMessage.listen((message) {
-      log('Foreground Notification Received...');
-      _showNotificationFromMessage(message);
-    });
-
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      handleNotificationClick(jsonEncode(event.data));
-    });
-
-    _firebaseMessaging.getInitialMessage().then((RemoteMessage? message) async {
-      if (message != null) {
-        await Future.delayed(Duration(seconds: 3));
-        handleNotificationClick(jsonEncode(message.data));
+      if (Platform.isAndroid || Platform.isIOS) {
+        // _firebaseMessaging.subscribeToTopic("all-devices");
+        await _firebaseMessaging.requestPermission(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
       }
-    });
+      await _initLocalNotification();
+      await _getExistingToken(context);
+
+      FirebaseMessaging.onMessage.listen((message) {
+        log('Foreground Notification Received...');
+        _showNotificationFromMessage(message);
+      });
+
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+      FirebaseMessaging.onMessageOpenedApp.listen((event) {
+        handleNotificationClick(jsonEncode(event.data));
+      });
+
+      _firebaseMessaging
+          .getInitialMessage()
+          .then((RemoteMessage? message) async {
+        if (message != null) {
+          await Future.delayed(Duration(seconds: 3));
+          handleNotificationClick(jsonEncode(message.data));
+        }
+      });
+    } catch (e) {
+      log("Notification init error: $e");
+    }
   }
 
   Future<void> _getExistingToken(BuildContext context) async {

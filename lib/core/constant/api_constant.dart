@@ -66,4 +66,12 @@ class ApiConstants {
   // UPDATE APP
 
   static const remoteConfigURL = "appversion";
+
+  // OPERATION OR TASK
+  static const String createNewOperation = "operation";
+  static const String getCreatedOperations = "operation";
+  static const String getToDoOperations = "operation/assigned";
+  static const String deleteOperation = "operation";
+  static const String assignOperation = "operation/assign";
+  static const String getUsersFromRole = "roleusers";
 }
