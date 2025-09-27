@@ -6,6 +6,7 @@ import 'package:dazzles/features/navigation/presentation/pending_image_screen.da
 import 'package:dazzles/features/navigation/presentation/upcoming_products_screen.dart';
 import 'package:dazzles/features/operation-or-task/presentation/create_new_operation_task_screen.dart';
 import 'package:dazzles/features/operation-or-task/presentation/operation_task_view_scree.dart';
+import 'package:dazzles/features/operation-or-task/presentation/task_perfomance_screen.dart';
 import 'package:dazzles/features/packaging-or-po/presentation/package_page.dart';
 import 'package:dazzles/features/product/presentation/products_page.dart';
 import 'package:dazzles/features/route_sreen.dart';
@@ -229,6 +230,13 @@ class RouteProvider {
           path: creatNewOperationTaskScreen,
           builder: (context, state) {
             return CreateNewOperationTaskScreen();
+          }),
+      GoRoute(
+          path: taskPerfomanceScreen,
+          builder: (context, state) {
+            final map = state.extra as Map<String, dynamic>;
+            final id = map['operationId'] as String;
+            return TaskPerfomanceScreen(operationId: id,);
           }),
     ],
   );

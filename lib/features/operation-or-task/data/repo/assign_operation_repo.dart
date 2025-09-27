@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
-import 'package:dazzles/features/operation-or-task/data/model/create_operation_model.dart';
 
 class AssignOperationRepo {
   static Future<Map<String, dynamic>> assignOperation(
@@ -11,14 +10,21 @@ class AssignOperationRepo {
     final userData = await LoginRefDataBase().getUserData;
     final response = await ApiConfig.postRequest(
       endpoint: "${ApiConstants.assignOperation}",
-      body: {"operationId": operationId, "employeeId": userIds},
+      body: {
+        "operationId": int.parse(operationId),
+        "employeeIds": userIds
+            .map(
+              (e) => int.parse(e),
+            )
+            .toList()
+      },
       header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",
       },
     );
 
-    if (response.status == 201) {
+    if (response.status == 201 || response.status == 200) {
       log(response.message);
       return {
         "error": false,

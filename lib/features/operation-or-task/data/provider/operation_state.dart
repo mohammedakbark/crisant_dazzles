@@ -10,12 +10,18 @@ class OperationState {
   final bool isLoadingAssigningOperation;
   final bool isFechingUserRoles;
   final bool isFechingEmployees;
+  final bool isLoadingSubmistingTask;
   List<String> waitingListForDeletingOperation;
   final List<CreatedOperationModel> createdOperations;
   final List<ToDoOperationModel> toDoOperationsTask;
   final List<UserRoleModel> userRoles;
   final List<EmployeeModelForOperation> employees;
   final List<EmployeeModelForOperation> selectedEmployee;
+
+  // Message
+  bool isShowingMessage;
+  String message;
+  bool isError;
 
   OperationState({
     this.isFechingCreatedOperations = false,
@@ -24,12 +30,16 @@ class OperationState {
     this.isLoadingAssigningOperation = false,
     this.isFechingUserRoles = false,
     this.isFechingEmployees = false,
+    this.isLoadingSubmistingTask = false,
     this.waitingListForDeletingOperation = const [],
     this.createdOperations = const [],
     this.toDoOperationsTask = const [],
     this.userRoles = const [],
     this.employees = const [],
     this.selectedEmployee = const [],
+    this.isShowingMessage = false,
+    this.message = '',
+    this.isError = false,
   });
 
   OperationState copyWith(
@@ -39,12 +49,16 @@ class OperationState {
       bool? isLoadingAssigningOperation,
       bool? isFechingUserRoles,
       bool? isFechingEmployees,
+      bool? isLoadingSubmistingTask,
       List<String>? waitingListForDeletingOperation,
       List<CreatedOperationModel>? createdOperations,
       List<ToDoOperationModel>? toDoOperationsTask,
       List<UserRoleModel>? userRoles,
       List<EmployeeModelForOperation>? employees,
-      List<EmployeeModelForOperation>? selectedEmployee}) {
+      List<EmployeeModelForOperation>? selectedEmployee,
+      bool? isShowingMessage,
+      String? message,
+      bool? isError}) {
     return OperationState(
         isFechingCreatedOperations:
             isFechingCreatedOperations ?? this.isFechingCreatedOperations,
@@ -54,6 +68,8 @@ class OperationState {
             isCreatingOperationLoading ?? this.isCreatingOperationLoading,
         isLoadingAssigningOperation:
             isLoadingAssigningOperation ?? this.isLoadingAssigningOperation,
+        isLoadingSubmistingTask:
+            isLoadingSubmistingTask ?? this.isLoadingSubmistingTask,
         isFechingEmployees: isFechingEmployees ?? this.isFechingEmployees,
         isFechingUserRoles: isFechingUserRoles ?? this.isFechingUserRoles,
         waitingListForDeletingOperation: waitingListForDeletingOperation ??
@@ -62,6 +78,9 @@ class OperationState {
         toDoOperationsTask: toDoOperationsTask ?? this.toDoOperationsTask,
         userRoles: userRoles ?? this.userRoles,
         employees: employees ?? this.employees,
-        selectedEmployee: selectedEmployee ?? this.selectedEmployee);
+        selectedEmployee: selectedEmployee ?? this.selectedEmployee,
+        isShowingMessage: isShowingMessage ?? this.isShowingMessage,
+        message: message ?? this.message,
+        isError: isError ?? this.isError);
   }
 }

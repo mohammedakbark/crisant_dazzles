@@ -16,7 +16,7 @@ class GetToDoOperationTask {
       },
     );
 
-    if (response.status == 201) {
+    if (response.status == 200) {
       final data = response.data as List;
       // log("To do operations length: ${data.length}");
       return {

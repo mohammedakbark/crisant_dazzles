@@ -44,3 +44,4 @@ const drVideoPlayerScreen = "/drVideoPlayerScreen";
 // ---- Operation Level Task
 const operationTaskViewScreen = "/operationTaskViewScreen";
 const creatNewOperationTaskScreen = "/creatNewOperationTaskScreen";
+const taskPerfomanceScreen = "/taskPerfomanceScreen";

@@ -7,12 +7,13 @@ class AppButton extends StatelessWidget {
   final void Function()? onPressed;
   final Color? bgColor;
   final String title;
-  const AppButton({
-    super.key,
-    this.onPressed,
-    required this.title,
-    this.bgColor,
-  });
+  final Color? textColor;
+  const AppButton(
+      {super.key,
+      this.onPressed,
+      required this.title,
+      this.bgColor,
+      this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class AppButton extends StatelessWidget {
                 fontSize: ResponsiveHelper.isTablet()
                     ? ResponsiveHelper.fontSmall
                     : null,
-                color: AppColors.kBgColor)),
+                color: textColor ?? AppColors.kBgColor)),
       ),
     );
   }

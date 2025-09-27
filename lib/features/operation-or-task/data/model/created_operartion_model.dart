@@ -12,23 +12,25 @@ class CreatedOperationModel {
   final String endTime;
   final DateTime createdAt;
   final DateTime modifiedAt;
+  final List<AssignedEmployees> assignedTo;
 
-  CreatedOperationModel({
-    required this.operationId,
-    required this.operationName,
-    required this.specialDate,
-    required this.scheduleType,
-    required this.submissionType,
-    required this.galleryAccess,
-    required this.createdBy,
-    required this.startTime,
-    required this.endTime,
-    required this.createdAt,
-    required this.modifiedAt,
-  });
+  CreatedOperationModel(
+      {required this.operationId,
+      required this.operationName,
+      required this.specialDate,
+      required this.scheduleType,
+      required this.submissionType,
+      required this.galleryAccess,
+      required this.createdBy,
+      required this.startTime,
+      required this.endTime,
+      required this.createdAt,
+      required this.modifiedAt,
+      required this.assignedTo});
 
   factory CreatedOperationModel.fromJson(Map<String, dynamic> json) =>
       CreatedOperationModel(
+        assignedTo: json['assignedTo'] ?? [],
         operationId: json["operationId"],
         operationName: json["operationName"],
         specialDate: json["specialDate"],
@@ -43,6 +45,7 @@ class CreatedOperationModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "assignedTo": assignedTo,
         "operationId": operationId,
         "operationName": operationName,
         "specialDate": specialDate,
@@ -54,5 +57,32 @@ class CreatedOperationModel {
         "endTime": endTime,
         "created_at": createdAt.toIso8601String(),
         "modified_at": modifiedAt.toIso8601String(),
+      };
+}
+
+class AssignedEmployees {
+  final String employeeId;
+  final String employeeName;
+  final String status; // completed/pending/expired
+  final DateTime createdTime;
+
+  AssignedEmployees(
+      {required this.employeeId,
+      required this.employeeName,
+      required this.status,
+      required this.createdTime});
+
+  factory AssignedEmployees.fromJson(json) {
+    return AssignedEmployees(
+        createdTime: json['createdTime'],
+        employeeId: json['employeeId'],
+        employeeName: json['employeeName'],
+        status: json['status']);
+  }
+  Map<String, dynamic> toJson() => {
+        "createdTime": createdTime,
+        "employeeName": employeeName,
+        "employeeId": employeeId,
+        "status": status,
       };
 }

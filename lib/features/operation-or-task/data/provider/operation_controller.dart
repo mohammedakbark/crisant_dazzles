@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/features/Auth/data/models/user_role_mode.dart';
 import 'package:dazzles/features/Auth/data/repo/get_roles_repo.dart';
@@ -14,6 +15,7 @@ import 'package:dazzles/features/operation-or-task/data/repo/delete_operation_re
 import 'package:dazzles/features/operation-or-task/data/repo/get_assigned_operations_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_created_operations_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_role_based_employees.dart';
+import 'package:dazzles/features/operation-or-task/data/repo/submit_task_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -133,6 +135,7 @@ class OperationController extends AsyncNotifier<OperationState> {
         AsyncValue.data(baseState.copyWith(isLoadingAssigningOperation: true));
 
     try {
+      log('leng ${baseState.selectedEmployee.length}');
       final response = await AssignOperationRepo.assignOperation(
           operationId,
           baseState.selectedEmployee
@@ -145,7 +148,9 @@ class OperationController extends AsyncNotifier<OperationState> {
         state = AsyncValue.data(
             latest.copyWith(isLoadingAssigningOperation: false));
         await getCreatedOperationsBySelf();
+        await getToDoOperationTask();
         showCustomSnackBarAdptive("Task assigned", isError: false);
+        showMessage("Task assigned", isError: false);
         context.pop();
         log("Task assigned successfully");
       } else {
@@ -153,6 +158,7 @@ class OperationController extends AsyncNotifier<OperationState> {
             latest.copyWith(isLoadingAssigningOperation: false));
         log("error assigning operation: ${response['data']}");
         showCustomSnackBarAdptive(response['data'], isError: true);
+        showMessage(response['data'], isError: true);
       }
     } catch (e, st) {
       final latest = state.value ?? OperationState();
@@ -160,7 +166,61 @@ class OperationController extends AsyncNotifier<OperationState> {
           AsyncValue.data(latest.copyWith(isLoadingAssigningOperation: false));
       showCustomSnackBarAdptive("error assigning operation: $e\n$st",
           isError: true);
+
+      showMessage("error assigning operation: $e", isError: true);
       log("error assigning operation: $e\n$st");
+    }
+  }
+
+  Future<void> onSubmitToDoTask(
+      BuildContext context, String operationId, String assignedId,
+      {String? text, File? video, File? image}) async {
+    final baseState = state.value ?? OperationState();
+    state = AsyncValue.data(baseState.copyWith(isLoadingSubmistingTask: true));
+
+    try {
+      final response = await SubmitTaskRepo.onSubmitTask(
+          operationId, assignedId,
+          text: text, video: video, image: image);
+
+      final latest = state.value ?? OperationState();
+
+      if (response['error'] == false) {
+        state =
+            AsyncValue.data(latest.copyWith(isLoadingSubmistingTask: false));
+        await getCreatedOperationsBySelf();
+        await getToDoOperationTask();
+        showCustomSnackBarAdptive("Task submitted successfully",
+            isError: false);
+        showMessage("Task submitted successfully", isError: false);
+        context.pop();
+        log("Task submitted successfully");
+        // return {
+        //   "message": response['data'],
+        //   "error": false,
+        // };
+      } else {
+        state =
+            AsyncValue.data(latest.copyWith(isLoadingSubmistingTask: false));
+        log("error submitting task: ${response['data']}");
+        showCustomSnackBarAdptive(response['data'], isError: true);
+        showMessage(response['data'], isError: true);
+        // return {
+        //   "message": response['data'],
+        //   "error": true,
+        // };
+      }
+    } catch (e, st) {
+      final latest = state.value ?? OperationState();
+      state = AsyncValue.data(latest.copyWith(isLoadingSubmistingTask: false));
+      showCustomSnackBarAdptive("error submitting task: $e\n$st",
+          isError: true);
+      log("error creating operation: $e\n$st");
+      showMessage("error submitting task: $e", isError: true);
+      // return {
+      //   "message": "error submitting task: $e",
+      //   "error": true,
+      // };
     }
   }
 
@@ -191,6 +251,7 @@ class OperationController extends AsyncNotifier<OperationState> {
       if (!error) {
         // success: refresh list of operations
         await getCreatedOperationsBySelf();
+        await getToDoOperationTask();
         log('Deleted operation $operationId successfully');
         // optional: show success snackbar
         showCustomSnackBarAdptive(
@@ -272,14 +333,19 @@ class OperationController extends AsyncNotifier<OperationState> {
           employees: employees,
           isFechingEmployees: false,
         ));
+        if (employees.isEmpty)
+          showMessage("No employees listed in this role!", isError: true);
         log(" fetched employees : ${employees.length}");
       } else {
         state = AsyncValue.data(latest.copyWith(isFechingEmployees: false));
+        showMessage("error fetching employees: ${response['message']}",
+            isError: true);
         log("error fetching employees: ${response['message']}");
       }
     } catch (e, st) {
       final latest = state.value ?? OperationState();
       state = AsyncValue.data(latest.copyWith(isFechingEmployees: false));
+      showMessage(isError: true, "error fetching employees: $e\n$st");
       log("error fetching employees: $e\n$st");
     }
   }
@@ -314,10 +380,29 @@ class OperationController extends AsyncNotifier<OperationState> {
     final baseState = state.value ?? OperationState();
 
     state = AsyncValue.data(baseState.copyWith(
-      selectedEmployee: [],
-      employees: [],
-      isLoadingAssigningOperation: false,
-      isFechingEmployees: false,
+        selectedEmployee: [],
+        employees: [],
+        isLoadingAssigningOperation: false,
+        isFechingEmployees: false,
+        isShowingMessage: false,
+        message: '',
+        isError: false));
+  }
+
+  void showMessage(String msg, {bool isError = false}) {
+    final latest = state.value ?? OperationState();
+    state = AsyncData(latest.copyWith(
+      isShowingMessage: true,
+      message: msg,
+      isError: isError,
     ));
+    Timer(const Duration(seconds: 5), () {
+      final latest = state.value ?? OperationState();
+      state = AsyncData(latest.copyWith(
+        isShowingMessage: false,
+        message: '',
+        isError: false,
+      ));
+    });
   }
 }
