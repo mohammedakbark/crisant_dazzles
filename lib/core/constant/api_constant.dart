@@ -75,4 +75,6 @@ class ApiConstants {
   static const String assignOperation = "operation/assign";
   static const String getUsersFromRole = "roleusers";
   static const String submitTask = "operation/recording";
+  static const String getOperationAssignedEmployees = "operation/history";
+  static const String removeEmployeeFromTask = "operation/assigned";
 }

@@ -1,6 +1,7 @@
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
+import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/operation-or-task/data/enums/operation_enums.dart';
 import 'package:dazzles/features/operation-or-task/data/model/assigned_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
@@ -452,7 +453,7 @@ class OperationTile extends ConsumerWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      context.push(taskPerfomanceScreen, extra: {
+                      context.push(operationAssigedEmployeesListScreen, extra: {
                         "operationId": createdTask!.operationId.toString()
                       });
                     },
@@ -485,14 +486,17 @@ class OperationTile extends ConsumerWidget {
   void _showDeleteConfirmation(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => AlertDialog.adaptive(
         title: const Text('Delete Task'),
         content: Text(
             'Are you sure you want to delete "${createdTask!.operationName}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: AppStyle.smallStyle(),
+            ),
           ),
           TextButton(
             onPressed: () {

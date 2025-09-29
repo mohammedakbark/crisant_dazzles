@@ -1,4 +1,5 @@
 import 'package:dazzles/features/Auth/data/models/user_role_mode.dart';
+import 'package:dazzles/features/operation-or-task/data/model/assigned_employee_status_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/assigned_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/empployee_model_for_operation.dart';
@@ -11,12 +12,16 @@ class OperationState {
   final bool isFechingUserRoles;
   final bool isFechingEmployees;
   final bool isLoadingSubmistingTask;
+  final bool isLoadingAssignedEmployeesList;
+
   List<String> waitingListForDeletingOperation;
+  List<String> waitingListForRemovingEmployee;
   final List<CreatedOperationModel> createdOperations;
   final List<ToDoOperationModel> toDoOperationsTask;
   final List<UserRoleModel> userRoles;
   final List<EmployeeModelForOperation> employees;
   final List<EmployeeModelForOperation> selectedEmployee;
+  final List<AssignedEmployeeStatusModel> assignedEmployeesStatus;
 
   // Message
   bool isShowingMessage;
@@ -31,12 +36,15 @@ class OperationState {
     this.isFechingUserRoles = false,
     this.isFechingEmployees = false,
     this.isLoadingSubmistingTask = false,
+    this.isLoadingAssignedEmployeesList = false,
     this.waitingListForDeletingOperation = const [],
+    this.waitingListForRemovingEmployee = const [],
     this.createdOperations = const [],
     this.toDoOperationsTask = const [],
     this.userRoles = const [],
     this.employees = const [],
     this.selectedEmployee = const [],
+    this.assignedEmployeesStatus = const [],
     this.isShowingMessage = false,
     this.message = '',
     this.isError = false,
@@ -50,12 +58,15 @@ class OperationState {
       bool? isFechingUserRoles,
       bool? isFechingEmployees,
       bool? isLoadingSubmistingTask,
+      bool? isLoadingAssignedEmployeesList,
       List<String>? waitingListForDeletingOperation,
+      List<String>? waitingListForRemovingEmployee,
       List<CreatedOperationModel>? createdOperations,
       List<ToDoOperationModel>? toDoOperationsTask,
       List<UserRoleModel>? userRoles,
       List<EmployeeModelForOperation>? employees,
       List<EmployeeModelForOperation>? selectedEmployee,
+      List<AssignedEmployeeStatusModel>? assignedEmployeesStatus,
       bool? isShowingMessage,
       String? message,
       bool? isError}) {
@@ -70,6 +81,10 @@ class OperationState {
             isLoadingAssigningOperation ?? this.isLoadingAssigningOperation,
         isLoadingSubmistingTask:
             isLoadingSubmistingTask ?? this.isLoadingSubmistingTask,
+        isLoadingAssignedEmployeesList: isLoadingAssignedEmployeesList ??
+            this.isLoadingAssignedEmployeesList,
+        waitingListForRemovingEmployee: waitingListForRemovingEmployee ??
+            this.waitingListForRemovingEmployee,
         isFechingEmployees: isFechingEmployees ?? this.isFechingEmployees,
         isFechingUserRoles: isFechingUserRoles ?? this.isFechingUserRoles,
         waitingListForDeletingOperation: waitingListForDeletingOperation ??
@@ -80,6 +95,8 @@ class OperationState {
         employees: employees ?? this.employees,
         selectedEmployee: selectedEmployee ?? this.selectedEmployee,
         isShowingMessage: isShowingMessage ?? this.isShowingMessage,
+        assignedEmployeesStatus:
+            assignedEmployeesStatus ?? this.assignedEmployeesStatus,
         message: message ?? this.message,
         isError: isError ?? this.isError);
   }

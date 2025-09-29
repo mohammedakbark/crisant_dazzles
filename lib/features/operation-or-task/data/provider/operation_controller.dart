@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dazzles/core/utils/snackbars.dart';
 import 'package:dazzles/features/Auth/data/models/user_role_mode.dart';
 import 'package:dazzles/features/Auth/data/repo/get_roles_repo.dart';
+import 'package:dazzles/features/operation-or-task/data/model/assigned_employee_status_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/assigned_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/create_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
@@ -12,9 +13,11 @@ import 'package:dazzles/features/operation-or-task/data/provider/operation_state
 import 'package:dazzles/features/operation-or-task/data/repo/assign_operation_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/create_new_operation_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/delete_operation_repo.dart';
+import 'package:dazzles/features/operation-or-task/data/repo/get_assigned_employees_ist_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_assigned_operations_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_created_operations_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_role_based_employees.dart';
+import 'package:dazzles/features/operation-or-task/data/repo/remove_employee_from_assigned_task_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/submit_task_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -169,6 +172,107 @@ class OperationController extends AsyncNotifier<OperationState> {
 
       showMessage("error assigning operation: $e", isError: true);
       log("error assigning operation: $e\n$st");
+    }
+  }
+
+  Future<void> onGetAssignedEmployeeStatus(String operationId) async {
+    final baseState = state.value ?? OperationState();
+    state = AsyncValue.data(
+        baseState.copyWith(
+          assignedEmployeesStatus:[],
+          isLoadingAssignedEmployeesList: true));
+
+    try {
+      log('leng ${baseState.selectedEmployee.length}');
+      final response =
+          await GetAssignedEmployeeStatus.onFetctOperationAssignedEmployees(
+        operationId,
+      );
+
+      final latest = state.value ?? OperationState();
+
+      if (response['error'] == false) {
+        final data = response['data'] as List<AssignedEmployeeStatusModel>;
+
+        state = AsyncValue.data(latest.copyWith(
+          assignedEmployeesStatus: data,
+          isLoadingAssignedEmployeesList: false,
+        ));
+
+        log("employee list feched successfulyy");
+      } else {
+        state = AsyncValue.data(
+            latest.copyWith(isLoadingAssignedEmployeesList: false));
+        log("error feching employees: ${response['data']}");
+      }
+    } catch (e, st) {
+      final latest = state.value ?? OperationState();
+      state = AsyncValue.data(
+          latest.copyWith(isLoadingAssignedEmployeesList: false));
+
+      log("error feching employees: $e\n$st");
+    }
+  }
+
+  Future<void> removeEmployeeFromTask(
+      String assignedId, String operationId) async {
+    // defensive copy of current state to avoid mutating lists held by state directly
+    final baseState = state.value ?? OperationState();
+    final currentlyRemoving = List<String>.from(
+      baseState.waitingListForRemovingEmployee,
+    );
+
+    // optimistic update: add id to deleting list and emit new state
+    if (!currentlyRemoving.contains(assignedId)) {
+      currentlyRemoving.add(assignedId);
+      state = AsyncValue.data(
+        baseState.copyWith(waitingListForRemovingEmployee: currentlyRemoving),
+      );
+    }
+
+    try {
+      final Map<String, dynamic> response =
+          await RemoveEmployeeFromAssignedTaskRepo.removeEmployee(assignedId);
+
+      // response handling
+      final bool error = response['error'] == true;
+      final String message =
+          (response['data'] ?? response['message'] ?? '').toString();
+
+      if (!error) {
+        // success: refresh list of operations
+        await onGetAssignedEmployeeStatus(operationId);
+        log('removing employee $assignedId successfully');
+        // optional: show success snackbar
+        showCustomSnackBarAdptive(
+             "Removed successfully",
+            isError: false);
+      } else {
+        // backend returned an error
+        log('Error removing employee $assignedId: $message');
+        showCustomSnackBarAdptive(
+            message.isNotEmpty ? message : "Error removing employee",
+            isError: true);
+      }
+    } catch (e, st) {
+      log('Exception removing employee $operationId: $e\n$st');
+      showCustomSnackBarAdptive('Error removing employee: $e', isError: true);
+    } finally {
+      // ensure the id is removed from the waiting list and state is updated
+      final latest = state.value ?? OperationState();
+      final newWaiting =
+          List<String>.from(latest.waitingListForRemovingEmployee);
+
+      if (newWaiting.contains(operationId)) {
+        newWaiting.remove(operationId);
+        state = AsyncValue.data(
+          latest.copyWith(waitingListForRemovingEmployee: newWaiting),
+        );
+      } else {
+        // make sure state still reflects the latest list even if id already removed
+        state = AsyncValue.data(
+            latest.copyWith(waitingListForRemovingEmployee: newWaiting));
+      }
     }
   }
 
