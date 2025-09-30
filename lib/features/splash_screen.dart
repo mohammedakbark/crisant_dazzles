@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:dazzles/core/app%20permission/app_permission_extension.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';

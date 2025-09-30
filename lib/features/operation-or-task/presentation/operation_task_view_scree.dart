@@ -102,18 +102,22 @@ class _OperationTaskViewScreenState
                 // if you want call refresh action
                 // ref.read(operationControllerProvider.notifier).expireTasks();
               },
-              child: ListView(
-                padding: const EdgeInsets.all(12),
-                children: [
-                  // Tasks assigned to me to Complete
-                  _buildToDoTaskList(
-                      myTasks, operationState.isFetchingToDoOperations),
+              child: createdTask.isEmpty && myTasks.isEmpty
+                  ? Center(
+                      child: AppErrorView(error: "No task found!"),
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.all(12),
+                      children: [
+                        // Tasks assigned to me to Complete
+                        _buildToDoTaskList(
+                            myTasks, operationState.isFetchingToDoOperations),
 
-                  // Created task to some other employees to do
-                  _buildAssignedList(
-                      createdTask, operationState.isFechingCreatedOperations)
-                ],
-              ),
+                        // Created task to some other employees to do
+                        _buildAssignedList(createdTask,
+                            operationState.isFechingCreatedOperations),
+                      ],
+                    ),
             );
           },
         ));
@@ -122,6 +126,7 @@ class _OperationTaskViewScreenState
 
 Widget _buildToDoTaskList(
     List<ToDoOperationModel> myTasks, bool isFetchingToDoOperations) {
+  if (myTasks.isEmpty) return SizedBox();
   return Column(
     // crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -135,8 +140,9 @@ Widget _buildToDoTaskList(
       ),
       if (myTasks.isEmpty)
         SizedBox(
-            height: 100,
-            child: Center(child: Text('No tasks assigned to you.'))),
+            height: 300,
+            child: Center(
+                child: AppErrorView(error: "No tasks assigned to you."))),
       const SizedBox(height: 8),
       ...myTasks
           .map((t) => OperationTile(

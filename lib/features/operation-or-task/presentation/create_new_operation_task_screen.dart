@@ -184,9 +184,10 @@ class _CreateNewOperationTaskScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Operation Task'),
+        leading: AppBackButton(),
+        title: AppBarText(title: 'Create Operation Task'),
         elevation: 0,
-        backgroundColor: theme.colorScheme.primaryContainer,
+        // backgroundColor: theme.colorScheme.primaryContainer,
         foregroundColor: theme.colorScheme.onPrimaryContainer,
       ),
       body: BuildStateManageComponent(
@@ -464,6 +465,7 @@ class _CreateNewOperationTaskScreenState
                           ],
                         )
                       : AppButton(
+                          textColor: AppColors.kWhite,
                           title: 'Create Task',
                           onPressed: _isLoading ? null : _createTask,
                         ),
