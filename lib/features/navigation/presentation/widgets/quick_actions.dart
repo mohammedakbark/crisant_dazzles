@@ -4,7 +4,6 @@ import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/core/utils/responsive_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
 
@@ -18,6 +17,7 @@ class QuickActions extends StatelessWidget {
     AppPermission.scanproduct,
     AppPermission.updateproduct,
     AppPermission.recentlyupdated,
+
   ];
   @override
   Widget build(BuildContext context) {

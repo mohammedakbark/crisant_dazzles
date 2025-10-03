@@ -19,7 +19,7 @@ enum AppPermission {
   stockquantityvisibility,
   soldquantityvisibility,
   editprice,
-  createoperationtask
+  createoperationtask,
 }
 
 extension AppPermissionExt on AppPermission {
