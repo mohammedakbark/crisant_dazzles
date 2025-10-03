@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 enum AppPermission {
+  // dashboard qucik actions
   dashboardinsight,
   productlist,
   updateproduct,
@@ -12,20 +13,100 @@ enum AppPermission {
   purchaseorderlist,
   valey,
   recentlyupdated,
-  operationtask,
-  // FEATURES
+  operationaction,
+
+  // Operation
+  createoperationtask,
+  myoperationtasklist,
+  todooperationtasklist,
+  operationrequestlist,
+  operationdashboard,
+  operationreport,
+
+  // other FEATURES
   purchasePriceVisibility,
   salesPriceVisibility,
   stockquantityvisibility,
   soldquantityvisibility,
   editprice,
-  createoperationtask,
 }
 
 extension AppPermissionExt on AppPermission {
+  /// Try to parse a DB/remote key into a permission. Returns `null` if unknown.
+  static AppPermission? tryFromKey(String? key) {
+    if (key == null) return null;
+    // final normalized = key.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
+    final normalized = key.trim().toLowerCase();
+
+    switch (normalized) {
+      // Qucik Actions
+      case 'valey':
+        return AppPermission.valey;
+
+      case 'productlist':
+        return AppPermission.productlist;
+
+      case 'scanproduct':
+        return AppPermission.scanproduct;
+
+      case 'updateproduct':
+        return AppPermission.updateproduct;
+
+      case 'purchaseorderlist':
+        return AppPermission.purchaseorderlist;
+
+      case 'dashboardinsight':
+        return AppPermission.dashboardinsight;
+      case "recentlyupdated":
+        return AppPermission.recentlyupdated;
+      case "operationaction":
+        return AppPermission.operationaction;
+
+      // operation permission
+
+      case "createoperationtask":
+        return AppPermission.createoperationtask;
+      case "myoperationtasklist":
+        return AppPermission.myoperationtasklist;
+      case "todooperationtasklist":
+        return AppPermission.todooperationtasklist;
+      case "operationrequestlist":
+        return AppPermission.operationrequestlist;
+      case "operationdashboard":
+        return AppPermission.operationdashboard;
+      case "operationreport":
+        return AppPermission.operationreport;
+
+      // Other Functions
+      case "purchasepricevisibility":
+        return AppPermission.purchasePriceVisibility;
+      case "salespricevisibility":
+        return AppPermission.salesPriceVisibility;
+      case "stockquantityvisibility":
+        return AppPermission.stockquantityvisibility;
+      case "soldquantityvisibility":
+        return AppPermission.soldquantityvisibility;
+      case "editprice":
+        return AppPermission.editprice;
+
+      default:
+        return null;
+    }
+  }
+
+  /// Convert an iterable of string keys (from DB) into a Set<AppPermission> — unknown keys are ignored.
+  static Set<AppPermission> fromKeySet(Iterable<String>? keys) {
+    if (keys == null) return <AppPermission>{};
+    return keys
+        .map((k) => AppPermissionExt.tryFromKey(k))
+        .whereType<AppPermission>()
+        .toSet();
+  }
+
   // Icon for each permission
   IconData get icon {
     switch (this) {
+      // Dashboard Qucik Actions
       case AppPermission.valey:
         return Icons.local_parking;
       case AppPermission.updateproduct:
@@ -40,8 +121,18 @@ extension AppPermissionExt on AppPermission {
         return Icons.widgets;
       case AppPermission.recentlyupdated:
         return Icons.list;
-      case AppPermission.operationtask:
+      case AppPermission.operationaction:
         return SolarIconsOutline.notificationUnreadLines;
+// Operation Actions
+      case AppPermission.todooperationtasklist:
+        return Icons.view_list_rounded;
+      case AppPermission.myoperationtasklist:
+        return Icons.list_alt;
+      case AppPermission.createoperationtask:
+        return Icons.add;
+      case AppPermission.operationrequestlist:
+        return Icons.edit_notifications_outlined;
+
       default:
         return Icons.add_box;
     }
@@ -50,6 +141,7 @@ extension AppPermissionExt on AppPermission {
   // Color for each permission
   Color get color {
     switch (this) {
+      // Dashboard Qucik Actions
       case AppPermission.valey:
         return Colors.cyan;
       case AppPermission.updateproduct:
@@ -66,8 +158,19 @@ extension AppPermissionExt on AppPermission {
         return Colors.amber;
       case AppPermission.recentlyupdated:
         return Colors.deepPurple;
-      case AppPermission.operationtask:
+      case AppPermission.operationaction:
         return Colors.red;
+
+      // Operation Actions
+
+      case AppPermission.todooperationtasklist:
+        return Colors.blueGrey;
+      case AppPermission.myoperationtasklist:
+        return const Color.fromARGB(255, 48, 112, 202);
+      case AppPermission.createoperationtask:
+        return const Color.fromARGB(255, 30, 175, 197);
+      case AppPermission.operationrequestlist:
+        return const Color.fromARGB(255, 189, 72, 252);
       default:
         return Colors.grey;
     }
@@ -76,6 +179,7 @@ extension AppPermissionExt on AppPermission {
   // Human readable title
   String get title {
     switch (this) {
+      // Dashboard Qucik Actions
       case AppPermission.valey:
         return 'Valey';
       case AppPermission.productlist:
@@ -90,8 +194,19 @@ extension AppPermissionExt on AppPermission {
         return 'Update Image';
       case AppPermission.recentlyupdated:
         return "Recently Updated";
-      case AppPermission.operationtask:
+      case AppPermission.operationaction:
         return "Operations";
+
+      // Operation Actions
+
+      case AppPermission.todooperationtasklist:
+        return "To Do";
+      case AppPermission.myoperationtasklist:
+        return "My Task";
+      case AppPermission.createoperationtask:
+        return "Create Task";
+      case AppPermission.operationrequestlist:
+        return "Requests";
       default:
         return this.name;
     }
@@ -127,6 +242,7 @@ extension AppPermissionExt on AppPermission {
   // Example onTap handler — replace with real logic (navigation / actions)
   void onTap(BuildContext context) {
     switch (this) {
+      // Dashboard Qucik Actions
       case AppPermission.valey:
         context.push(drNavScreen);
         break;
@@ -145,69 +261,26 @@ extension AppPermissionExt on AppPermission {
       case AppPermission.recentlyupdated:
         context.push(recentlyCaptured);
         break;
-      case AppPermission.operationtask:
-        context.push(operationTaskViewScreen);
+      case AppPermission.operationaction:
+        context.push(operationDashboardScreen);
         break;
+
+      case AppPermission.createoperationtask:
+        context.push(creatNewOperationTaskScreen);
+        break;
+      case AppPermission.myoperationtasklist:
+        context.push(myOperationtaskScreen);
+        break;
+      case AppPermission.todooperationtasklist:
+        context.push(todoOperationTaskScreen);
+        break;
+      case AppPermission.operationrequestlist:
+        context.push(operationReuqestScreen);
+        break;
+
+      // Operation Actions
       default:
         break;
     }
-  }
-
-  // -----------------------
-  // Static helpers for parsing string keys (from DB / remote)
-  // -----------------------
-
-  /// Try to parse a DB/remote key into a permission. Returns `null` if unknown.
-  static AppPermission? tryFromKey(String? key) {
-    if (key == null) return null;
-    // final normalized = key.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
-    final normalized = key.trim().toLowerCase();
-
-    switch (normalized) {
-      case 'valey':
-        return AppPermission.valey;
-
-      case 'productlist':
-        return AppPermission.productlist;
-
-      case 'scanproduct':
-        return AppPermission.scanproduct;
-
-      case 'updateproduct':
-        return AppPermission.updateproduct;
-
-      case 'purchaseorderlist':
-        return AppPermission.purchaseorderlist;
-
-      case 'dashboardinsight':
-        return AppPermission.dashboardinsight;
-      case "recentlyupdated":
-        return AppPermission.recentlyupdated;
-      case "purchasepricevisibility":
-        return AppPermission.purchasePriceVisibility;
-      case "salespricevisibility":
-        return AppPermission.salesPriceVisibility;
-      case "stockquantityvisibility":
-        return AppPermission.stockquantityvisibility;
-      case "soldquantityvisibility":
-        return AppPermission.soldquantityvisibility;
-      case "editprice":
-        return AppPermission.editprice;
-      case "operationtask":
-        return AppPermission.operationtask;
-      case "createoperationtask":
-        return AppPermission.createoperationtask;
-      default:
-        return null;
-    }
-  }
-
-  /// Convert an iterable of string keys (from DB) into a Set<AppPermission> — unknown keys are ignored.
-  static Set<AppPermission> fromKeySet(Iterable<String>? keys) {
-    if (keys == null) return <AppPermission>{};
-    return keys
-        .map((k) => AppPermissionExt.tryFromKey(k))
-        .whereType<AppPermission>()
-        .toSet();
   }
 }

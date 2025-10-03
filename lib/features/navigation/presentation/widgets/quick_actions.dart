@@ -13,7 +13,7 @@ class QuickActions extends StatelessWidget {
     AppPermission.productlist,
     AppPermission.purchaseorderlist,
     AppPermission.valey,
-    AppPermission.operationtask,
+    AppPermission.operationaction,
     AppPermission.scanproduct,
     AppPermission.updateproduct,
     AppPermission.recentlyupdated,

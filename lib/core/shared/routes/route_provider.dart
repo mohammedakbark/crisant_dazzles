@@ -5,8 +5,11 @@ import 'package:dazzles/features/Auth/presentation/login_screen.dart';
 import 'package:dazzles/features/navigation/presentation/pending_image_screen.dart';
 import 'package:dazzles/features/navigation/presentation/upcoming_products_screen.dart';
 import 'package:dazzles/features/operation-or-task/presentation/create_new_operation_task_screen.dart';
-import 'package:dazzles/features/operation-or-task/presentation/operation_task_view_scree.dart';
+import 'package:dazzles/features/operation-or-task/presentation/operation_dashboard_screen.dart';
+import 'package:dazzles/features/operation-or-task/presentation/my_operation_screen.dart';
 import 'package:dazzles/features/operation-or-task/presentation/operation_assigned_employees_view.dart';
+import 'package:dazzles/features/operation-or-task/presentation/operation_request_screen.dart';
+import 'package:dazzles/features/operation-or-task/presentation/to_do_operation_screen.dart';
 import 'package:dazzles/features/packaging-or-po/presentation/package_page.dart';
 import 'package:dazzles/features/product/presentation/products_page.dart';
 import 'package:dazzles/features/route_sreen.dart';
@@ -220,11 +223,10 @@ class RouteProvider {
       //---------------------------
 
       // ---- Operation Level Task
-
       GoRoute(
-          path: operationTaskViewScreen,
+          path: operationDashboardScreen,
           builder: (context, state) {
-            return OperationTaskViewScreen();
+            return OperationDashboardScreen();
           }),
       GoRoute(
           path: creatNewOperationTaskScreen,
@@ -232,11 +234,30 @@ class RouteProvider {
             return CreateNewOperationTaskScreen();
           }),
       GoRoute(
+          path: todoOperationTaskScreen,
+          builder: (context, state) {
+            return ToDoOperationScreen();
+          }),
+      GoRoute(
+          path: myOperationtaskScreen,
+          builder: (context, state) {
+            return MyOperationTaskScreen();
+          }),
+
+      GoRoute(
           path: operationAssigedEmployeesListScreen,
           builder: (context, state) {
             final map = state.extra as Map<String, dynamic>;
             final id = map['operationId'] as String;
-            return OperationAssigedEmployeesView(operationId: id,);
+            return OperationAssigedEmployeesView(
+              operationId: id,
+            );
+          }),
+
+      GoRoute(
+          path: operationReuqestScreen,
+          builder: (context, state) {
+            return OperationRequestScreen();
           }),
     ],
   );

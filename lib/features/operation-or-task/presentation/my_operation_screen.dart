@@ -20,16 +20,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class OperationTaskViewScreen extends ConsumerStatefulWidget {
-  const OperationTaskViewScreen({super.key});
+class MyOperationTaskScreen extends ConsumerStatefulWidget {
+  const MyOperationTaskScreen({super.key});
 
   @override
-  ConsumerState<OperationTaskViewScreen> createState() =>
+  ConsumerState<MyOperationTaskScreen> createState() =>
       _OperationTaskViewScreenState();
 }
 
 class _OperationTaskViewScreenState
-    extends ConsumerState<OperationTaskViewScreen> {
+    extends ConsumerState<MyOperationTaskScreen> {
   late String currentUserId;
 
   @override
@@ -59,7 +59,7 @@ class _OperationTaskViewScreenState
 
     Future.microtask(
       () {
-        notifier.getToDoOperationTask();
+        // notifier.getToDoOperationTask();
         notifier.getCreatedOperationsBySelf();
         notifier.fetchAllRoles();
       },
@@ -75,20 +75,20 @@ class _OperationTaskViewScreenState
     return Scaffold(
         appBar: AppBar(
           leading: AppBackButton(),
-          title: AppBarText(title: "Operations"),
+          title: AppBarText(title: "My Task"),
         ),
-        floatingActionButton:
-            AppPermissionConfig().has(AppPermission.createoperationtask)
-                ? FloatingActionButton(
-                    backgroundColor: AppColors.kTeal,
-                    child: const Icon(
-                      Icons.add,
-                      color: AppColors.kWhite,
-                    ),
-                    onPressed: () {
-                      context.push(creatNewOperationTaskScreen);
-                    })
-                : null,
+        // floatingActionButton:
+        //     AppPermissionConfig().has(AppPermission.createoperationtask)
+        //         ? FloatingActionButton(
+        //             backgroundColor: AppColors.kTeal,
+        //             child: const Icon(
+        //               Icons.add,
+        //               color: AppColors.kWhite,
+        //             ),
+        //             onPressed: () {
+        //               context.push(creatNewOperationTaskScreen);
+        //             })
+        //         : null,
         body: BuildStateManageComponent(
           stateController: state,
           errorWidget: (p0, p1) => AppErrorView(error: p0.toString()),
@@ -106,54 +106,57 @@ class _OperationTaskViewScreenState
                   ? Center(
                       child: AppErrorView(error: "No task found!"),
                     )
-                  : ListView(
-                      padding: const EdgeInsets.all(12),
-                      children: [
-                        // Tasks assigned to me to Complete
-                        _buildToDoTaskList(
-                            myTasks, operationState.isFetchingToDoOperations),
+                  : _buildAssignedList(
+                      createdTask, operationState.isFechingCreatedOperations),
 
-                        // Created task to some other employees to do
-                        _buildAssignedList(createdTask,
-                            operationState.isFechingCreatedOperations),
-                      ],
-                    ),
+              // ListView(
+              //     padding: const EdgeInsets.all(12),
+              //     children: [
+              //       // Tasks assigned to me to Complete
+              //       _buildToDoTaskList(
+              //           myTasks, operationState.isFetchingToDoOperations),
+
+              //       // Created task to some other employees to do
+              //       _buildAssignedList(createdTask,
+              //           operationState.isFechingCreatedOperations),
+              //     ],
+              //   ),
             );
           },
         ));
   }
 }
 
-Widget _buildToDoTaskList(
-    List<ToDoOperationModel> myTasks, bool isFetchingToDoOperations) {
-  if (myTasks.isEmpty) return SizedBox();
-  return Column(
-    // crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('Tasks To Do',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          if (isFetchingToDoOperations) AppLoading()
-        ],
-      ),
-      if (myTasks.isEmpty)
-        SizedBox(
-            height: 300,
-            child: Center(
-                child: AppErrorView(error: "No tasks assigned to you."))),
-      const SizedBox(height: 8),
-      ...myTasks
-          .map((t) => OperationTile(
-                isToDoTask: true,
-                toDoTask: t,
-              ))
-          .toList(),
-      const SizedBox(height: 16),
-    ],
-  );
-}
+// Widget _buildToDoTaskList(
+//     List<ToDoOperationModel> myTasks, bool isFetchingToDoOperations) {
+//   if (myTasks.isEmpty) return SizedBox();
+//   return Column(
+//     // crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           const Text('Tasks To Do',
+//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//           if (isFetchingToDoOperations) AppLoading()
+//         ],
+//       ),
+//       if (myTasks.isEmpty)
+//         SizedBox(
+//             height: 300,
+//             child: Center(
+//                 child: AppErrorView(error: "No tasks assigned to you."))),
+//       const SizedBox(height: 8),
+//       ...myTasks
+//           .map((t) => OperationTile(
+//                 isToDoTask: true,
+//                 toDoTask: t,
+//               ))
+//           .toList(),
+//       const SizedBox(height: 16),
+//     ],
+//   );
+// }
 
 Widget _buildAssignedList(
     List<CreatedOperationModel> createdTask, bool isFechingCreatedOperations) {
@@ -161,14 +164,14 @@ Widget _buildAssignedList(
 
   return Column(
     children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('Assigned Tasks',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          if (isFechingCreatedOperations) AppLoading()
-        ],
-      ),
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: [
+      //     const Text('',
+      //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      //     if (isFechingCreatedOperations) AppLoading()
+      //   ],
+      // ),
       const SizedBox(height: 8),
       ...createdTask
           .map((t) => OperationTile(

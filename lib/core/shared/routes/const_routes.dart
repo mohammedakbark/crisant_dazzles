@@ -42,6 +42,9 @@ const drlocationScreen = "/drLocationScreen";
 const drVideoPlayerScreen = "/drVideoPlayerScreen";
 
 // ---- Operation Level Task
-const operationTaskViewScreen = "/operationTaskViewScreen";
+const operationDashboardScreen = "/operationDashboardScreen";
 const creatNewOperationTaskScreen = "/creatNewOperationTaskScreen";
+const todoOperationTaskScreen = "/todoOperationTask";
+const myOperationtaskScreen = "/operationTaskViewScreen";
 const operationAssigedEmployeesListScreen = "/taskPerfomanceScreen";
+const operationReuqestScreen = "/operationReuqestScreen";
