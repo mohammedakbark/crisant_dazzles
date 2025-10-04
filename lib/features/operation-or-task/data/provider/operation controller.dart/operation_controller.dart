@@ -9,13 +9,13 @@ import 'package:dazzles/features/operation-or-task/data/model/assigned_operation
 import 'package:dazzles/features/operation-or-task/data/model/create_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/empployee_model_for_operation.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_state.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_state.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/assign_operation_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/create_new_operation_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/delete_operation_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_assigned_employees_ist_repo.dart';
-import 'package:dazzles/features/operation-or-task/data/repo/get_assigned_operations_repo.dart';
-import 'package:dazzles/features/operation-or-task/data/repo/get_created_operations_repo.dart';
+import 'package:dazzles/features/operation-or-task/data/repo/get_to_do_operation_repo.dart';
+import 'package:dazzles/features/operation-or-task/data/repo/get_my_operation_task_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/get_role_based_employees.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/remove_employee_from_assigned_task_repo.dart';
 import 'package:dazzles/features/operation-or-task/data/repo/submit_task_repo.dart';
@@ -40,8 +40,7 @@ class OperationController extends AsyncNotifier<OperationState> {
         AsyncValue.data(baseState.copyWith(isFechingCreatedOperations: true));
 
     try {
-      final response =
-          await GetCreatedOperationsRepo.onFetchCreatedOperations();
+      final response = await GetMyOperationTaskRepo.onFetchCreatedOperations();
 
       final latest = state.value ?? OperationState();
 
@@ -72,7 +71,7 @@ class OperationController extends AsyncNotifier<OperationState> {
     state = AsyncValue.data(baseState.copyWith(isFetchingToDoOperations: true));
 
     try {
-      final response = await GetToDoOperationTask.onFetchToDoOperationTask();
+      final response = await GetToDoOperationRepo.onFetchToDoOperationTask();
 
       final latest = state.value ?? OperationState();
 
@@ -177,10 +176,8 @@ class OperationController extends AsyncNotifier<OperationState> {
 
   Future<void> onGetAssignedEmployeeStatus(String operationId) async {
     final baseState = state.value ?? OperationState();
-    state = AsyncValue.data(
-        baseState.copyWith(
-          assignedEmployeesStatus:[],
-          isLoadingAssignedEmployeesList: true));
+    state = AsyncValue.data(baseState.copyWith(
+        assignedEmployeesStatus: [], isLoadingAssignedEmployeesList: true));
 
     try {
       log('leng ${baseState.selectedEmployee.length}');
@@ -244,9 +241,7 @@ class OperationController extends AsyncNotifier<OperationState> {
         await onGetAssignedEmployeeStatus(operationId);
         log('removing employee $assignedId successfully');
         // optional: show success snackbar
-        showCustomSnackBarAdptive(
-             "Removed successfully",
-            isError: false);
+        showCustomSnackBarAdptive("Removed successfully", isError: false);
       } else {
         // backend returned an error
         log('Error removing employee $assignedId: $message');

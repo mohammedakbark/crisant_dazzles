@@ -37,8 +37,18 @@ class DashboardGrid extends ConsumerWidget {
             const SizedBox(width: 8),
             Text("Insight", style: AppStyle.boldStyle(fontSize: 16)),
             const SizedBox(width: 12),
-            const Flexible(
-              child: Divider(height: 0, color: AppColors.kGrey),
+            Flexible(
+              child: Container(
+                height: 2,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.kGrey,
+                      AppColors.kGrey.withOpacity(0.1),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),

@@ -23,6 +23,10 @@ enum AppPermission {
   operationdashboard,
   operationreport,
 
+  //valye Actions
+  valeycheckin,
+  valeycheckout,
+
   // other FEATURES
   purchasePriceVisibility,
   salesPriceVisibility,
@@ -76,6 +80,13 @@ extension AppPermissionExt on AppPermission {
         return AppPermission.operationdashboard;
       case "operationreport":
         return AppPermission.operationreport;
+
+      // valey Actions
+
+      case "valeycheckin":
+        return AppPermission.valeycheckin;
+      case "valeycheckout":
+        return AppPermission.valeycheckout;
 
       // Other Functions
       case "purchasepricevisibility":

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dazzles/core/components/app_spacer.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -5,8 +7,9 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/operation-or-task/data/enums/operation_enums.dart';
 import 'package:dazzles/features/operation-or-task/data/model/assigned_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_controller.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_state.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_controller.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_state.dart';
+import 'package:dazzles/features/operation-or-task/presentation/widgets/ask_request_sheet.dart';
 import 'package:dazzles/features/operation-or-task/presentation/widgets/assign_operation_sheet.dart';
 import 'package:dazzles/features/operation-or-task/presentation/widgets/operation_complete_sheet.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,6 +46,7 @@ class OperationTile extends ConsumerWidget {
       BuildContext context, WidgetRef ref, ThemeData theme) {
     final taskStatus = _getTaskStatus(toDoTask!);
     final isEnabled = taskStatus == TaskStatus.active;
+    final isExpired = taskStatus == TaskStatus.expired;
     final statusInfo = _getStatusInfo(taskStatus);
 
     return Container(
@@ -228,6 +232,31 @@ class OperationTile extends ConsumerWidget {
                       ),
                     ),
                   ],
+
+                  if (isExpired) ...[
+                    ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                AppColors.kDeepPurple.withAlpha(100)),
+                        icon: Icon(
+                          Icons.timer,
+                          size: 15,
+                          color: AppColors.kWhite,
+                        ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (_) => Container(
+                              child: AskRequestSheet(task: toDoTask!),
+                            ),
+                          );
+                        },
+                        label: Text(
+                          "Request",
+                          style: AppStyle.boldStyle(fontSize: 15),
+                        ))
+                  ]
                 ],
               ),
             ),
@@ -375,25 +404,6 @@ class OperationTile extends ConsumerWidget {
                       ],
 
                       // Assigned Count
-                      if (createdTask!.assignedTo.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.people,
-                              size: 16,
-                              color: theme.colorScheme.primary,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Assigned to ${createdTask!.assignedTo.length} employees',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ],
                   ),
                 ),
@@ -579,6 +589,9 @@ class OperationTile extends ConsumerWidget {
     final startTime = _parseTimeString(task.startTime ?? "00:00");
     final endTime = _parseTimeString(task.endTime ?? "23:59");
 
+    log(startTime.toString());
+    log(endTime.toString());
+
     // Check if schedule is once and compare dates
     if (task.scheduleType == ScheduleType.once) {
       if (task.specialDate == null) {
@@ -652,17 +665,99 @@ class OperationTile extends ConsumerWidget {
     }
   }
 
+  // TimeOfDay? _parseTimeString(String timeString) {
+  //   try {
+  //     final parts = timeString.split(':');
+  //     if (parts.length == 2) {
+  //       final hour = int.parse(parts[0]);
+  //       final minute = int.parse(parts[1]);
+  //       return TimeOfDay(hour: hour, minute: minute);
+  //     }
+  //   } catch (e) {
+  //     // Handle parsing error
+  //   }
+  //   return null;
+  // }
   TimeOfDay? _parseTimeString(String timeString) {
     try {
-      final parts = timeString.split(':');
-      if (parts.length == 2) {
-        final hour = int.parse(parts[0]);
-        final minute = int.parse(parts[1]);
+      // Raw input logging
+      log("raw time input -> '$timeString'");
+
+      // 1) Replace several known problematic Unicode spaces / controls with a normal space,
+      //    remove ZERO WIDTH chars entirely.
+      String s = timeString
+          .replaceAll('\u00A0', ' ') // NO-BREAK SPACE
+          .replaceAll('\u202F', ' ') // NARROW NO-BREAK SPACE
+          .replaceAll('\u200B', '') // ZERO WIDTH SPACE
+          .replaceAll('\uFEFF', '') // ZERO WIDTH NO-BREAK SPACE / BOM
+          .replaceAll(RegExp(r'[\u2000-\u200A]'), ' ') // various spaces
+          .replaceAll(RegExp(r'[\u0000-\u001F\u007F]'), '') // control chars
+          .trim();
+
+      // Collapse multiple whitespace into single space and uppercase
+      s = s.replaceAll(RegExp(r'\s+'), ' ').toUpperCase();
+
+      // Log normalized
+      log("normalized time -> '$s'");
+
+      // OPTIONAL: log code units (uncomment while debugging invisible chars)
+      // log("code units: ${s.codeUnits.map((c) => c.toRadixString(16)).toList()}");
+
+      // Regex that captures:
+      // group1 -> hour (1-2 digits)
+      // group2 -> minute (exactly 2 digits)
+      // group3 -> optional AM or PM (with or without space)
+      final timeRe = RegExp(r'^(\d{1,2}):(\d{2})(?:\s*([AP]M))?$');
+
+      final m = timeRe.firstMatch(s);
+      if (m != null) {
+        int hour = int.tryParse(m.group(1)!) ?? 0;
+        int minute = int.tryParse(m.group(2)!) ?? 0;
+        final ampm = m.group(3); // may be null
+
+        if (ampm != null) {
+          // Normalize hour for AM/PM
+          if (ampm == 'AM') {
+            if (hour == 12) hour = 0;
+          } else if (ampm == 'PM') {
+            if (hour < 12) hour = hour + 12;
+          }
+        }
+        // Ensure bounds
+        if (hour < 0) hour = 0;
+        if (hour > 23) hour = hour % 24;
+        if (minute < 0) minute = 0;
+        if (minute > 59) minute = minute % 60;
+
+        log("Parsed (regex) → Hour: $hour  Min: $minute  (ampm: ${ampm ?? 'none'})");
         return TimeOfDay(hour: hour, minute: minute);
       }
+
+      // If regex didn't match, try a looser HH:mm extraction (strip non-digits except colon)
+      final loose = s.replaceAll(RegExp(r'[^0-9:]'), '');
+      if (loose.contains(':')) {
+        final parts = loose.split(':');
+        if (parts.length >= 2) {
+          final hour = int.tryParse(parts[0]) ?? 0;
+          final minute =
+              int.tryParse(parts[1].padRight(2, '0').substring(0, 2)) ?? 0;
+          log("Parsed (loose) → Hour: $hour  Min: $minute");
+          return TimeOfDay(hour: hour % 24, minute: minute % 60);
+        }
+      }
+
+      // Last resort: try DateTime.parse (ISO)
+      try {
+        final dt = DateTime.parse(s);
+        log("Parsed (ISO) → ${dt.hour}:${dt.minute}");
+        return TimeOfDay(hour: dt.hour, minute: dt.minute);
+      } catch (e) {
+        log("ISO parse failed for '$s': $e");
+      }
     } catch (e) {
-      // Handle parsing error
+      log("parse error: $e");
     }
+
     return null;
   }
 

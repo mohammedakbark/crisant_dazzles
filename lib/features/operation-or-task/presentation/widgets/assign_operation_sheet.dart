@@ -8,8 +8,8 @@ import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/empployee_model_for_operation.dart';
 import 'package:dazzles/features/operation-or-task/data/model/operation_models.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_controller.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_state.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_controller.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

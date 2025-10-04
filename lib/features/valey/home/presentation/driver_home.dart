@@ -1,7 +1,10 @@
+import 'package:dazzles/core/app%20permission/app_permission_extension.dart';
+import 'package:dazzles/core/app%20permission/app_permissions.dart';
 import 'package:dazzles/core/components/app_error_componet.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
+import 'package:dazzles/core/components/dashboard_app_bar.dart';
 import 'package:dazzles/core/local/shared%20preference/login_red_database.dart';
 import 'package:dazzles/core/shared/routes/const_routes.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
@@ -54,7 +57,10 @@ class _DriverHomeState extends ConsumerState<DriverHome> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSpacer(hp: .03),
-                    _buildWelcomeSection(),
+                    DashboardAppBar(
+                      pageName: "Valey",
+                      // icon: Icons.local_parking_rounded,
+                    ),
                     AppSpacer(hp: .04),
                     _buildActionButtons(),
                     AppSpacer(hp: .04),
@@ -66,91 +72,6 @@ class _DriverHomeState extends ConsumerState<DriverHome> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildWelcomeSection() {
-    return Container(
-      child: Row(
-        children: [
-          InkWell(
-            onTap: () => context.pop(),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.kPrimaryColor.withOpacity(0.1),
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.kPrimaryColor.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-              child: Icon(CupertinoIcons.square_grid_2x2_fill),
-            ),
-          ),
-          AppSpacer(
-            wp: .02,
-          ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.kPrimaryColor.withOpacity(0.1),
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.kPrimaryColor.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: AppColors.kPrimaryColor.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.local_parking_rounded,
-                          color: AppColors.kWhite,
-                          size: 24,
-                        ),
-                      ),
-                      AppSpacer(
-                        wp: .05,
-                      ),
-                      Text(
-                        "Valey",
-                        style: AppStyle.boldStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -242,38 +163,40 @@ class _DriverHomeState extends ConsumerState<DriverHome> {
         ),
         Row(
           children: [
-            Expanded(
-              child: _buildEnhancedButtonTile(
-                "Check In",
-                CupertinoIcons.arrow_down_circle_fill,
-                const LinearGradient(
-                  colors: [Color(0xFF6366f1), Color(0xFF8b5cf6)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            if (AppPermissionConfig().has(AppPermission.valeycheckin))
+              Expanded(
+                child: _buildEnhancedButtonTile(
+                  "Check In",
+                  CupertinoIcons.arrow_down_circle_fill,
+                  const LinearGradient(
+                    colors: [Color(0xFF6366f1), Color(0xFF8b5cf6)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  () {
+                    context
+                        .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
+                    // context.push(drCustomerRegScreen, extra: {"qrId": "6"});
+                  },
                 ),
-                () {
-                  context
-                      .push(drQrScannerScreen, extra: {"scanFor": "checkIn"});
-                  // context.push(drCustomerRegScreen, extra: {"qrId": "6"});
-                },
               ),
-            ),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildEnhancedButtonTile(
-                "Check Out",
-                CupertinoIcons.arrow_up_circle_fill,
-                const LinearGradient(
-                  colors: [Color(0xFF06b6d4), Color(0xFF3b82f6)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            if (AppPermissionConfig().has(AppPermission.valeycheckout))
+              Expanded(
+                child: _buildEnhancedButtonTile(
+                  "Check Out",
+                  CupertinoIcons.arrow_up_circle_fill,
+                  const LinearGradient(
+                    colors: [Color(0xFF06b6d4), Color(0xFF3b82f6)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  () async {
+                    context.push(drQrScannerScreen,
+                        extra: {"scanFor": "checkOut"});
+                  },
                 ),
-                () async {
-                  context
-                      .push(drQrScannerScreen, extra: {"scanFor": "checkOut"});
-                },
               ),
-            ),
           ],
         ),
       ],

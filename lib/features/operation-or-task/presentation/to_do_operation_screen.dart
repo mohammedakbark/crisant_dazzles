@@ -13,8 +13,8 @@ import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/operation-or-task/data/model/assigned_operation_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_controller.dart';
-import 'package:dazzles/features/operation-or-task/data/provider/operation_state.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_controller.dart';
+import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_state.dart';
 
 import 'package:dazzles/features/operation-or-task/presentation/widgets/operation_tile.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +34,11 @@ class _OperationTaskViewScreenState extends ConsumerState<ToDoOperationScreen> {
 
   @override
   void initState() {
+    Future.microtask(
+      () {
+        ref.invalidate(operationControllerProvider);
+      },
+    );
     super.initState();
     _loadCurrentUser(); // load user id separately
     // start fetching controller data (no blocking UI)
@@ -88,9 +93,9 @@ class _OperationTaskViewScreenState extends ConsumerState<ToDoOperationScreen> {
                 // if you want call refresh action
                 // ref.read(operationControllerProvider.notifier).expireTasks();
               },
-              child: createdTask.isEmpty && myTasks.isEmpty
+              child: myTasks.isEmpty
                   ? Center(
-                      child: AppErrorView(error: "No task found!"),
+                      child: AppErrorView(error: "No tasks assigned to you."),
                     )
                   : _buildToDoTaskList(
                       myTasks, operationState.isFetchingToDoOperations),
@@ -102,33 +107,19 @@ class _OperationTaskViewScreenState extends ConsumerState<ToDoOperationScreen> {
   Widget _buildToDoTaskList(
       List<ToDoOperationModel> myTasks, bool isFetchingToDoOperations) {
     if (myTasks.isEmpty) return SizedBox();
-    return Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     AppMargin(
-        //       child: const Text('Tasks To Do',
-        //           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        //     ),
-        //     if (isFetchingToDoOperations) AppLoading()
-        //   ],
-        // ),
-        if (myTasks.isEmpty)
-          SizedBox(
-              height: 300,
-              child: Center(
-                  child: AppErrorView(error: "No tasks assigned to you."))),
-        const SizedBox(height: 8),
-        ...myTasks
-            .map((t) => OperationTile(
-                  isToDoTask: true,
-                  toDoTask: t,
-                ))
-            .toList(),
-        const SizedBox(height: 16),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...myTasks
+              .map((t) => OperationTile(
+                    isToDoTask: true,
+                    toDoTask: t,
+                  ))
+              .toList(),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }
