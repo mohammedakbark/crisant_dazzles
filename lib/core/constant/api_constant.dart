@@ -7,7 +7,7 @@ class ApiConstants {
   static const String mediaBaseUrl = "http://192.168.0.144:5173/uploads/";
 
   static const String login = "login";
-  static const String profile = "profile";
+  // static const String profile = "profile";
   static const String dashboard = "dashboard";
   static const String dashboardRecentlyCaptured = "dashboard/recentCaptured";
   static const String upcomingProductList = "dashboard/upcomingproducts";

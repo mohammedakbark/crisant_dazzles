@@ -1,23 +1,23 @@
-import 'dart:async';
+// import 'dart:async';
 
-import 'package:dazzles/features/profile/data/repo/get_profile_repo.dart';
-import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:dazzles/features/profile/data/repo/get_profile_repo.dart';
+// import 'package:dazzles/features/profile/data/models/user_profile_model.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final profileControllerProvider =
-    AsyncNotifierProvider<GetProfileController, UserProfileModel?>(
-  GetProfileController.new,
-);
+// final profileControllerProvider =
+//     AsyncNotifierProvider<GetProfileController, UserProfileModel?>(
+//   GetProfileController.new,
+// );
 
-class GetProfileController extends AsyncNotifier<UserProfileModel?> {
-  @override
-  FutureOr<UserProfileModel?> build() async {
-    try {
-      final result = await GetProfileRepo.onGetProfileData();
-      if (result['error'] == false) return result['data'];
-      throw result['data'];
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-}
+// class GetProfileController extends AsyncNotifier<UserProfileModel?> {
+//   @override
+//   FutureOr<UserProfileModel?> build() async {
+//     try {
+//       final result = await GetProfileRepo.onGetProfileData();
+//       if (result['error'] == false) return result['data'];
+//       throw result['data'];
+//     } catch (e) {
+//       throw e.toString();
+//     }
+//   }
+// }
