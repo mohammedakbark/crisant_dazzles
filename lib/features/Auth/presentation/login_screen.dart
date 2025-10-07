@@ -41,29 +41,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   UserRoleModel selectedRoleModel =
       UserRoleModel(roleId: 0, roleName: "Office");
 
-  void _onChangeRole(
-    UserRoleModel value,
-  ) {
-    selectedRoleModel = value;
-    if (selectedRoleModel.roleName == LoginController.mainRole) {
-      ref.watch(mobileLoginControllerProvider.notifier).state = false;
-    } else {
-      ref.watch(mobileLoginControllerProvider.notifier).state = true;
-    }
-    // _clearController();
-  }
+  // void _onChangeRole(
+  //   UserRoleModel value,
+  // ) {
+  //   selectedRoleModel = value;
+  //   if (selectedRoleModel.roleName == LoginController.mainRole) {
+  //     ref.watch(mobileLoginControllerProvider.notifier).state = false;
+  //   } else {
+  //     ref.watch(mobileLoginControllerProvider.notifier).state = true;
+  //   }
+  //   // _clearController();
+  // }
 
 // LOGIN WITH PASSWORD  (FOR OFFICE ___)
-  void _loginWithPassword(
-    context,
-  ) {
-    ref.read(loginControllerProvider.notifier).onLogin(
-          _userNameController.text.trim(),
-          _passwordController.text.trim(),
-          selectedRoleModel,
-          context,
-        );
-  }
+  // void _loginWithPassword(
+  //   context,
+  // ) {
+  //   ref.read(loginControllerProvider.notifier).onLogin(
+  //         _userNameController.text.trim(),
+  //         _passwordController.text.trim(),
+  //         selectedRoleModel,
+  //         context,
+  //       );
+  // }
 
 // LOGIN WITH OTP ( FOR OTHER USERS___)
   void _genarateOTPforLogin(
@@ -133,7 +133,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       () {
         ref.invalidate(loginControllerProvider);
         ref.invalidate(passwordObsecureControllerProvider);
-        ref.invalidate(mobileLoginControllerProvider);
+        // ref.invalidate(mobileLoginControllerProvider);
         ref.invalidate(userRoleControllerProvider);
       },
     );
@@ -144,7 +144,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(
     BuildContext context,
   ) {
-    final isMobileNumberLogin = ref.watch(mobileLoginControllerProvider);
+    // final isMobileNumberLogin = ref.watch(mobileLoginControllerProvider);
     final isTab = ResponsiveHelper.isTablet();
     return Scaffold(
       // appBar: AppBar(
@@ -178,120 +178,125 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   AppSpacer(hp: .15),
                   Column(
                     children: [
-                      BuildStateManageComponent(
-                        stateController: ref.watch(userRoleControllerProvider),
-                        errorWidget: (p0, p1) => SizedBox.shrink(),
-                        successWidget: (data) {
-                          final listOfRole = data as List<UserRoleModel>;
+                      // BuildStateManageComponent(
+                      //   stateController: ref.watch(userRoleControllerProvider),
+                      //   errorWidget: (p0, p1) => SizedBox.shrink(),
+                      //   successWidget: (data) {
+                      //     final listOfRole = data as List<UserRoleModel>;
 
-                          return DropdownButtonFormField<UserRoleModel>(
-                              iconSize: isTab ? 50 : 24,
-                              hint: Text(
-                                selectedRoleModel.roleName,
-                                style: AppStyle.mediumStyle(
-                                    fontSize: ResponsiveHelper.isTablet()
-                                        ? ResponsiveHelper.fontExtraSmall
-                                        : null),
-                              ),
-                              decoration: InputDecoration(
-                                errorStyle: AppStyle.mediumStyle(
-                                    fontSize: ResponsiveHelper.isTablet()
-                                        ? ResponsiveHelper.fontExtraSmall
-                                        : null,
-                                    color: AppColors.kErrorPrimary),
-                                suffixIconColor: AppColors.kWhite,
-                                prefixIconColor: AppColors.kWhite,
-                                fillColor: AppColors.kBgColor,
-                                filled: true,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.kPrimaryColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveHelper.borderRadiusSmall,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.kPrimaryColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveHelper.borderRadiusSmall,
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.kErrorPrimary),
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveHelper.borderRadiusSmall,
-                                  ),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.kErrorPrimary),
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveHelper.borderRadiusSmall,
-                                  ),
-                                ),
-                              ),
-                              items: listOfRole
-                                  .map(
-                                    (e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(
-                                        e.roleName,
-                                        style: AppStyle.mediumStyle(
-                                          fontSize: ResponsiveHelper.isTablet()
-                                              ? ResponsiveHelper.fontExtraSmall
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) => _onChangeRole(
-                                    value!,
-                                  ));
-                        },
-                      ),
+                      //     return DropdownButtonFormField<UserRoleModel>(
+                      //         iconSize: isTab ? 50 : 24,
+                      //         hint: Text(
+                      //           selectedRoleModel.roleName,
+                      //           style: AppStyle.mediumStyle(
+                      //               fontSize: ResponsiveHelper.isTablet()
+                      //                   ? ResponsiveHelper.fontExtraSmall
+                      //                   : null),
+                      //         ),
+                      //         decoration: InputDecoration(
+                      //           errorStyle: AppStyle.mediumStyle(
+                      //               fontSize: ResponsiveHelper.isTablet()
+                      //                   ? ResponsiveHelper.fontExtraSmall
+                      //                   : null,
+                      //               color: AppColors.kErrorPrimary),
+                      //           suffixIconColor: AppColors.kWhite,
+                      //           prefixIconColor: AppColors.kWhite,
+                      //           fillColor: AppColors.kBgColor,
+                      //           filled: true,
+                      //           focusedBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //               color: AppColors.kPrimaryColor,
+                      //             ),
+                      //             borderRadius: BorderRadius.circular(
+                      //               ResponsiveHelper.borderRadiusSmall,
+                      //             ),
+                      //           ),
+                      //           enabledBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //               color: AppColors.kPrimaryColor,
+                      //             ),
+                      //             borderRadius: BorderRadius.circular(
+                      //               ResponsiveHelper.borderRadiusSmall,
+                      //             ),
+                      //           ),
+                      //           errorBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: AppColors.kErrorPrimary),
+                      //             borderRadius: BorderRadius.circular(
+                      //               ResponsiveHelper.borderRadiusSmall,
+                      //             ),
+                      //           ),
+                      //           focusedErrorBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: AppColors.kErrorPrimary),
+                      //             borderRadius: BorderRadius.circular(
+                      //               ResponsiveHelper.borderRadiusSmall,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //         items: listOfRole
+                      //             .map(
+                      //               (e) => DropdownMenuItem(
+                      //                 value: e,
+                      //                 child: Text(
+                      //                   e.roleName,
+                      //                   style: AppStyle.mediumStyle(
+                      //                     fontSize: ResponsiveHelper.isTablet()
+                      //                         ? ResponsiveHelper.fontExtraSmall
+                      //                         : null,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             )
+                      //             .toList(),
+                      //         onChanged: (value) => _onChangeRole(
+                      //               value!,
+                      //             ));
+                      //   },
+                      // ),
                       AppSpacer(hp: .02),
                       //  TEXTFORMFIELD
-                      isMobileNumberLogin
-                          ? _buildMobileLoginUI()
-                          : _buildUserNameLoginUI(),
+
+                      _buildMobileLoginUI(),
+                      // isMobileNumberLogin
+                      //     ? _buildMobileLoginUI()
+                      //     : _buildUserNameLoginUI(),
                       _errorWidgetBuilder(ref),
                       AppSpacer(
                         hp: .03,
                       ),
                       BuildStateManageComponent(
                         stateController: ref.watch(loginControllerProvider),
-                        successWidget: (data) => AppButton(
-                          title: isMobileNumberLogin ? "GET OTP" : "Login",
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              if (isMobileNumberLogin) {
+                        successWidget: (data) => Padding(
+                          padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+                          child: AppButton(
+                            title: "GET OTP",
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                // if (isMobileNumberLogin) {
                                 // mobile number with OTP
                                 _genarateOTPforLogin(
                                   context,
                                 );
-                              } else {
+                                // } else {
                                 // user name with password
-                                _loginWithPassword(
-                                  context,
-                                );
+                                // _loginWithPassword(
+                                //   context,
+                                // );
+                                // }
                               }
-                            }
-
-                            // final local = LocalUserRefModel(
-                            //     token:
-                            //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJUZXN0aW5nIiwicm9sZXMiOnsicm9sZU5hbWUiOiJNYXN0ZXJzIn0sImlhdCI6MTc1MTQ1MzY5NSwiZXhwIjoxNzUyMDU4NDk1fQ.sv09IH3cdBJp8kxxF_vnqXriHB0fFqQCI8vKWvKTfwA",
-                            //     userId: 1,
-                            //     userName: "Tester",
-                            //     role: "Driver",
-                            //     roleId: 8);
-                            // await LoginRefDataBase().setUseretails(local);
-                            // log("Done");
-                          },
+                          
+                              // final local = LocalUserRefModel(
+                              //     token:
+                              //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJUZXN0aW5nIiwicm9sZXMiOnsicm9sZU5hbWUiOiJNYXN0ZXJzIn0sImlhdCI6MTc1MTQ1MzY5NSwiZXhwIjoxNzUyMDU4NDk1fQ.sv09IH3cdBJp8kxxF_vnqXriHB0fFqQCI8vKWvKTfwA",
+                              //     userId: 1,
+                              //     userName: "Tester",
+                              //     role: "Driver",
+                              //     roleId: 8);
+                              // await LoginRefDataBase().setUseretails(local);
+                              // log("Done");
+                            },
+                          ),
                         ),
                       ),
                       AppSpacer(
@@ -310,12 +315,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget _buildMobileLoginUI() => Column(
         children: [
-          CustomTextField(
-            controller: _mobileNumberController,
-            hintText: "Mobile Number",
-            maxLenght: 10,
-            keyBoardType: TextInputType.phone,
-            validator: AppValidator.mobileNumberValidator,
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+            child: CustomTextField(
+              controller: _mobileNumberController,
+              hintText: "Mobile Number",
+              maxLenght: 10,
+              keyBoardType: TextInputType.phone,
+              validator: AppValidator.mobileNumberValidator,
+            ),
           ),
           AppSpacer(hp: .02),
         ],
@@ -542,7 +550,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ? Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: 12,right: 12,left: 12),
               child: Text(
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

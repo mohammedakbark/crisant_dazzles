@@ -23,35 +23,35 @@ class LoginController extends AsyncNotifier<Map<String, dynamic>?> {
 
   static int mainRoleId = 0;
   static String mainRole = "Office";
-  Future<void> onLogin(
-    String username,
-    String password,
-    UserRoleModel userRole,
-    BuildContext context,
-  ) async {
-    state = const AsyncLoading();
-    final response = await LoginRepo.onLogin(username, password);
-    showMessageinUI(
-        response['error'] == false ? "Login successful" : response['message'],
-        response['error']);
-    if (response['error'] == false) {
-      final local = LocalUserRefModel(
-          token: response['token'],
-          userId: response['userId'],
-          userName: response['username'],
-          role: userRole.roleName,
-          roleId: userRole.roleId);
-      await LoginRefDataBase().setUseretails(local);
-      // await FirebasePushNotification().initNotification(context);
-      state = AsyncData(response);
+  // Future<void> onLogin(
+  //   String username,
+  //   String password,
+  //   UserRoleModel userRole,
+  //   BuildContext context,
+  // ) async {
+  //   state = const AsyncLoading();
+  //   final response = await LoginRepo.onLogin(username, password);
+  //   showMessageinUI(
+  //       response['error'] == false ? "Login successful" : response['message'],
+  //       response['error']);
+  //   if (response['error'] == false) {
+  //     final local = LocalUserRefModel(
+  //         token: response['token'],
+  //         userId: response['userId'],
+  //         userName: response['username'],
+  //         role: userRole.roleName,
+  //         roleId: userRole.roleId);
+  //     await LoginRefDataBase().setUseretails(local);
+  //     // await FirebasePushNotification().initNotification(context);
+  //     state = AsyncData(response);
 
-      if (context.mounted) {
-        naviagteToScreen(userRole, context);
-      }
-    } else {
-      state = AsyncError("Error null", StackTrace.empty);
-    }
-  }
+  //     if (context.mounted) {
+  //       naviagteToScreen(userRole, context);
+  //     }
+  //   } else {
+  //     state = AsyncError("Error null", StackTrace.empty);
+  //   }
+  // }
 
   Future<Map<String, dynamic>?> loginWithMobileNumber(
     UserRoleModel roleModel,
@@ -189,6 +189,6 @@ final passwordObsecureControllerProvider = StateProvider(
   (ref) => true,
 );
 
-final mobileLoginControllerProvider = StateProvider(
-  (ref) => false,
-);
+// final mobileLoginControllerProvider = StateProvider(
+//   (ref) => true,
+// );
