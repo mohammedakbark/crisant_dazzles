@@ -1,13 +1,10 @@
-import 'package:dazzles/core/components/app_button.dart';
 import 'package:dazzles/core/components/app_loading.dart';
 import 'package:dazzles/core/components/app_margin.dart';
 import 'package:dazzles/core/components/app_spacer.dart';
-import 'package:dazzles/core/components/app_textfield.dart';
 import 'package:dazzles/core/shared/theme/app_colors.dart';
 import 'package:dazzles/core/shared/theme/styles/text_style.dart';
 import 'package:dazzles/features/operation-or-task/data/model/created_operartion_model.dart';
 import 'package:dazzles/features/operation-or-task/data/model/empployee_model_for_operation.dart';
-import 'package:dazzles/features/operation-or-task/data/model/operation_models.dart';
 import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_controller.dart';
 import 'package:dazzles/features/operation-or-task/data/provider/operation%20controller.dart/operation_state.dart';
 import 'package:flutter/material.dart';
@@ -123,6 +120,8 @@ class _AssignSheetState extends ConsumerState<AssignSheet> {
             if (ref.watch(operationControllerProvider).value!.isShowingMessage)
               AppMargin(
                 child: Text(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   ref.watch(operationControllerProvider).value!.message,
                   style: AppStyle.boldStyle(
                       color:
