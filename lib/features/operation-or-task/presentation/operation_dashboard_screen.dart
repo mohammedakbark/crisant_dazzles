@@ -60,6 +60,7 @@ class _OperationDashboardScreenState
             child: SafeArea(
       child: Column(
         children: [
+          AppSpacer(hp: .03),
           DashboardAppBar(
             pageName: "Operation Dashboard",
           ),
