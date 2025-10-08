@@ -1,6 +1,6 @@
 import 'package:dazzles/core/config/api_config.dart';
 import 'package:dazzles/core/constant/api_constant.dart';
-import 'package:dazzles/features/Auth/data/models/user_role_mode.dart';
+import 'package:dazzles/module/common/Auth/data/models/user_role_mode.dart';
 
 class GetRolesRepo {
   static Future<Map<String, dynamic>> onGetRoles() async {
